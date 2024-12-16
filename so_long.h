@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 09:32:18 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/16 11:11:41 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include <unistd.h>
 # include <mlx.h>
+# include <stdlib.h>
+
+# include "ft_printf/ft_printf.h"
 
 // #ifndef WINDOW_WIDTH
 # define WINDOW_WIDTH 1920
