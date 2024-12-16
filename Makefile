@@ -5,12 +5,12 @@ CC = cc
 CFLAGS = -fsanitize=address -g
 
 # Source and object files
-SOURCES = so_long.c
+SOURCES = so_long.c so_long_events.c
 OBJECTS = $(SOURCES:.c=.o)
 
-# Library directories and its dependencies
+# Library directories and its files
 LIB_DIRS = mlx_linux ft_printf
-LIB_DEPENDENCIES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a
+LIB_FILES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a
 
 # Library flags
 LIB_PATHS = -Lmlx_linux -Lft_printf

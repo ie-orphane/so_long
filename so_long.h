@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 11:11:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:16:47 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,17 @@
 # include <unistd.h>
 # include <mlx.h>
 # include <stdlib.h>
+# include <X11/keysym.h>
+# include <X11/X.h>
 
 # include "ft_printf/ft_printf.h"
 
-// #ifndef WINDOW_WIDTH
+
+#define MLX_ERROR 1
+
 # define WINDOW_WIDTH 1920
-// #endif
-
-// #ifndef WINDOW_HEIGHT
 # define WINDOW_HEIGHT 1080
-// #endif
-
-// #ifndef WINDOW_TITLE
 # define WINDOW_TITLE "my game"
-// #endif
 
 
 typedef	struct s_data
@@ -37,5 +34,10 @@ typedef	struct s_data
 	void *mlx;
 	void *win;
 } t_data;
+
+
+int	handle_no_event(void *data);
+int handle_close_event(t_data *data);
+int handle_keypress_event(int keycode, t_data *data);
 
 #endif // SO_LONG_H
