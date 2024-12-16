@@ -1,0 +1,4 @@
+.vscode/
+mlx_linux/
+*.o
+so_long
