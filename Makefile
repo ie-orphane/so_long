@@ -2,20 +2,19 @@ NAME=so_long
 
 # Compiler and flags
 CC = cc
-CFLAGS = -fsanitize=address -g
 
 # Source and object files
-SOURCES = so_long.c so_long_events.c
+SOURCES = so_long.c so_long_events.c read_map.c
 OBJECTS = $(SOURCES:.c=.o)
 
 # Library directories and its files
-LIB_DIRS = mlx_linux ft_printf
-LIB_FILES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a
+LIB_DIRS = mlx_linux ft_printf libft
+LIB_FILES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a libft/libft.a
 
 # Library flags
-LIB_PATHS = -Lmlx_linux -Lft_printf
-LIBS = -lmlx_Linux -lftprintf
-INCLUDE_PATHS = -Imlx_linux -Ift_printf
+LIB_PATHS = -Lmlx_linux -Lft_printf -Llibft
+LIBS = -lmlx_Linux -lftprintf -lft
+INCLUDE_PATHS = -Imlx_linux -Ift_printf -Ilibft
 
 LIB_FLAGS = $(LIB_PATHS) $(LIBS) $(INCLUDE_PATHS)
 
@@ -23,7 +22,7 @@ LIB_FLAGS = $(LIB_PATHS) $(LIBS) $(INCLUDE_PATHS)
 all : $(NAME)
 
 $(NAME): $(LIB_FILES) $(OBJECTS)
-	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz $(CFLAGS) -o $(NAME)
+	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(NAME)
 
 $(LIB_FILES):
 	@for dir in $(LIB_DIRS); do \
