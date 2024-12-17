@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 12:16:47 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:13:28 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,23 @@
 # include <X11/X.h>
 
 # include "ft_printf/ft_printf.h"
+# include "libft/libft.h"
+# include "read_map.h"
 
+# define MLX_ERROR 1
 
-#define MLX_ERROR 1
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
+# define WIN_TITLE "my game"
 
-# define WINDOW_WIDTH 1920
-# define WINDOW_HEIGHT 1080
-# define WINDOW_TITLE "my game"
-
-
-typedef	struct s_data
+typedef struct s_data
 {
-	void *mlx;
-	void *win;
-} t_data;
-
+	void	*mlx;
+	void	*win;
+}	t_data;
 
 int	handle_no_event(void *data);
-int handle_close_event(t_data *data);
-int handle_keypress_event(int keycode, t_data *data);
+int	handle_close_event(t_data *data);
+int	handle_keypress_event(int keycode, t_data *data);
 
 #endif // SO_LONG_H

@@ -6,13 +6,14 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 12:16:08 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:34:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	main(void) {
+int	main(void)
+{
 	t_data	data;
 
 	data.mlx = mlx_init();
@@ -21,8 +22,9 @@ int	main(void) {
 		ft_printf("Error\n");
 		return (MLX_ERROR);
 	}
-	data.win = mlx_new_window(data.mlx, WINDOW_WIDTH / 2, WINDOW_HEIGHT, WINDOW_TITLE);
-	if (data.win == NULL){
+	data.win = mlx_new_window(data.mlx, WIN_WIDTH / 2, WIN_HEIGHT, WIN_TITLE);
+	if (data.win == NULL)
+	{
 		ft_printf("Error\n");
 		free(data.mlx);
 		return (MLX_ERROR);
