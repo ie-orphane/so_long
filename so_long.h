@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 17:13:28 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:09:30 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ typedef struct s_data
 	void	*mlx;
 	void	*win;
 }	t_data;
+
+typedef struct s_img
+{
+	void *self;
+	int width;
+	int height;
+} t_img;
 
 int	handle_no_event(void *data);
 int	handle_close_event(t_data *data);

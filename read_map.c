@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/16 21:58:39 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/17 17:46:10 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,11 @@ void	check_blocks(t_map **map)
 			map_cpy->height, position, map_cpy->blocks[map_cpy->height]);
 		exit(1);
 	}
+	if (map_cpy->width * 96 > WIN_WIDTH || map_cpy->height * 96 > WIN_HEIGHT)
+	{
+		printf("Error\nmap too big\n");
+		exit(1);
+	}
 }
 
 t_map	*read_map(char *fpath)
@@ -119,6 +124,5 @@ t_map	*read_map(char *fpath)
 		check_line_size(&map);
 		check_blocks(&map);
 	}
-	ft_printf("width = %d\nheight = %d", map->width, map->height);
 	return (map);
 }
