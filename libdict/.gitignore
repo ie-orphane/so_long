@@ -1,0 +1,5 @@
+*
+!.gitignore
+!dict_*.c
+!dict.h
+!Makefile
