@@ -4,7 +4,7 @@ NAME=so_long
 CC = cc
 
 # Source and object files
-SOURCES = so_long.c so_long_events.c read_map.c
+SOURCES = so_long.c so_long_events.c map.c utils.c dict.c
 OBJECTS = $(SOURCES:.c=.o)
 
 # Library directories and its files
@@ -31,7 +31,7 @@ $(LIB_FILES):
 	done
 
 %.o: %.c
-	@$(CC) -Wall -Wextra -Werror -Imlx_linux -O3 -c $< -o $@
+	@$(CC) -Wall -Wextra -Werror $(INCLUDE_PATHS) -O3 -c $< -o $@
 
 clean :
 	@rm -f $(OBJECTS)
@@ -41,7 +41,7 @@ clean :
 	done
 
 fclean : clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(LIB_FILES)
 
 re : fclean all
 

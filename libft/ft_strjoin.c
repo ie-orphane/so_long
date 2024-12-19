@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 09:35:25 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/10/31 11:52:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/18 10:26:07 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*str;
 	size_t	str_size;
 
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	str_size = s1_len + s2_len + 1;
