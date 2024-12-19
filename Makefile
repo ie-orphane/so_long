@@ -4,7 +4,7 @@ NAME=so_long
 CC = cc
 
 # Source and object files
-SOURCES = so_long.c so_long_events.c map.c utils.c dict.c
+SOURCES = so_long.c events.c map.c utils.c dict.c
 OBJECTS = $(SOURCES:.c=.o)
 
 # Library directories and its files
@@ -48,4 +48,12 @@ re : fclean all
 run : $(NAME)
 	@./$(NAME)
 
-.PHONY : all clean fclean re run
+TEST = test
+
+$(TEST):
+	@$(CC) $(TEST:=.c) $(LIB_FLAGS) $(INCLUDE_PATHS) -lXext -lX11 -lm -lz -O3 -o $(TEST)
+
+trun: $(TEST)
+	@./$(TEST)
+
+.PHONY : all clean fclean re run test
