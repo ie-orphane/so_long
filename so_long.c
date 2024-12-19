@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/19 11:38:13 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:53:52 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	main(void)
 	data.map = read_map("./map.ber");
 	data.mlx = mlx_init();
 	data.imgs = NULL;
+	data.collective = 0;
 	if (data.mlx == NULL)
 	{
 		ft_printf("Error\n");

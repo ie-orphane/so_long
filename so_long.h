@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/18 20:47:22 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:46:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_map {
 	char **blocks;
 	int x;
 	int y;
+	size_t collective;
 } t_map;
 
 typedef struct s_img
@@ -59,6 +60,7 @@ typedef struct s_data
 	t_map	*map;
 	t_img	*pimg;
 	t_dict *imgs;
+	size_t collective;
 } t_data;
 
 /* utils */

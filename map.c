@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/18 20:48:31 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:54:18 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	check_line_size(t_map **map)
 static void	check_blocks(t_map **map)
 {
 	t_map	*map_cpy;
-	// int		position;
 	size_t	i;
 
 	map_cpy = *map;
@@ -64,7 +63,9 @@ static void	check_blocks(t_map **map)
 			map_cpy->x = i;
 			map_cpy->y = map_cpy->height;
 		}
-		else if (ft_strchr("01CE\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
+		else if (map_cpy->blocks[map_cpy->height][i] == 'C')
+			map_cpy->collective += 1;
+		else if (ft_strchr("01E\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
 		{
 			ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
 			map_cpy->blocks[map_cpy->height][i],
@@ -74,16 +75,6 @@ static void	check_blocks(t_map **map)
 		}
 		i++;
 	}
-	// return (-1);
-	// position = ft_strset(map_cpy->blocks[map_cpy->height], );
-	// if (position != -1)
-	// {
-	// 	ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
-	// 		map_cpy->blocks[map_cpy->height][position],
-	// 		map_cpy->height,
-	// 		position, map_cpy->blocks[map_cpy->height]);
-	// 	exit(1);
-	// }
 }
 
 /* 
@@ -124,6 +115,7 @@ t_map	*read_map(char *fpath)
 	map->width = -1;
 	map->height = -1;
 	map->blocks = blocks;
+	map->collective = 0;
 	while (blocks[++map->height])
 	{
 		check_line_size(&map);
