@@ -6,17 +6,17 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 10:38:10 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:49:52 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	*init_image(void *mlx_ptr, char *img_path)
+void *init_image(void *mlx_ptr, char *img_path)
 {
-	void	*img_ptr;
-	int		img_width;
-	int		img_height;
+	void *img_ptr;
+	int img_width;
+	int img_height;
 
 	img_ptr = mlx_xpm_file_to_image(
 		mlx_ptr,
@@ -40,12 +40,10 @@ void	*init_image(void *mlx_ptr, char *img_path)
 
 void init_images(t_data *data)
 {
-	// dict_add(&data->imgs, 'P', init_image(data->mlx, "./p96x96.xpm"));
 	dict_add(&data->imgs, '1', init_image(data->mlx, "./sprites/wall32x32.xpm"));
-	// dict_add(&data->imgs, 'C', init_image(data->mlx, "./c96x96.xpm"));
 }
 
-void	render(t_data *data)
+void render(t_data *data)
 {
 	int x;
 	int y;
@@ -69,26 +67,78 @@ void	render(t_data *data)
 	}
 }
 
-int update_animation(t_data *data) {
+typedef struct s_point
+{
+	int x;
+	int y;
+} t_point;
+
+int squares_overlap(t_point a, t_point b, int size)
+{
+	int a_right = a.x + size;
+	int a_bottom = a.y + size;
+	int b_right = b.x + size;
+	int b_bottom = b.y + size;
+
+	if (a.x > b_right || b.x > a_right) // No horizontal overlap
+		return (0);
+	if (a.y > b_bottom || b.y > a_bottom) // No vertical overlap
+		return (0);
+	return (1);
+}
+
+int next_iswall(t_data *data, int next_x, int next_y)
+{
+	int y = 0;
+	while (y < data->map->height)
+	{
+		int x = 0;
+		while (x < data->map->width)
+		{
+			if (data->map->blocks[y][x] == '1')
+			{
+				t_point wall_position = {x * FRAME_SIZE, y * FRAME_SIZE};
+				t_point player_position = {next_x + SPEED - 1, next_y + SPEED - 1};
+				if (squares_overlap(wall_position, player_position, FRAME_SIZE))
+					return (1);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}
+
+int update_animation(t_data *data)
+{
 	t_dict *frames;
 	char framekey;
 	t_dict *frame;
+	int next_y;
+	int next_x;
 
 	if (data->counter++ % ANIMATION_DELAY == 0)
 	{
 		mlx_clear_window(data->mlx, data->win);
-		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
+		next_x = data->x;
+		next_y = data->y;
+		if ((data->keys[XK_d] ||
+			 data->keys[XK_a] ||
+			 data->keys[XK_w] ||
+			 data->keys[XK_s]) &&
+			(next_iswall(data, next_x, next_y) == 0))
 		{
+
 			if (data->keys[XK_d])
-				data->x += SPEED;
+				next_x += SPEED;
 			if (data->keys[XK_a])
-				data->x -= SPEED;
+				next_x -= SPEED;
 			if (data->keys[XK_w])
-				data->y -= SPEED;
+				next_y -= SPEED;
 			if (data->keys[XK_s])
-				data->y += SPEED;
-			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
+				next_y += SPEED;
 			ft_printf("run : %d : %d, %d\n", data->current_frame, data->x, data->y);
+			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
 			framekey = 'r';
 		}
 		else
@@ -97,6 +147,8 @@ int update_animation(t_data *data) {
 			ft_printf("idle: %d : %d, %d\n", data->current_frame, data->x, data->y);
 			framekey = 'i';
 		}
+		data->x = next_x;
+		data->y = next_y;
 		frames = dict_find(&data->frames, framekey);
 		frame = dict_find(&frames, data->current_frame);
 		if (frames == NULL || frame == NULL)
@@ -104,13 +156,13 @@ int update_animation(t_data *data) {
 			ft_printf("failed to get frames");
 			exit(0);
 		}
+		render(data);
 		mlx_put_image_to_window(
 			data->mlx,
 			data->win,
 			frame,
 			data->x,
 			data->y);
-		render(data);
 	}
 	return 0;
 }
@@ -157,9 +209,9 @@ void fill_frames(t_data *data, size_t max_frames, const char *frames_dir, char f
 	dict_add(&data->frames, frames_key, frames);
 }
 
-int	main(void)
+int main(void)
 {
-	t_data	data;
+	t_data data;
 
 	data.map = read_map("./map.ber");
 	data.mlx = mlx_init();
@@ -188,10 +240,25 @@ int	main(void)
 	init_images(&data);
 	fill_frames(&data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(&data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
+	int x;
+	int y;
 
+	y = 0;
+	while (y < data.map->height - 1)
+	{
+		x = 0;
+		while (x < data.map->width - 1)
+		{
+			if (data.map->blocks[y][x] == '1' && x != 0 && y != 0)
+				ft_printf("(%d, %d) ", x, y);
+			x++;
+		}
+		y++;
+	}
+	ft_printf("\n");
 	data.current_frame = 0;
-	data.x = 0;
-	data.y = 0;
+	data.x = 125;
+	data.y = 125;
 	data.counter = 0;
 	for (int i = 0; i < 256; i++)
 		data.keys[i] = 0;

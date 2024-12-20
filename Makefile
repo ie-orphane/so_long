@@ -6,6 +6,7 @@ CC = cc
 # Source and object files
 SOURCES = so_long.c events.c map.c utils.c dict.c
 OBJECTS = $(SOURCES:.c=.o)
+INCLUDES = dict.h so_long.h
 
 # Library directories and its files
 LIB_DIRS = mlx_linux ft_printf libft
@@ -22,6 +23,7 @@ LIB_FLAGS = $(LIB_PATHS) $(LIBS) $(INCLUDE_PATHS)
 all : $(NAME)
 
 $(NAME): $(LIB_FILES) $(OBJECTS)
+	@echo "new compile"
 	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(NAME)
 
 $(LIB_FILES):
@@ -30,7 +32,7 @@ $(LIB_FILES):
 		$(MAKE) -C $$dir 1> /dev/null; \
 	done
 
-%.o: %.c
+%.o: %.c $(INCLUDES)
 	@$(CC) -Wall -Wextra -Werror $(INCLUDE_PATHS) -O3 -c $< -o $@
 
 clean :
