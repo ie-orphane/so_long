@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 18:04:54 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/18 18:12:35 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:38:07 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	*dict_find(t_dict **dict, const char key)
 
 	if (!dict || !*dict)
 		return (NULL);
+	// ft_putstr_fd("hello", 1);
 	current = *dict;
 	while (current)
 	{

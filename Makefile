@@ -49,9 +49,11 @@ run : $(NAME)
 	@./$(NAME)
 
 TEST = test
+TEST_SOURCES = test.c dict.c
+TEST_OBJECTS = $(TEST_SOURCES:.c=.o)
 
-$(TEST):
-	@$(CC) $(TEST:=.c) $(LIB_FLAGS) $(INCLUDE_PATHS) -lXext -lX11 -lm -lz -O3 -o $(TEST)
+$(TEST): $(LIB_FILES) $(TEST_OBJECTS)
+	@$(CC) $(TEST_OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(TEST)
 
 trun: $(TEST)
 	@./$(TEST)

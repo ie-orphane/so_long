@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/19 11:46:19 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:17:07 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@
 # define WIN_HEIGHT 1080
 # define WIN_TITLE "my game"
 
-# define BLOCK_SIZE 96
-
+// # define BLOCK_SIZE 96
+# define FRAME_SIZE 32
+# define IDLE_FRAMES 11
+# define RUN_FRAMES 12
+# define ANIMATION_DELAY 10000
+# define SPEED 7
 
 typedef struct s_map {
 	char *content;
@@ -61,6 +65,15 @@ typedef struct s_data
 	t_img	*pimg;
 	t_dict *imgs;
 	size_t collective;
+
+	int frame_width;
+	int frame_height;
+	int current_frame;
+	int x;
+	int y;
+	t_dict *frames;
+	int counter;
+	int keys[256];
 } t_data;
 
 /* utils */
@@ -72,7 +85,8 @@ t_map	*read_map(char *fpath);
 
 int		handle_no_event(void *data);
 int		handle_close_event(t_data *data);
-int		handle_keypress_event(int keycode, t_data *data);
+int key_down(int keycode, t_data *data);
+int key_up(int keycode, t_data *data);
 // void	render(t_data *data);
 
 #endif // SO_LONG_H

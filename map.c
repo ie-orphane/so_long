@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/19 11:54:18 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:43:06 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ static void	check_blocks(t_map **map)
  */
 void	check_map_size(t_map *map)
 {
-	if (map->width * BLOCK_SIZE > WIN_WIDTH
-		|| map->height * BLOCK_SIZE > WIN_HEIGHT)
+	if (map->width * FRAME_SIZE > WIN_WIDTH
+		|| map->height * FRAME_SIZE > WIN_HEIGHT)
 	{
 		printf("Error\nMap (%dx%d) overflow from the window  (%dx%d)\n",
-			map->width * BLOCK_SIZE,
-			map->height * BLOCK_SIZE,
+			map->width * FRAME_SIZE,
+			map->height * FRAME_SIZE,
 			WIN_WIDTH,
 			WIN_HEIGHT);
 		exit(1);
