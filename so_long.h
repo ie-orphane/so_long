@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 20:45:22 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:07:37 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_data
 	t_dict *frames;
 	int counter;
 	int keys[256];
+	int steps;
 } t_data;
 
 /* utils */

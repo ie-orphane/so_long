@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 21:04:09 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:16:50 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,6 @@ void render(t_data *data)
 	}
 }
 
-typedef struct s_point
-{
-	int x;
-	int y;
-} t_point;
-
 int frames_overlap(int ax, int ay, int bx, int by)
 {
 	int a_right = ax + FRAME_SIZE;
@@ -134,29 +128,30 @@ int frames_overlap(int ax, int ay, int bx, int by)
 
 int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 {
-	int distance;
-	int x;
-	int y;
+	int distance = SPEED;
+	int y = 0;
 
-	distance = SPEED;
-	y = 0;
 	while (y < data->map->height)
 	{
-		x = 0;
+		int x = 0;
 		while (x < data->map->width)
 		{
 			if (data->map->blocks[y][x] == '1') // Wall block
 			{
 				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
 				{
+
 					if (direction == 'r') // Moving right
-						distance = (x * FRAME_SIZE) - (data->x + FRAME_SIZE);
+						distance = x * FRAME_SIZE - (data->x + FRAME_SIZE);
 					else if (direction == 'l') // Moving left
-						distance = data->x - ((x * FRAME_SIZE) + FRAME_SIZE);
-					else if (direction == 'd') // Moving downy
-						distance = (x * FRAME_SIZE) - (data->y + FRAME_SIZE);
+						distance = data->x - (x * FRAME_SIZE + FRAME_SIZE);
+					else if (direction == 'd') // Moving down
+						distance = y * FRAME_SIZE - (data->y + FRAME_SIZE);
 					else if (direction == 'u') // Moving up
-						distance = data->y - ((x * FRAME_SIZE) + FRAME_SIZE);
+						distance = data->y - (y * FRAME_SIZE + FRAME_SIZE);
+
+
+					// Clamp distance to positive values
 					if (distance < 0)
 						distance = 0;
 				}
@@ -165,9 +160,11 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 		}
 		y++;
 	}
+
+	// Return the smaller of SPEED or the clamped distance
 	if (distance < SPEED)
-    	return (distance);
-    return (SPEED);
+		return (distance);
+	return (SPEED);
 }
 
 void update_position(t_data *data, int *next_x, int *next_y)
@@ -177,22 +174,23 @@ void update_position(t_data *data, int *next_x, int *next_y)
 
 	// Calculate distances for both axes independently
 	if (data->keys[XK_d]) // Move right
-		distance_x = next_ifwall(data, 'r', data->x + SPEED, data->y);
-	else if (data->keys[XK_a]) // Move left
-		distance_x = next_ifwall(data, 'l', data->x - SPEED, data->y);
+		distance_x = next_ifwall(data, 'r', *next_x + SPEED, data->y);
+	if (data->keys[XK_a]) // Move left
+		distance_x = next_ifwall(data, 'l', *next_x - SPEED, data->y);
+
 	if (data->keys[XK_s]) // Move down
-		distance_y = next_ifwall(data, 'd', data->x, data->y + SPEED);
-	else if (data->keys[XK_w]) // Move up
-		distance_y = next_ifwall(data, 'u', data->x, data->y - SPEED);
+		distance_y = next_ifwall(data, 'd', data->x, *next_y + SPEED);
+	if (data->keys[XK_w]) // Move up
+		distance_y = next_ifwall(data, 'u', data->x, *next_y - SPEED);
 
 	// Apply movement only if the respective direction is not blocked
-	if (data->keys[XK_d])
+	if (data->keys[XK_d] && distance_x > 0)
 		*next_x += distance_x;
-	else if (data->keys[XK_a])
+	if (data->keys[XK_a] && distance_x > 0)
 		*next_x -= distance_x;
-	if (data->keys[XK_s])
+	if (data->keys[XK_s] && distance_y > 0)
 		*next_y += distance_y;
-	else if (data->keys[XK_w])
+	if (data->keys[XK_w] && distance_y > 0)
 		*next_y -= distance_y;
 }
 
@@ -263,25 +261,10 @@ int main(void)
 	data.collective = 0;
 	data.counter = 0;
 	data.frames = NULL;
+	data.steps = 0;
 
 	init_images(&data);
 
-	int x;
-	int y;
-
-	y = 0;
-	while (y < data.map->height - 1)
-	{
-		x = 0;
-		while (x < data.map->width - 1)
-		{
-			if (data.map->blocks[y][x] == '1' && x != 0 && y != 0)
-				ft_printf("(%d, %d) ", x, y);
-			x++;
-		}
-		y++;
-	}
-	ft_printf("\n");
 	data.current_frame = 0;
 	data.x = data.map->x * FRAME_SIZE;
 	data.y = data.map->y * FRAME_SIZE;
