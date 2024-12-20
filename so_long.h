@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 15:49:07 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 20:45:22 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define IDLE_FRAMES 11
 # define RUN_FRAMES 12
 # define ANIMATION_DELAY 10000
-# define SPEED 7
+# define SPEED 8
 
 typedef struct s_map {
 	char *content;

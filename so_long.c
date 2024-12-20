@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 15:49:52 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:04:09 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,134 +38,6 @@ void *init_image(void *mlx_ptr, char *img_path)
 	return (img_ptr);
 }
 
-void init_images(t_data *data)
-{
-	dict_add(&data->imgs, '1', init_image(data->mlx, "./sprites/wall32x32.xpm"));
-}
-
-void render(t_data *data)
-{
-	int x;
-	int y;
-
-	y = 0;
-	while (y < data->map->height)
-	{
-		x = 0;
-		while (x < data->map->width)
-		{
-			if (data->map->blocks[y][x] == '1')
-				mlx_put_image_to_window(
-					data->mlx,
-					data->win,
-					dict_find(&data->imgs, data->map->blocks[y][x]),
-					FRAME_SIZE * x,
-					FRAME_SIZE * y);
-			x++;
-		}
-		y++;
-	}
-}
-
-typedef struct s_point
-{
-	int x;
-	int y;
-} t_point;
-
-int squares_overlap(t_point a, t_point b, int size)
-{
-	int a_right = a.x + size;
-	int a_bottom = a.y + size;
-	int b_right = b.x + size;
-	int b_bottom = b.y + size;
-
-	if (a.x > b_right || b.x > a_right) // No horizontal overlap
-		return (0);
-	if (a.y > b_bottom || b.y > a_bottom) // No vertical overlap
-		return (0);
-	return (1);
-}
-
-int next_iswall(t_data *data, int next_x, int next_y)
-{
-	int y = 0;
-	while (y < data->map->height)
-	{
-		int x = 0;
-		while (x < data->map->width)
-		{
-			if (data->map->blocks[y][x] == '1')
-			{
-				t_point wall_position = {x * FRAME_SIZE, y * FRAME_SIZE};
-				t_point player_position = {next_x + SPEED - 1, next_y + SPEED - 1};
-				if (squares_overlap(wall_position, player_position, FRAME_SIZE))
-					return (1);
-			}
-			x++;
-		}
-		y++;
-	}
-	return (0);
-}
-
-int update_animation(t_data *data)
-{
-	t_dict *frames;
-	char framekey;
-	t_dict *frame;
-	int next_y;
-	int next_x;
-
-	if (data->counter++ % ANIMATION_DELAY == 0)
-	{
-		mlx_clear_window(data->mlx, data->win);
-		next_x = data->x;
-		next_y = data->y;
-		if ((data->keys[XK_d] ||
-			 data->keys[XK_a] ||
-			 data->keys[XK_w] ||
-			 data->keys[XK_s]) &&
-			(next_iswall(data, next_x, next_y) == 0))
-		{
-
-			if (data->keys[XK_d])
-				next_x += SPEED;
-			if (data->keys[XK_a])
-				next_x -= SPEED;
-			if (data->keys[XK_w])
-				next_y -= SPEED;
-			if (data->keys[XK_s])
-				next_y += SPEED;
-			ft_printf("run : %d : %d, %d\n", data->current_frame, data->x, data->y);
-			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
-			framekey = 'r';
-		}
-		else
-		{
-			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
-			ft_printf("idle: %d : %d, %d\n", data->current_frame, data->x, data->y);
-			framekey = 'i';
-		}
-		data->x = next_x;
-		data->y = next_y;
-		frames = dict_find(&data->frames, framekey);
-		frame = dict_find(&frames, data->current_frame);
-		if (frames == NULL || frame == NULL)
-		{
-			ft_printf("failed to get frames");
-			exit(0);
-		}
-		render(data);
-		mlx_put_image_to_window(
-			data->mlx,
-			data->win,
-			frame,
-			data->x,
-			data->y);
-	}
-	return 0;
-}
 char *file_name_to_path(const char *dir, int index)
 {
 	char *path;
@@ -209,6 +81,161 @@ void fill_frames(t_data *data, size_t max_frames, const char *frames_dir, char f
 	dict_add(&data->frames, frames_key, frames);
 }
 
+void init_images(t_data *data)
+{
+	dict_add(&data->imgs, '1', init_image(data->mlx, "./sprites/wall32x32.xpm"));
+	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
+	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
+}
+
+void render(t_data *data)
+{
+	int x;
+	int y;
+
+	y = 0;
+	while (y < data->map->height)
+	{
+		x = 0;
+		while (x < data->map->width)
+		{
+			if (data->map->blocks[y][x] == '1')
+				mlx_put_image_to_window(
+					data->mlx,
+					data->win,
+					dict_find(&data->imgs, data->map->blocks[y][x]),
+					FRAME_SIZE * x,
+					FRAME_SIZE * y);
+			x++;
+		}
+		y++;
+	}
+}
+
+typedef struct s_point
+{
+	int x;
+	int y;
+} t_point;
+
+int frames_overlap(int ax, int ay, int bx, int by)
+{
+	int a_right = ax + FRAME_SIZE;
+	int a_bottom = ay + FRAME_SIZE;
+	int b_right = bx + FRAME_SIZE;
+	int b_bottom = by + FRAME_SIZE;
+
+	if (ax >= b_right || bx >= a_right) // No horizontal overlap
+		return (0);
+	if (ay >= b_bottom || by >= a_bottom) // No vertical overlap
+		return (0);
+	return (1);
+}
+
+int next_ifwall(t_data *data, char direction, int next_x, int next_y)
+{
+	int distance;
+	int x;
+	int y;
+
+	distance = SPEED;
+	y = 0;
+	while (y < data->map->height)
+	{
+		x = 0;
+		while (x < data->map->width)
+		{
+			if (data->map->blocks[y][x] == '1') // Wall block
+			{
+				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
+				{
+					if (direction == 'r') // Moving right
+						distance = (x * FRAME_SIZE) - (data->x + FRAME_SIZE);
+					else if (direction == 'l') // Moving left
+						distance = data->x - ((x * FRAME_SIZE) + FRAME_SIZE);
+					else if (direction == 'd') // Moving downy
+						distance = (x * FRAME_SIZE) - (data->y + FRAME_SIZE);
+					else if (direction == 'u') // Moving up
+						distance = data->y - ((x * FRAME_SIZE) + FRAME_SIZE);
+					if (distance < 0)
+						distance = 0;
+				}
+			}
+			x++;
+		}
+		y++;
+	}
+	if (distance < SPEED)
+    	return (distance);
+    return (SPEED);
+}
+
+void update_position(t_data *data, int *next_x, int *next_y)
+{
+	int distance_x = SPEED;
+	int distance_y = SPEED;
+
+	// Calculate distances for both axes independently
+	if (data->keys[XK_d]) // Move right
+		distance_x = next_ifwall(data, 'r', data->x + SPEED, data->y);
+	else if (data->keys[XK_a]) // Move left
+		distance_x = next_ifwall(data, 'l', data->x - SPEED, data->y);
+	if (data->keys[XK_s]) // Move down
+		distance_y = next_ifwall(data, 'd', data->x, data->y + SPEED);
+	else if (data->keys[XK_w]) // Move up
+		distance_y = next_ifwall(data, 'u', data->x, data->y - SPEED);
+
+	// Apply movement only if the respective direction is not blocked
+	if (data->keys[XK_d])
+		*next_x += distance_x;
+	else if (data->keys[XK_a])
+		*next_x -= distance_x;
+	if (data->keys[XK_s])
+		*next_y += distance_y;
+	else if (data->keys[XK_w])
+		*next_y -= distance_y;
+}
+
+int update_animation(t_data *data)
+{
+	int next_x = data->x;
+	int next_y = data->y;
+
+	if (data->counter++ % ANIMATION_DELAY == 0)
+	{
+		mlx_clear_window(data->mlx, data->win);
+
+		// Update position with collision checks
+		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
+		{
+			update_position(data, &next_x, &next_y);
+
+			if (next_x != data->x || next_y != data->y)
+				data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
+			else
+				data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
+		}
+		else
+			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
+
+		data->x = next_x;
+		data->y = next_y;
+
+		// Render current frame
+		t_dict *frames = dict_find(&data->frames, data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s] ? 'r' : 'i');
+		t_dict *frame = dict_find(&frames, data->current_frame);
+		if (!frames || !frame)
+		{
+			ft_printf("failed to get frames");
+			exit(0);
+		}
+
+		mlx_put_image_to_window(data->mlx, data->win, frame, data->x, data->y);
+		render(data);
+	}
+	return 0;
+}
+
 int main(void)
 {
 	t_data data;
@@ -238,8 +265,7 @@ int main(void)
 	data.frames = NULL;
 
 	init_images(&data);
-	fill_frames(&data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
-	fill_frames(&data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
+
 	int x;
 	int y;
 
@@ -257,8 +283,8 @@ int main(void)
 	}
 	ft_printf("\n");
 	data.current_frame = 0;
-	data.x = 125;
-	data.y = 125;
+	data.x = data.map->x * FRAME_SIZE;
+	data.y = data.map->y * FRAME_SIZE;
 	data.counter = 0;
 	for (int i = 0; i < 256; i++)
 		data.keys[i] = 0;
