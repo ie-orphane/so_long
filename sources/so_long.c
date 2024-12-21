@@ -6,37 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 09:34:55 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 15:21:55 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void *init_image(void *mlx_ptr, char *img_path)
-{
-	void *img_ptr;
-	int img_width;
-	int img_height;
-
-	img_ptr = mlx_xpm_file_to_image(
-		mlx_ptr,
-		img_path,
-		&img_width,
-		&img_height);
-	if (img_ptr == NULL)
-	{
-		ft_printf("img not found");
-		exit(0);
-	}
-	if (img_height != FRAME_SIZE || img_width != FRAME_SIZE)
-	{
-		ft_printf("size error");
-		free(mlx_ptr);
-		free(img_ptr);
-		exit(0);
-	}
-	return (img_ptr);
-}
 
 char *file_name_to_path(const char *dir, int index)
 {
@@ -65,17 +39,9 @@ void fill_frames(t_data *data, size_t max_frames, const char *frames_dir, char f
 	i = 0;
 	while (i < max_frames)
 	{
-		char *path = file_name_to_path(frames_dir, i);
-		char *img_ptr = mlx_xpm_file_to_image(data->mlx, path, &data->frame_width, &data->frame_height);
-		if (img_ptr == NULL || data->frame_height != FRAME_SIZE || data->frame_width != FRAME_SIZE)
-		{
-			ft_printf("%s: failed to load frame", path);
-			dict_clear(&frames, dict_free);
-			free(path);
-			exit(0);
-		}
-		dict_add(&frames, i, img_ptr);
-		free(path);
+		char *img_path = file_name_to_path(frames_dir, i);
+		dict_add(&frames, i, img_init(data->mlx, img_path));
+		free(img_path);
 		i++;
 	}
 	dict_add(&data->frames, frames_key, frames);
@@ -83,7 +49,7 @@ void fill_frames(t_data *data, size_t max_frames, const char *frames_dir, char f
 
 void init_images(t_data *data)
 {
-	dict_add(&data->imgs, '1', init_image(data->mlx, "./sprites/wall32x32.xpm"));
+	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall32x32.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
 }
@@ -100,12 +66,15 @@ void render(t_data *data)
 		while (x < data->map->width)
 		{
 			if (data->map->blocks[y][x] == '1')
+			{
+				t_img *wall_img = dict_find(&data->imgs, data->map->blocks[y][x]);
 				mlx_put_image_to_window(
 					data->mlx,
 					data->win,
-					dict_find(&data->imgs, data->map->blocks[y][x]),
+					wall_img->img_ptr,
 					FRAME_SIZE * x,
 					FRAME_SIZE * y);
+			}
 			x++;
 		}
 		y++;
@@ -185,8 +154,8 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	if (data->keys[XK_w] && distance_y > 0)
 		*next_y -= distance_y;
 	data->steps += abs(data->x - *next_x) + abs(data->y - *next_y);
-	if (data->steps != 0 && data->steps % FRAME_SIZE == 0)
-		ft_printf("%d\n", data->steps / FRAME_SIZE);
+	// if (data->steps != 0 && data->steps % FRAME_SIZE == 0)
+	// 	ft_printf("%d\n", data->steps / FRAME_SIZE);
 }
 
 int update_animation(t_data *data)
@@ -213,13 +182,13 @@ int update_animation(t_data *data)
 		data->x = next_x;
 		data->y = next_y;
 		t_dict *frames = dict_find(&data->frames, keyframe);
-		t_dict *frame = dict_find(&frames, data->current_frame);
+		t_img *frame = dict_find(&frames, data->current_frame);
 		if (!frames || !frame)
 		{
 			ft_printf("failed to get frames");
 			exit(0);
 		}
-		mlx_put_image_to_window(data->mlx, data->win, frame, data->x, data->y);
+		mlx_put_image_to_window(data->mlx, data->win, frame->img_ptr, data->x, data->y);
 		render(data);
 	}
 	return 0;

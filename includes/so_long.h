@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 09:33:20 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:30:56 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "ft_printf.h"
 # include "libft.h"
 # include "dict.h"
+# include "image.h"
 
 # define MLX_ERROR 1
 
@@ -49,21 +50,21 @@ typedef struct s_map {
 	size_t collective;
 } t_map;
 
-typedef struct s_img
-{
-	void *self;
-	int width;
-	int height;
-	int x;
-	int y;
-}	t_img;
+// typedef struct s_img
+// {
+// 	void *self;
+// 	int width;
+// 	int height;
+// 	int x;
+// 	int y;
+// }	t_img;
 
 typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
 	t_map	*map;
-	t_img	*pimg;
+	t_img	img;
 	t_dict *imgs;
 	size_t collective;
 
@@ -72,6 +73,7 @@ typedef struct s_data
 	int current_frame;
 	int x;
 	int y;
+	char direction;
 	t_dict *frames;
 	int counter;
 	int keys[256];

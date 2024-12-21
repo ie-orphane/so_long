@@ -2,11 +2,19 @@ NAME=so_long
 
 # Compiler and flags
 CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
 # Source and object files
-SOURCES = so_long.c events.c map.c utils.c dict.c
-OBJECTS = $(SOURCES:.c=.o)
-INCLUDES = dict.h so_long.h
+SOURCES_DIR = sources
+SOURCES_FILE = so_long.c events.c map.c utils.c dict.c image.c
+SOURCES = $(addprefix $(SOURCES_DIR)/,$(SOURCES_FILE))
+
+OBJECTS_DIR = objects
+OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(SOURCES_FILE:.c=.o))
+
+INCLUDES_DIR = includes
+INCLUDES_FILE = dict.h so_long.h
+INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(INCLUDES_FILE))
 
 # Library directories and its files
 LIB_DIRS = mlx_linux ft_printf libft
@@ -15,16 +23,12 @@ LIB_FILES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a libft/libft.a
 # Library flags
 LIB_PATHS = -Lmlx_linux -Lft_printf -Llibft
 LIBS = -lmlx_Linux -lftprintf -lft
-INCLUDE_PATHS = -Imlx_linux -Ift_printf -Ilibft
+INCLUDE_PATHS := -I$(INCLUDES_DIR) -Imlx_linux -Ift_printf -Ilibft
 
 LIB_FLAGS = $(LIB_PATHS) $(LIBS) $(INCLUDE_PATHS)
 
 
 all : $(NAME)
-
-$(NAME): $(LIB_FILES) $(OBJECTS)
-	@echo "new compile"
-	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(NAME)
 
 $(LIB_FILES):
 	@for dir in $(LIB_DIRS); do \
@@ -32,8 +36,13 @@ $(LIB_FILES):
 		$(MAKE) -C $$dir 1> /dev/null; \
 	done
 
-%.o: %.c $(INCLUDES)
-	@$(CC) -Wall -Wextra -Werror $(INCLUDE_PATHS) -O3 -c $< -o $@
+$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
+	@mkdir -p $(OBJECTS_DIR)
+	$(CC) $(CFLAGS) $(INCLUDE_PATHS) -O3 -c $< -o $@
+
+$(NAME): $(LIB_FILES) $(OBJECTS)
+	@echo "new compile"
+	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(NAME)
 
 clean :
 	@rm -f $(OBJECTS)
