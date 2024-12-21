@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 18:16:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 18:40:05 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define IDLE_FRAMES 11
 # define RUN_FRAMES 12
 # define COLLECTIVE_FRAMES 17
+# define EXIT_FRAMES 8
 # define ANIMATION_DELAY 10000
 # define SPEED 8
 
@@ -78,6 +79,7 @@ typedef struct s_data
 
 	int current_frame;
 	int count_frame;
+	int eframe;
 
 	t_ply ply;
 	char direction;
