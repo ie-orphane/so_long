@@ -13,7 +13,7 @@ OBJECTS_DIR = objects
 OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(SOURCES_FILE:.c=.o))
 
 INCLUDES_DIR = includes
-INCLUDES_FILE = dict.h so_long.h
+INCLUDES_FILE = so_long.h image.h dict.h
 INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(INCLUDES_FILE))
 
 # Library directories and its files

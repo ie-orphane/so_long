@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 15:21:55 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 18:15:38 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ void init_images(t_data *data)
 	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall32x32.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
+	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 }
 
 void render(t_data *data)
 {
 	int x;
 	int y;
+	t_img *img;
+	t_dict *frames;
 
 	y = 0;
 	while (y < data->map->height)
@@ -65,16 +68,33 @@ void render(t_data *data)
 		x = 0;
 		while (x < data->map->width)
 		{
+			img = NULL;
 			if (data->map->blocks[y][x] == '1')
+				img = dict_find(&data->imgs, data->map->blocks[y][x]);
+			else if (data->map->blocks[y][x] == 'C')
 			{
-				t_img *wall_img = dict_find(&data->imgs, data->map->blocks[y][x]);
+				frames = dict_find(&data->frames, 'c');
+				img = dict_find(&frames, data->count_frame);
+				if (!frames || !img)
+				{
+					ft_printf("failed to get frames");
+					exit(0);
+				}
+			}
+			else if (data->map->blocks[y][x] == 'E')
+			{
+				if (data->ccount == data->pcount)
+					img = dict_find(&data->imgs, 'e');
+				else
+					img = dict_find(&data->imgs, data->map->blocks[y][x]);
+			}
+			if (img)
 				mlx_put_image_to_window(
 					data->mlx,
 					data->win,
-					wall_img->img_ptr,
+					img->img_ptr,
 					FRAME_SIZE * x,
 					FRAME_SIZE * y);
-			}
 			x++;
 		}
 		y++;
@@ -110,15 +130,37 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
 				{
 					if (direction == 'r') // Moving right
-						distance = x * FRAME_SIZE - (data->x + FRAME_SIZE);
+						distance = x * FRAME_SIZE - (data->px + FRAME_SIZE);
 					else if (direction == 'l') // Moving left
-						distance = data->x - (x * FRAME_SIZE + FRAME_SIZE);
+						distance = data->px - (x * FRAME_SIZE + FRAME_SIZE);
 					else if (direction == 'd') // Moving down
-						distance = y * FRAME_SIZE - (data->y + FRAME_SIZE);
+						distance = y * FRAME_SIZE - (data->py + FRAME_SIZE);
 					else if (direction == 'u') // Moving up
-						distance = data->y - (y * FRAME_SIZE + FRAME_SIZE);
+						distance = data->py - (y * FRAME_SIZE + FRAME_SIZE);
 					if (distance < 0)
 						distance = 0;
+				}
+			}
+			else if (data->map->blocks[y][x] == 'C')
+			{
+				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
+				{
+					if (direction == 'r') // Moving right
+						distance = x * FRAME_SIZE - (data->px + FRAME_SIZE);
+					else if (direction == 'l') // Moving left
+						distance = data->px - (x * FRAME_SIZE + FRAME_SIZE);
+					else if (direction == 'd') // Moving down
+						distance = y * FRAME_SIZE - (data->py + FRAME_SIZE);
+					else if (direction == 'u') // Moving up
+						distance = data->py - (y * FRAME_SIZE + FRAME_SIZE);
+					if (distance < 0)
+						distance = 0;
+					if (distance == 0)
+					{
+						distance = SPEED;
+						data->map->blocks[y][x] = '0';
+						data->pcount += 1;
+					}
 				}
 			}
 			x++;
@@ -138,13 +180,13 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	distance_x = SPEED;
 	distance_y = SPEED;
 	if (data->keys[XK_d]) // Move right
-		distance_x = next_ifwall(data, 'r', *next_x + SPEED, data->y);
+		distance_x = next_ifwall(data, 'r', *next_x + SPEED, data->py);
 	if (data->keys[XK_a]) // Move left
-		distance_x = next_ifwall(data, 'l', *next_x - SPEED, data->y);
+		distance_x = next_ifwall(data, 'l', *next_x - SPEED, data->py);
 	if (data->keys[XK_s]) // Move down
-		distance_y = next_ifwall(data, 'd', data->x, *next_y + SPEED);
+		distance_y = next_ifwall(data, 'd', data->px, *next_y + SPEED);
 	if (data->keys[XK_w]) // Move up
-		distance_y = next_ifwall(data, 'u', data->x, *next_y - SPEED);
+		distance_y = next_ifwall(data, 'u', data->px, *next_y - SPEED);
 	if (data->keys[XK_d] && distance_x > 0)
 		*next_x += distance_x;
 	if (data->keys[XK_a] && distance_x > 0)
@@ -153,15 +195,15 @@ void update_position(t_data *data, int *next_x, int *next_y)
 		*next_y += distance_y;
 	if (data->keys[XK_w] && distance_y > 0)
 		*next_y -= distance_y;
-	data->steps += abs(data->x - *next_x) + abs(data->y - *next_y);
+	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
 	// if (data->steps != 0 && data->steps % FRAME_SIZE == 0)
 	// 	ft_printf("%d\n", data->steps / FRAME_SIZE);
 }
 
 int update_animation(t_data *data)
 {
-	int next_x = data->x;
-	int next_y = data->y;
+	int next_x = data->px;
+	int next_y = data->py;
 
 	if (data->counter++ % ANIMATION_DELAY == 0)
 	{
@@ -170,17 +212,13 @@ int update_animation(t_data *data)
 		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
 		{
 			update_position(data, &next_x, &next_y);
-
-			if (next_x == data->x && next_y == data->y)
-				data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
-			else
-				data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
+			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
 			keyframe = 'r';
 		}
 		else
 			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
-		data->x = next_x;
-		data->y = next_y;
+		data->px = next_x;
+		data->py = next_y;
 		t_dict *frames = dict_find(&data->frames, keyframe);
 		t_img *frame = dict_find(&frames, data->current_frame);
 		if (!frames || !frame)
@@ -188,7 +226,8 @@ int update_animation(t_data *data)
 			ft_printf("failed to get frames");
 			exit(0);
 		}
-		mlx_put_image_to_window(data->mlx, data->win, frame->img_ptr, data->x, data->y);
+		data->count_frame = (data->count_frame + 1) % COLLECTIVE_FRAMES;
+		mlx_put_image_to_window(data->mlx, data->win, frame->img_ptr, data->px, data->py);
 		render(data);
 	}
 	return 0;
@@ -198,7 +237,7 @@ int main(void)
 {
 	t_data data;
 
-	data.map = read_map("./map.ber");
+	data.map = read_map(&data, "./map.ber");
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
 	{
@@ -218,16 +257,18 @@ int main(void)
 	}
 
 	data.imgs = NULL;
-	data.collective = 0;
+	// data.collective = 0;
 	data.counter = 0;
 	data.frames = NULL;
 	data.steps = 0;
+	data.pcount = 0;
+	// data.ccount = data.map->collective;
 
 	init_images(&data);
 
 	data.current_frame = 0;
-	data.x = data.map->x * FRAME_SIZE;
-	data.y = data.map->y * FRAME_SIZE;
+	data.count_frame = 0;
+
 	data.counter = 0;
 	for (int i = 0; i < 256; i++)
 		data.keys[i] = 0;

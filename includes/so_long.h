@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 14:30:56 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 18:16:24 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define FRAME_SIZE 32
 # define IDLE_FRAMES 11
 # define RUN_FRAMES 12
+# define COLLECTIVE_FRAMES 17
 # define ANIMATION_DELAY 10000
 # define SPEED 8
 
@@ -59,25 +60,36 @@ typedef struct s_map {
 // 	int y;
 // }	t_img;
 
+typedef struct s_ply
+{
+	int x;
+	int y;
+	int current_bag;
+	int max_bag;
+} t_ply;
+
+
 typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
 	t_map	*map;
-	t_img	img;
 	t_dict *imgs;
-	size_t collective;
 
-	int frame_width;
-	int frame_height;
 	int current_frame;
-	int x;
-	int y;
+	int count_frame;
+
+	t_ply ply;
 	char direction;
 	t_dict *frames;
 	int counter;
 	int keys[256];
 	int steps;
+
+	int px;
+	int py;
+	int pcount;
+	int ccount;
 } t_data;
 
 /* utils */
@@ -85,7 +97,7 @@ char	*read_file(char *fpath);
 int		ft_strset(const char *str, const char *set);
 
 /* map */
-t_map	*read_map(char *fpath);
+t_map	*read_map(t_data *data, char *fpath);
 
 int		handle_no_event(void *data);
 int		handle_close_event(t_data *data);

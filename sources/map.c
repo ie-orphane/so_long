@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 10:43:06 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:59:44 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	check_line_size(t_map **map)
  * 
  * the map should contains only '0', '1', 'C', 'E', 'P'
  */
-static void	check_blocks(t_map **map)
+static void	check_blocks(t_data *data, t_map **map)
 {
 	t_map	*map_cpy;
 	size_t	i;
@@ -60,11 +60,12 @@ static void	check_blocks(t_map **map)
 	{
 		if (map_cpy->blocks[map_cpy->height][i] == 'P')
 		{
-			map_cpy->x = i;
-			map_cpy->y = map_cpy->height;
+			data->px = i * FRAME_SIZE;
+			data->py = map_cpy->height * FRAME_SIZE;
 		}
 		else if (map_cpy->blocks[map_cpy->height][i] == 'C')
-			map_cpy->collective += 1;
+			data->ccount += 1;
+			// map_cpy->collective += 1;
 		else if (ft_strchr("01E\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
 		{
 			ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
@@ -96,7 +97,7 @@ void	check_map_size(t_map *map)
 	}
 }
 
-t_map	*read_map(char *fpath)
+t_map	*read_map(t_data *data, char *fpath)
 {
 	t_map	*map;
 	char	*content;
@@ -115,11 +116,14 @@ t_map	*read_map(char *fpath)
 	map->width = -1;
 	map->height = -1;
 	map->blocks = blocks;
-	map->collective = 0;
+	// map->collective = 0;
+	data->ccount = 0;
+	data->px = -1;
+	data->py = -1;
 	while (blocks[++map->height])
 	{
 		check_line_size(&map);
-		check_blocks(&map);
+		check_blocks(data, &map);
 	}
 	check_map_size(map);
 	return (map);
