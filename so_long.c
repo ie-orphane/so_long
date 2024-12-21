@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/20 21:16:50 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/21 09:34:55 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 			{
 				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
 				{
-
 					if (direction == 'r') // Moving right
 						distance = x * FRAME_SIZE - (data->x + FRAME_SIZE);
 					else if (direction == 'l') // Moving left
@@ -149,9 +148,6 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 						distance = y * FRAME_SIZE - (data->y + FRAME_SIZE);
 					else if (direction == 'u') // Moving up
 						distance = data->y - (y * FRAME_SIZE + FRAME_SIZE);
-
-
-					// Clamp distance to positive values
 					if (distance < 0)
 						distance = 0;
 				}
@@ -160,8 +156,6 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 		}
 		y++;
 	}
-
-	// Return the smaller of SPEED or the clamped distance
 	if (distance < SPEED)
 		return (distance);
 	return (SPEED);
@@ -169,21 +163,19 @@ int next_ifwall(t_data *data, char direction, int next_x, int next_y)
 
 void update_position(t_data *data, int *next_x, int *next_y)
 {
-	int distance_x = SPEED;
-	int distance_y = SPEED;
+	int distance_x;
+	int distance_y;
 
-	// Calculate distances for both axes independently
+	distance_x = SPEED;
+	distance_y = SPEED;
 	if (data->keys[XK_d]) // Move right
 		distance_x = next_ifwall(data, 'r', *next_x + SPEED, data->y);
 	if (data->keys[XK_a]) // Move left
 		distance_x = next_ifwall(data, 'l', *next_x - SPEED, data->y);
-
 	if (data->keys[XK_s]) // Move down
 		distance_y = next_ifwall(data, 'd', data->x, *next_y + SPEED);
 	if (data->keys[XK_w]) // Move up
 		distance_y = next_ifwall(data, 'u', data->x, *next_y - SPEED);
-
-	// Apply movement only if the respective direction is not blocked
 	if (data->keys[XK_d] && distance_x > 0)
 		*next_x += distance_x;
 	if (data->keys[XK_a] && distance_x > 0)
@@ -192,6 +184,9 @@ void update_position(t_data *data, int *next_x, int *next_y)
 		*next_y += distance_y;
 	if (data->keys[XK_w] && distance_y > 0)
 		*next_y -= distance_y;
+	data->steps += abs(data->x - *next_x) + abs(data->y - *next_y);
+	if (data->steps != 0 && data->steps % FRAME_SIZE == 0)
+		ft_printf("%d\n", data->steps / FRAME_SIZE);
 }
 
 int update_animation(t_data *data)
@@ -202,32 +197,28 @@ int update_animation(t_data *data)
 	if (data->counter++ % ANIMATION_DELAY == 0)
 	{
 		mlx_clear_window(data->mlx, data->win);
-
-		// Update position with collision checks
+		char keyframe = 'i';
 		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
 		{
 			update_position(data, &next_x, &next_y);
 
-			if (next_x != data->x || next_y != data->y)
-				data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
-			else
+			if (next_x == data->x && next_y == data->y)
 				data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
+			else
+				data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
+			keyframe = 'r';
 		}
 		else
 			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
-
 		data->x = next_x;
 		data->y = next_y;
-
-		// Render current frame
-		t_dict *frames = dict_find(&data->frames, data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s] ? 'r' : 'i');
+		t_dict *frames = dict_find(&data->frames, keyframe);
 		t_dict *frame = dict_find(&frames, data->current_frame);
 		if (!frames || !frame)
 		{
 			ft_printf("failed to get frames");
 			exit(0);
 		}
-
 		mlx_put_image_to_window(data->mlx, data->win, frame, data->x, data->y);
 		render(data);
 	}
