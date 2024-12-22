@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 11:24:50 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 21:09:16 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,15 @@ void	fill_frames(t_data *data, size_t max, const char *dir, char key)
 
 void	init_images(t_data *data)
 {
-	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall32x32.xpm"));
+	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall.xpm"));
+	// dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/000.xpm"));
 	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
-	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/background/gray.xpm"));
+	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/ground.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
+	fill_frames(data, ENEMY_FRAMES, "./sprites/mashroom/", 'F');
 }
 
 t_img	*frame_get(t_dict *framedict, char framekey, char frameindex)
@@ -93,6 +95,8 @@ void	render(t_data *data)
 				img = dict_find(&data->imgs, 'E');
 			else if (data->map->blocks[y][x] == 'E')
 				img = frame_get(data->frames, 'e', data->eframe);
+			else if (data->map->blocks[y][x] == 'F')
+				img = frame_get(data->frames, 'F', data->enemy_frame);
 			if (img)
 				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 			x++;
@@ -132,7 +136,7 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 		x = 0;
 		while (x < data->map->width)
 		{
-			if (ft_strchr("1EC", data->map->blocks[y][x]))
+			if (ft_strchr("1ECF", data->map->blocks[y][x]))
 			{
 				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
 				{
@@ -154,7 +158,8 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 							data->map->blocks[y][x] = '0';
 							data->pcount += 1;
 						}
-						else if (data->map->blocks[y][x] == 'E' && data->ccount == data->pcount)
+						else if ((data->map->blocks[y][x] == 'E' && data->ccount == data->pcount) 
+							|| data->map->blocks[y][x] == 'F')
 						{
 							ft_printf("\nGAME OVER\n");
 							exit(0);
@@ -199,6 +204,19 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	// 	ft_printf("%d\n", data->steps / FRAME_SIZE);
 }
 
+int keyin(t_data *data, int arr[])
+{
+	int i;
+
+	i = 0;
+	while (arr[i] != -1)
+	{
+		if (data->keys[arr[i]])
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int update_animation(t_data *data)
 {
@@ -208,7 +226,8 @@ int update_animation(t_data *data)
 	if (data->counter++ % ANIMATION_DELAY == 0)
 	{
 		char keyframe = 'i';
-		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
+		
+		if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
 		{
 			update_position(data, &next_x, &next_y);
 			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
@@ -226,6 +245,7 @@ int update_animation(t_data *data)
 			exit(0);
 		}
 		data->count_frame = (data->count_frame + 1) % COLLECTIVE_FRAMES;
+		data->enemy_frame = (data->enemy_frame + 1) % ENEMY_FRAMES;
 		if (data->ccount == data->pcount)
 			data->eframe = (data->eframe + 1) % EXIT_FRAMES;
 		if (data->img)
@@ -272,6 +292,7 @@ int main(void)
 	data.steps = 0;
 	data.pcount = 0;
 	data.eframe = 0;
+	data.enemy_frame = 0;
 
 	init_images(&data);
 

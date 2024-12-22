@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 11:07:26 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:22:35 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define RUN_FRAMES 12
 # define COLLECTIVE_FRAMES 17
 # define EXIT_FRAMES 8
+# define ENEMY_FRAMES 13
 # define ANIMATION_DELAY 10000
 # define SPEED 8
 
@@ -81,6 +82,7 @@ typedef struct s_data
 	int current_frame;
 	int count_frame;
 	int eframe;
+	int enemy_frame;
 
 	t_ply ply;
 	char direction;

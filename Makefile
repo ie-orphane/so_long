@@ -60,7 +60,7 @@ run : $(NAME)
 	@./$(NAME)
 
 TEST = test
-TEST_SOURCES = test.c dict.c
+TEST_SOURCES = test.c
 TEST_OBJECTS = $(TEST_SOURCES:.c=.o)
 
 $(TEST): $(LIB_FILES) $(TEST_OBJECTS)

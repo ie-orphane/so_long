@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 17:59:44 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:13:07 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	check_blocks(t_data *data, t_map **map)
 		else if (map_cpy->blocks[map_cpy->height][i] == 'C')
 			data->ccount += 1;
 			// map_cpy->collective += 1;
-		else if (ft_strchr("01E\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
+		else if (ft_strchr("01EF\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
 		{
 			ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
 			map_cpy->blocks[map_cpy->height][i],
