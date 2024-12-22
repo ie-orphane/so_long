@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 18:40:05 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 11:07:26 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ typedef struct s_data
 	void	*mlx;
 	void	*win;
 	t_map	*map;
-	t_dict *imgs;
+	t_dict	*imgs;
+	t_img	*img;
 
 	int current_frame;
 	int count_frame;

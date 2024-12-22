@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/21 20:01:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 11:24:50 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,21 @@ void	init_images(t_data *data)
 {
 	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall32x32.xpm"));
 	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
+	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/background/gray.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
+}
+
+t_img	*frame_get(t_dict *framedict, char framekey, char frameindex)
+{
+	t_img	*img;
+	t_dict	*frames;
+
+	frames = dict_find(&framedict, framekey);
+	img = dict_find(&frames, frameindex);
+	return (img);
 }
 
 void	render(t_data *data)
@@ -64,7 +75,6 @@ void	render(t_data *data)
 	int		x;
 	int		y;
 	t_img	*img;
-	t_dict	*frames;
 
 	y = 0;
 	while (y < data->map->height)
@@ -72,27 +82,19 @@ void	render(t_data *data)
 		x = 0;
 		while (x < data->map->width)
 		{
+			img = dict_find(&data->imgs, '0');
+			put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 			img = NULL;
 			if (data->map->blocks[y][x] == '1')
 				img = dict_find(&data->imgs, data->map->blocks[y][x]);
 			else if (data->map->blocks[y][x] == 'C')
-			{
-				frames = dict_find(&data->frames, 'c');
-				img = dict_find(&frames, data->count_frame);
-			}
+				img = frame_get(data->frames, 'c', data->count_frame);
+			else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
+				img = dict_find(&data->imgs, 'E');
 			else if (data->map->blocks[y][x] == 'E')
-			{
-				if (data->ccount != data->pcount)
-					img = dict_find(&data->imgs, 'E');
-				else
-				{
-					frames = dict_find(&data->frames, 'e');
-					img = dict_find(&frames, data->eframe);
-				}
-			}
+				img = frame_get(data->frames, 'e', data->eframe);
 			if (img)
-				mlx_put_image_to_window(data->mlx, data->win, img->img_ptr,
-					FRAME_SIZE * x, FRAME_SIZE * y);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 			x++;
 		}
 		y++;
@@ -152,7 +154,8 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 							data->map->blocks[y][x] = '0';
 							data->pcount += 1;
 						}
-						else if (data->map->blocks[y][x] == 'E' && data->ccount == data->pcount) {
+						else if (data->map->blocks[y][x] == 'E' && data->ccount == data->pcount)
+						{
 							ft_printf("\nGAME OVER\n");
 							exit(0);
 						}
@@ -196,6 +199,7 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	// 	ft_printf("%d\n", data->steps / FRAME_SIZE);
 }
 
+
 int update_animation(t_data *data)
 {
 	int next_x = data->px;
@@ -203,7 +207,6 @@ int update_animation(t_data *data)
 
 	if (data->counter++ % ANIMATION_DELAY == 0)
 	{
-		mlx_clear_window(data->mlx, data->win);
 		char keyframe = 'i';
 		if (data->keys[XK_d] || data->keys[XK_a] || data->keys[XK_w] || data->keys[XK_s])
 		{
@@ -225,10 +228,18 @@ int update_animation(t_data *data)
 		data->count_frame = (data->count_frame + 1) % COLLECTIVE_FRAMES;
 		if (data->ccount == data->pcount)
 			data->eframe = (data->eframe + 1) % EXIT_FRAMES;
+		if (data->img)
+		{
+			mlx_destroy_image(data->mlx, data->img->img_ptr);
+			free(data->img);
+		}
+		data->img = img_new(data->mlx, data->map->width * FRAME_SIZE, data->map->height * FRAME_SIZE);
 		render(data);
-		mlx_put_image_to_window(data->mlx, data->win, frame->img_ptr, data->px, data->py);
+		put_img_to_img(data->img, frame, data->px, data->py);
+		mlx_clear_window(data->mlx, data->win);
+		mlx_put_image_to_window(data->mlx, data->win, data->img->img_ptr, 0, 0);
 	}
-	return 0;
+	return (0);
 }
 
 int main(void)
@@ -255,6 +266,7 @@ int main(void)
 	}
 
 	data.imgs = NULL;
+	data.img = NULL;
 	data.counter = 0;
 	data.frames = NULL;
 	data.steps = 0;
