@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 17:22:35 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/22 21:34:49 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define RUN_FRAMES 12
 # define COLLECTIVE_FRAMES 17
 # define EXIT_FRAMES 8
-# define ENEMY_FRAMES 13
+# define ENEMY_FRAMES 9
 # define ANIMATION_DELAY 10000
 # define SPEED 8
 

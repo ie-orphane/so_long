@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 21:09:16 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/23 10:38:52 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,13 @@ void	fill_frames(t_data *data, size_t max, const char *dir, char key)
 void	init_images(t_data *data)
 {
 	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall.xpm"));
-	// dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/000.xpm"));
+	dict_add(&data->imgs, '4', img_init(data->mlx, "./sprites/left_wall.xpm"));
+	dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/right_wall.xpm"));
+	dict_add(&data->imgs, '3', img_init(data->mlx, "./sprites/twall.xpm"));
+	dict_add(&data->imgs, '5', img_init(data->mlx, "./sprites/tlcorner.xpm"));
+	dict_add(&data->imgs, '6', img_init(data->mlx, "./sprites/trcorner.xpm"));
+	dict_add(&data->imgs, '7', img_init(data->mlx, "./sprites/br-corner.xpm"));
+	dict_add(&data->imgs, '8', img_init(data->mlx, "./sprites/bl-corner.xpm"));
 	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
 	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/ground.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
@@ -60,6 +66,7 @@ void	init_images(t_data *data)
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
 	fill_frames(data, ENEMY_FRAMES, "./sprites/mashroom/", 'F');
+	fill_frames(data, 32, "./sprites/grass/", 'g');
 }
 
 t_img	*frame_get(t_dict *framedict, char framekey, char frameindex)
@@ -77,26 +84,72 @@ void	render(t_data *data)
 	int		x;
 	int		y;
 	t_img	*img;
-
+	
 	y = 0;
 	while (y < data->map->height)
 	{
 		x = 0;
 		while (x < data->map->width)
 		{
-			img = dict_find(&data->imgs, '0');
-			put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 			img = NULL;
-			if (data->map->blocks[y][x] == '1')
-				img = dict_find(&data->imgs, data->map->blocks[y][x]);
-			else if (data->map->blocks[y][x] == 'C')
-				img = frame_get(data->frames, 'c', data->count_frame);
-			else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
-				img = dict_find(&data->imgs, 'E');
-			else if (data->map->blocks[y][x] == 'E')
-				img = frame_get(data->frames, 'e', data->eframe);
-			else if (data->map->blocks[y][x] == 'F')
-				img = frame_get(data->frames, 'F', data->enemy_frame);
+			if (data->map->blocks[y][x] == '1' && x == 0 && 0 < y && y < data->map->height - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '4');
+			}
+			else if (data->map->blocks[y][x] == '1' && x == data->map->width - 1 && 0 < y && y < data->map->height - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '2');
+			}
+			else if (data->map->blocks[y][x] == '1' && y == 0 && 0 < x && x < data->map->width - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '3');
+			}
+			else if (data->map->blocks[y][x] == '1' && x == data->map->width - 1 && y == 0)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '6');
+			}
+			else if (data->map->blocks[y][x] == '1' && x == 0 && y == 0)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '5');
+			}
+			else if (data->map->blocks[y][x] == '1' && x == data->map->width - 1 && y == data->map->height - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '7');
+			}
+			else if (data->map->blocks[y][x] == '1' && x == 0 && y == data->map->height - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '8');
+			}
+			else
+			{
+				img = dict_find(&data->imgs, '0');
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = NULL;
+				if (data->map->blocks[y][x] == '1')
+					img = dict_find(&data->imgs, data->map->blocks[y][x]);
+				else if (data->map->blocks[y][x] == 'C')
+					img = frame_get(data->frames, 'c', data->count_frame);
+				else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
+					img = dict_find(&data->imgs, 'E');
+				else if (data->map->blocks[y][x] == 'E')
+					img = frame_get(data->frames, 'e', data->eframe);
+				else if (data->map->blocks[y][x] == 'F')
+					img = frame_get(data->frames, 'F', data->enemy_frame);
+			}
 			if (img)
 				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 			x++;
@@ -261,11 +314,12 @@ int update_animation(t_data *data)
 	}
 	return (0);
 }
-
+#include <time.h>
 int main(void)
 {
 	t_data data;
 
+	srand(time(NULL));
 	data.map = read_map(&data, "./map.ber");
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
