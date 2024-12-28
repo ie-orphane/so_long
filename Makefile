@@ -2,7 +2,7 @@ NAME=so_long
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
 
 # Source and object files
 SOURCES_DIR = sources

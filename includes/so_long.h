@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 21:34:49 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:33:31 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <X11/keysym.h>
 # include <X11/X.h>
 # include <math.h>
+# include <time.h>
 
 # include "ft_printf.h"
 # include "libft.h"
@@ -87,6 +88,7 @@ typedef struct s_data
 	t_ply ply;
 	char direction;
 	t_dict *frames;
+	t_dict *pframes;
 	int counter;
 	int keys[256];
 	int steps;

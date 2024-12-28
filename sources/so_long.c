@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/23 10:38:52 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:37:20 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,35 @@ void	fill_frames(t_data *data, size_t max, const char *dir, char key)
 	dict_add(&data->frames, key, frames);
 }
 
+typedef struct s_frame {
+	int		length;
+	t_dict	*self;
+} t_frame;
+
+void	fill_player_frames(t_data *data, size_t max, const char *dir, char key)
+{
+	t_frame *frames;
+	size_t	i;
+	char	*img_path;
+
+	frames = malloc(sizeof(t_frame));
+	frames->length = max;
+	frames->self = NULL;
+
+	i = 0;
+	while (i < max)
+	{
+		img_path = file_name_to_path(dir, i);
+		dict_add(&frames->self, i, img_init(data->mlx, img_path));
+		free(img_path);
+		i++;
+	}
+	dict_add(&data->pframes, key, frames);
+}
+
 void	init_images(t_data *data)
 {
-	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall.xpm"));
+	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/min-wall.xpm"));
 	dict_add(&data->imgs, '4', img_init(data->mlx, "./sprites/left_wall.xpm"));
 	dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/right_wall.xpm"));
 	dict_add(&data->imgs, '3', img_init(data->mlx, "./sprites/twall.xpm"));
@@ -59,10 +85,17 @@ void	init_images(t_data *data)
 	dict_add(&data->imgs, '6', img_init(data->mlx, "./sprites/trcorner.xpm"));
 	dict_add(&data->imgs, '7', img_init(data->mlx, "./sprites/br-corner.xpm"));
 	dict_add(&data->imgs, '8', img_init(data->mlx, "./sprites/bl-corner.xpm"));
+	dict_add(&data->imgs, '9', img_init(data->mlx, "./sprites/wall.xpm"));
 	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
 	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/ground.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
+	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/left/", 'I');
+	// fill_player_frames(data, 6, "./sprites/idle/front/", 'f');
+	// fill_player_frames(data, 6, "./sprites/idle/back/", 'b');
+	// fill_player_frames(data, 6, "./sprites/idle/left/", 'l');
+	// fill_player_frames(data, 6, "./sprites/idle/right/", 'r');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
+	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/left/", 'R');
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
 	fill_frames(data, ENEMY_FRAMES, "./sprites/mashroom/", 'F');
@@ -134,14 +167,24 @@ void	render(t_data *data)
 				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 				img = dict_find(&data->imgs, '8');
 			}
+			else if (data->map->blocks[y][x] == '1' && 0 < x && x < data->map->width - 1 && y == data->map->height - 1)
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '9');
+			}
+			else if (data->map->blocks[y][x] == '1')
+			{
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				img = dict_find(&data->imgs, '1');
+			}
 			else
 			{
 				img = dict_find(&data->imgs, '0');
 				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 				img = NULL;
-				if (data->map->blocks[y][x] == '1')
-					img = dict_find(&data->imgs, data->map->blocks[y][x]);
-				else if (data->map->blocks[y][x] == 'C')
+				if (data->map->blocks[y][x] == 'C')
 					img = frame_get(data->frames, 'c', data->count_frame);
 				else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
 					img = dict_find(&data->imgs, 'E');
@@ -237,9 +280,15 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	distance_x = SPEED;
 	distance_y = SPEED;
 	if (data->keys[XK_d]) // Move right
+	{
+		data->direction = 'r';
 		distance_x = next_if(data, 'r', *next_x + SPEED, data->py);
+	}
 	if (data->keys[XK_a]) // Move left
+	{
+		data->direction = 'l';
 		distance_x = next_if(data, 'l', *next_x - SPEED, data->py);
+	}
 	if (data->keys[XK_s]) // Move down
 		distance_y = next_if(data, 'd', data->px, *next_y + SPEED);
 	if (data->keys[XK_w]) // Move up
@@ -284,10 +333,17 @@ int update_animation(t_data *data)
 		{
 			update_position(data, &next_x, &next_y);
 			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
-			keyframe = 'r';
+			if (data->direction == 'l')
+				keyframe = 'R';
+			else
+				keyframe = 'r';
 		}
 		else
+		{
 			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
+			if (data->direction == 'l')
+				keyframe = 'I';
+		}
 		data->px = next_x;
 		data->py = next_y;
 		t_dict *frames = dict_find(&data->frames, keyframe);
@@ -314,7 +370,7 @@ int update_animation(t_data *data)
 	}
 	return (0);
 }
-#include <time.h>
+
 int main(void)
 {
 	t_data data;
@@ -347,6 +403,7 @@ int main(void)
 	data.pcount = 0;
 	data.eframe = 0;
 	data.enemy_frame = 0;
+	data.direction = 'r';
 
 	init_images(&data);
 
@@ -367,3 +424,4 @@ int main(void)
 	free(data.mlx);
 	return (0);
 }
+
