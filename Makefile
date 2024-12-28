@@ -2,7 +2,7 @@ NAME=so_long
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
+CFLAGS = -O3 -Wall -Wextra -Werror# -g -fsanitize=address
 
 # Source and object files
 SOURCES_DIR = sources
@@ -17,15 +17,15 @@ INCLUDES_FILE = so_long.h image.h dict.h
 INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(INCLUDES_FILE))
 
 # Library directories and its files
-LIB_DIRS = mlx_linux ft_printf libft
-LIB_FILES = mlx_linux/libmlx_Linux.a ft_printf/libftprintf.a libft/libft.a
+LIB_DIRS = ft_printf libft
+LIB_FILES = ft_printf/libftprintf.a libft/libft.a
 
 # Library flags
-LIB_PATHS = -Lmlx_linux -Lft_printf -Llibft
-LIBS = -lmlx_Linux -lftprintf -lft
-INCLUDE_PATHS := -I$(INCLUDES_DIR) -Imlx_linux -Ift_printf -Ilibft
+LIB_PATHS =  -Lft_printf -Llibft -L/usr/local/lib
+LIBS =  -lftprintf -lft -lmlx_Linux
+INCLUDE_PATHS := -I$(INCLUDES_DIR) -I/usr/local/include -Ift_printf -Ilibft
 
-LIB_FLAGS = $(LIB_PATHS) $(LIBS) $(INCLUDE_PATHS)
+LIB_FLAGS = $(LIB_PATHS) $(LIBS) -lXext -lX11 -lm $(INCLUDE_PATHS)
 
 
 all : $(NAME)
@@ -38,11 +38,11 @@ $(LIB_FILES):
 
 $(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
 	@mkdir -p $(OBJECTS_DIR)
-	$(CC) $(CFLAGS) $(INCLUDE_PATHS) -O3 -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDE_PATHS) -O3 -c $< -o $@
 
 $(NAME): $(LIB_FILES) $(OBJECTS)
 	@echo "new compile"
-	@$(CC) $(OBJECTS) $(LIB_FLAGS) -lXext -lX11 -lm -lz -o $(NAME)
+	@$(CC) $(OBJECTS) $(LIB_FLAGS) -o $(NAME)
 
 clean :
 	@rm -f $(OBJECTS)
