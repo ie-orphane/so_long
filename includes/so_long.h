@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/28 11:01:06 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/02 20:50:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_data
 	t_map	*map;
 	t_dict	*imgs;
 	t_img	*img;
+	t_img	*static_img;
 
 	int current_frame;
 	int count_frame;

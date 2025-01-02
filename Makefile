@@ -2,7 +2,7 @@ NAME=so_long
 
 # Compiler and flags
 CC = cc
-CFLAGS = -O3 -Wall -Wextra -Werror# -g -fsanitize=address
+CFLAGS = -O3 -Wall -Wextra -Werror
 
 # Source and object files
 SOURCES_DIR = sources
@@ -42,7 +42,7 @@ $(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
 
 $(NAME): $(LIB_FILES) $(OBJECTS)
 	@echo "new compile"
-	@$(CC) $(OBJECTS) $(LIB_FLAGS) -o $(NAME)
+	@$(CC) $(OBJECTS) $(LIB_FLAGS)  -fsanitize=address -g3 -o $(NAME) 
 
 clean :
 	@rm -f $(OBJECTS)
