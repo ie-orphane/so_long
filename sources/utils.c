@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/18 10:18:31 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:44:01 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,23 @@ int	ft_strset(const char *str, const char *set)
 		i++;
 	}
 	return (-1);
+}
+
+char	*filename_to_path(const char *dir, int index)
+{
+	char	*path;
+	char	*num;
+	size_t	pathsize;
+
+	num = ft_itoa(index);
+	pathsize = ft_strlen(dir) + ft_strlen(num) + 5;
+	path = malloc(pathsize * sizeof(char));
+	if (path)
+	{
+		ft_strlcpy(path, dir, pathsize);
+		ft_strlcat(path, num, pathsize);
+		ft_strlcat(path, ".xpm", pathsize);
+	}
+	free(num);
+	return (path);
 }

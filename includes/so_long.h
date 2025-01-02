@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/02 20:50:40 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:46:16 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,14 @@ typedef struct s_data
 /* utils */
 char	*read_file(char *fpath);
 int		ft_strset(const char *str, const char *set);
+char	*filename_to_path(const char *dir, int index);
+
+
+/* frames */
+void	fill_frames(t_data *data, size_t max, const char *dir, char key);
+void	init_images(t_data *data);
+t_img	*frame_get(t_dict *framedict, char framekey, char frameindex);
+
 
 /* map */
 t_map	*read_map(t_data *data, char *fpath);
