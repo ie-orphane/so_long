@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/26 14:33:31 by ielyatim         ###   ########.fr       */
+/*   Updated: 2024/12/28 11:01:06 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include <mlx.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
 # include <math.h>
@@ -27,6 +26,7 @@
 # include "libft.h"
 # include "dict.h"
 # include "image.h"
+# include "mlx.h"
 
 # define MLX_ERROR 1
 
