@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/02 21:48:06 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:03:23 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,24 @@ void	fill_player_frames(t_data *data, size_t max, const char *dir, char key)
 
 void	init_images(t_data *data)
 {
-	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/min-wall.xpm"));
-	dict_add(&data->imgs, '4', img_init(data->mlx, "./sprites/left_wall.xpm"));
-	dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/right_wall.xpm"));
-	dict_add(&data->imgs, '3', img_init(data->mlx, "./sprites/twall.xpm"));
-	dict_add(&data->imgs, '5', img_init(data->mlx, "./sprites/tlcorner.xpm"));
-	dict_add(&data->imgs, '6', img_init(data->mlx, "./sprites/trcorner.xpm"));
-	dict_add(&data->imgs, '7', img_init(data->mlx, "./sprites/br-corner.xpm"));
-	dict_add(&data->imgs, '8', img_init(data->mlx, "./sprites/bl-corner.xpm"));
-	dict_add(&data->imgs, '9', img_init(data->mlx, "./sprites/wall.xpm"));
-	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
 	dict_add(&data->imgs, '0', img_init(data->mlx, "./sprites/ground.xpm"));
+	dict_add(&data->imgs, '1', img_init(data->mlx, "./sprites/wall/center.xpm"));
+	dict_add(&data->imgs, '2', img_init(data->mlx, "./sprites/wall/right.xpm"));
+	dict_add(&data->imgs, '3', img_init(data->mlx, "./sprites/wall/top.xpm"));
+	dict_add(&data->imgs, '4', img_init(data->mlx, "./sprites/wall/left.xpm"));
+	dict_add(&data->imgs, '5', img_init(data->mlx, "./sprites/wall/top-left.xpm"));
+	dict_add(&data->imgs, '6', img_init(data->mlx, "./sprites/wall/top-right.xpm"));
+	dict_add(&data->imgs, '7', img_init(data->mlx, "./sprites/wall/bottom-right.xpm"));
+	dict_add(&data->imgs, '8', img_init(data->mlx, "./sprites/wall/bottom-left.xpm"));
+	dict_add(&data->imgs, '9', img_init(data->mlx, "./sprites/wall/bottom.xpm"));
+	dict_add(&data->imgs, 'E', img_init(data->mlx, "./sprites/exit32x32.xpm"));
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/", 'i');
 	fill_frames(data, IDLE_FRAMES, "./sprites/pink-man/idle/left/", 'I');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/", 'r');
 	fill_frames(data, RUN_FRAMES, "./sprites/pink-man/run/left/", 'R');
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
-	fill_frames(data, ENEMY_FRAMES, "./sprites/mashroom/", 'F');
+	fill_frames(data, ENEMY_FRAMES, "./sprites/bird/", 'F');
 	fill_frames(data, 32, "./sprites/grass/", 'g');
 }
 

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/02 21:48:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:59:48 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	init_static_img(t_data *data)
 				put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 				tile_key = get_wall_tile(data, x, y);
 			}
-			img = dict_find(&data->imgs, tile_key);
+			if(rand() % 4 != 0 && tile_key == '0')
+				img = frame_get(data->frames, 'g', (x + y) % 32);
+			else
+				img = dict_find(&data->imgs, tile_key);
 			if (img)
 				put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 		}
