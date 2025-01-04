@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/02 21:44:01 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/03 11:20:36 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,9 @@ char	*filename_to_path(const char *dir, int index)
 	}
 	free(num);
 	return (path);
+}
+
+int	randint(int min, int max)
+{
+	return rand() % (max - min + 1) + min;
 }

@@ -6,39 +6,61 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/03 09:59:48 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:24:08 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	get_wall_tile(t_data *data, int x, int y)
+int	get_wall_tile(t_data *data, int x, int y)
 {
-	if (x == 0 && 0 < y && y < data->map->height - 1)
-		return ('4');
 	if (x == data->map->width - 1 && 0 < y && y < data->map->height - 1)
-		return ('2');
-	if (y == 0 && 0 < x && x < data->map->width - 1)
-		return ('3');
-	if (x == data->map->width - 1 && y == 0)
-		return ('6');
-	if (x == 0 && y == 0)
-		return ('5');
-	if (x == data->map->width - 1 && y == data->map->height - 1)
-		return ('7');
-	if (x == 0 && y == data->map->height - 1)
-		return ('8');
+		return (TW_RIGHT);
 	if (0 < x && x < data->map->width - 1 && y == data->map->height - 1)
-		return ('9');
-	return ('1');
+		return (TW_BOTTOM);
+	if (0 < x && x < data->map->width - 1 && y == 0)
+		return (TW_TOP);
+	if (x == 0 && y == data->map->height - 1)
+		return (TW_BOTTOM_R);
+	if (x == 0 && y == 0)
+		return (TW_TOP_L);
+	if (x == 0 && 0 < y && y < data->map->height - 1)
+		return (TW_LEFT);
+	if (x == data->map->width - 1 && y == data->map->height - 1)
+		return (TW_BOTTOM_L);
+	if (x == data->map->width - 1 && y == 0)
+		return (TW_TOP_R);
+	return (-1);
 }
+
+// char	get_wall_tile(t_data *data, int x, int y)
+// {
+// 	if (x == 0 && 0 < y && y < data->map->height - 1)
+// 		return ('4');
+// 	if (x == data->map->width - 1 && 0 < y && y < data->map->height - 1)
+// 		return ('2');
+// 	if (y == 0 && 0 < x && x < data->map->width - 1)
+// 		return ('3');
+// 	if (x == data->map->width - 1 && y == 0)
+// 		return ('6');
+// 	if (x == 0 && y == 0)
+// 		return ('5');
+// 	if (x == data->map->width - 1 && y == data->map->height - 1)
+// 		return ('7');
+// 	if (x == 0 && y == data->map->height - 1)
+// 		return ('8');
+// 	if (0 < x && x < data->map->width - 1 && y == data->map->height - 1)
+// 		return ('9');
+// 	return ('1');
+// }
 
 void	init_static_img(t_data *data)
 {
 	int		x;
 	int		y;
 	t_img	*img;
-	char	tile_key;
+	// char	tile_key;
+	// int		t_wall_key;
 
 	data->static_img = img_new(data->mlx, data->map->width * FRAME_SIZE, data->map->height * FRAME_SIZE);
 	y = -1;
@@ -48,19 +70,28 @@ void	init_static_img(t_data *data)
 		while (++x < data->map->width)
 		{
 			img = NULL;
-			tile_key = '0';
+			// tile_key = '0';
 			if (data->map->blocks[y][x] == '1')
 			{
-				img = frame_get(data->frames, 'g', (x + y) % 32);
-				put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
-				tile_key = get_wall_tile(data, x, y);
+				// img = frame_get(data->frames, 'g', randint(0, 32 - 1));
+				// put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				// tile_key = ;
+				// t_wall_key = get_wall_tile(data, x, y);
+				// if (t_wall_key != -1)
+				// 	put_img_to_img(data->static_img, data->t_wall[t_wall_key], FRAME_SIZE * x, FRAME_SIZE * y);
+			img = dict_find(&data->imgs, '0');
 			}
-			if(rand() % 4 != 0 && tile_key == '0')
-				img = frame_get(data->frames, 'g', (x + y) % 32);
 			else
-				img = dict_find(&data->imgs, tile_key);
+			img = dict_find(&data->imgs, '1');
 			if (img)
 				put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+			// if(rand() % 8 != 0 && tile_key == '0')
+			// 	img = frame_get(data->frames, 'g', randint(0, 32 - 1));
+			// else
+			// if (tile_key = '0')
+			// img = dict_find(&data->imgs, tile_key);
+			// if (img)
+			// 	put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
 		}
 	}
 }
@@ -94,18 +125,10 @@ void	render(t_data *data)
 
 int	frames_overlap(int ax, int ay, int bx, int by)
 {
-	int	a_right;
-	int	a_bottom;
-	int	b_right;
-	int	b_bottom;
-
-	a_right = ax + FRAME_SIZE;
-	a_bottom = ay + FRAME_SIZE;
-	b_right = bx + FRAME_SIZE;
-	b_bottom = by + FRAME_SIZE;
-	if (ax >= b_right || bx >= a_right)
-		return (0);
-	if (ay >= b_bottom || by >= a_bottom)
+	if (ax >= bx + FRAME_SIZE ||
+		bx >= ax + FRAME_SIZE ||
+		ay >= by + FRAME_SIZE ||
+		by >= ay + FRAME_SIZE)
 		return (0);
 	return (1);
 }
@@ -165,7 +188,7 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 
 void update_position(t_data *data, int *next_x, int *next_y)
 {
-	if (data->keys[XK_d]) // Move right
+	if (data->keys[XK_d] == 1) // Move right
 	{
 		data->direction = 'r';
 		*next_x += next_if(data, 'r', *next_x + SPEED, data->py);
@@ -242,7 +265,7 @@ int update_animation(t_data *data)
 		}
 		data->img = img_new(data->mlx, data->map->width * FRAME_SIZE, data->map->height * FRAME_SIZE);
 		put_img_to_img(data->img, data->static_img, 0, 0);
-		render(data);
+		// render(data);
 		put_img_to_img(data->img, frame, data->px, data->py);
 		mlx_clear_window(data->mlx, data->win);
 		mlx_put_image_to_window(data->mlx, data->win, data->img->img_ptr, 0, 0);

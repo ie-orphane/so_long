@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 12:49:13 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 17:01:44 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ t_img	*img_init(void *mlx_ptr, char *img_path)
 		ft_printf("Image not found: %s\n", img_path);
 		exit(EXIT_FAILURE);
 	}
-	if (img->height != FRAME_SIZE || img->width != FRAME_SIZE)
-	{
-		ft_printf("Size error: Image dimensions must be %dx%d\n",
-			FRAME_SIZE, FRAME_SIZE);
-		mlx_destroy_image(mlx_ptr, img->img_ptr);
-		exit(EXIT_FAILURE);
-	}
+	// if (img->height != FRAME_SIZE || img->width != FRAME_SIZE)
+	// {
+	// 	ft_printf("Size error: Image dimensions must be %dx%d\n",
+	// 		FRAME_SIZE, FRAME_SIZE);
+	// 	mlx_destroy_image(mlx_ptr, img->img_ptr);
+	// 	exit(EXIT_FAILURE);
+	// }
 	img->addr = mlx_get_data_addr(img->img_ptr, &img->bpp,
 			&img->line_length, &img->endian);
 	return (img);

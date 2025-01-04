@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/02 21:46:16 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:16:23 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "dict.h"
 # include "image.h"
 # include "mlx.h"
+# include "sprite.h"
 
 # define MLX_ERROR 1
 
@@ -35,9 +36,9 @@
 # define WIN_TITLE "my game"
 
 // # define BLOCK_SIZE 96
-# define FRAME_SIZE 32
-# define IDLE_FRAMES 11
-# define RUN_FRAMES 12
+# define FRAME_SIZE 64
+# define IDLE_FRAMES 6
+# define RUN_FRAMES 6
 # define COLLECTIVE_FRAMES 17
 # define EXIT_FRAMES 8
 # define ENEMY_FRAMES 9
@@ -81,6 +82,8 @@ typedef struct s_data
 	t_img	*img;
 	t_img	*static_img;
 
+	void	*t_wall[TW_MAX];
+
 	int current_frame;
 	int count_frame;
 	int eframe;
@@ -90,6 +93,7 @@ typedef struct s_data
 	char direction;
 	t_dict *frames;
 	t_dict *pframes;
+	void	*_frames[F_MAX];
 	int counter;
 	int keys[256];
 	int steps;
@@ -104,6 +108,7 @@ typedef struct s_data
 char	*read_file(char *fpath);
 int		ft_strset(const char *str, const char *set);
 char	*filename_to_path(const char *dir, int index);
+int		randint(int min, int max);
 
 
 /* frames */
@@ -119,6 +124,5 @@ int		handle_no_event(void *data);
 int		handle_close_event(t_data *data);
 int key_down(int keycode, t_data *data);
 int key_up(int keycode, t_data *data);
-// void	render(t_data *data);
 
 #endif // SO_LONG_H
