@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 21:24:08 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:32:09 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	init_static_img(t_data *data)
 	// char	tile_key;
 	// int		t_wall_key;
 
-	data->static_img = img_new(data->mlx, data->map->width * FRAME_SIZE, data->map->height * FRAME_SIZE);
+	data->static_img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
 	y = -1;
 	while (++y < data->map->height)
 	{
@@ -74,24 +74,24 @@ void	init_static_img(t_data *data)
 			if (data->map->blocks[y][x] == '1')
 			{
 				// img = frame_get(data->frames, 'g', randint(0, 32 - 1));
-				// put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				// put_img_to_img(data->static_img, img, TILE_SIZE * x, TILE_SIZE * y);
 				// tile_key = ;
 				// t_wall_key = get_wall_tile(data, x, y);
 				// if (t_wall_key != -1)
-				// 	put_img_to_img(data->static_img, data->t_wall[t_wall_key], FRAME_SIZE * x, FRAME_SIZE * y);
+				// 	put_img_to_img(data->static_img, data->t_wall[t_wall_key], TILE_SIZE * x, TILE_SIZE * y);
 			img = dict_find(&data->imgs, '0');
 			}
 			else
 			img = dict_find(&data->imgs, '1');
 			if (img)
-				put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				put_img_to_img(data->static_img, img, TILE_SIZE * x, TILE_SIZE * y);
 			// if(rand() % 8 != 0 && tile_key == '0')
 			// 	img = frame_get(data->frames, 'g', randint(0, 32 - 1));
 			// else
 			// if (tile_key = '0')
 			// img = dict_find(&data->imgs, tile_key);
 			// if (img)
-			// 	put_img_to_img(data->static_img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+			// 	put_img_to_img(data->static_img, img, TILE_SIZE * x, TILE_SIZE * y);
 		}
 	}
 }
@@ -118,17 +118,17 @@ void	render(t_data *data)
 			else if (data->map->blocks[y][x] == 'F')
 				img = frame_get(data->frames, 'F', data->enemy_frame);
 			if (img)
-				put_img_to_img(data->img, img, FRAME_SIZE * x, FRAME_SIZE * y);
+				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
 		}
 	}
 }
 
 int	frames_overlap(int ax, int ay, int bx, int by)
 {
-	if (ax >= bx + FRAME_SIZE ||
-		bx >= ax + FRAME_SIZE ||
-		ay >= by + FRAME_SIZE ||
-		by >= ay + FRAME_SIZE)
+	if (ax >= bx + TILE_SIZE ||
+		bx >= ax + TILE_SIZE ||
+		ay >= by + TILE_SIZE ||
+		by >= ay + TILE_SIZE)
 		return (0);
 	return (1);
 }
@@ -148,16 +148,16 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 		{
 			if (ft_strchr("1ECF", data->map->blocks[y][x]))
 			{
-				if (frames_overlap(x * FRAME_SIZE, y * FRAME_SIZE, next_x, next_y))
+				if (frames_overlap(x * TILE_SIZE, y * TILE_SIZE, next_x, next_y))
 				{
 					if (direction == 'r')
-						distance = x * FRAME_SIZE - (data->px + FRAME_SIZE);
+						distance = x * TILE_SIZE - (data->px + TILE_SIZE);
 					else if (direction == 'l')
-						distance = data->px - (x * FRAME_SIZE + FRAME_SIZE);
+						distance = data->px - (x * TILE_SIZE + TILE_SIZE);
 					else if (direction == 'd')
-						distance = y * FRAME_SIZE - (data->py + FRAME_SIZE);
+						distance = y * TILE_SIZE - (data->py + TILE_SIZE);
 					else if (direction == 'u')
-						distance = data->py - (y * FRAME_SIZE + FRAME_SIZE);
+						distance = data->py - (y * TILE_SIZE + TILE_SIZE);
 					if (distance < 0)
 						distance = 0;
 					if (distance == 0)
@@ -203,8 +203,8 @@ void update_position(t_data *data, int *next_x, int *next_y)
 	if (data->keys[XK_w]) // Move up
 		*next_y -= next_if(data, 'u', data->px, *next_y - SPEED);
 	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
-	// if (data->steps != 0 && data->steps % FRAME_SIZE == 0)
-	// 	ft_printf("%d\n", data->steps / FRAME_SIZE);
+	// if (data->steps != 0 && data->steps % TILE_SIZE == 0)
+	// 	ft_printf("%d\n", data->steps / TILE_SIZE);
 }
 
 int keyin(t_data *data, int arr[])
@@ -263,7 +263,7 @@ int update_animation(t_data *data)
 			mlx_destroy_image(data->mlx, data->img->img_ptr);
 			free(data->img);
 		}
-		data->img = img_new(data->mlx, data->map->width * FRAME_SIZE, data->map->height * FRAME_SIZE);
+		data->img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
 		put_img_to_img(data->img, data->static_img, 0, 0);
 		// render(data);
 		put_img_to_img(data->img, frame, data->px, data->py);
@@ -287,8 +287,8 @@ int main(void)
 	}
 	data.win = mlx_new_window(
 		data.mlx,
-		data.map->width * FRAME_SIZE,
-		data.map->height * FRAME_SIZE,
+		data.map->width * TILE_SIZE,
+		data.map->height * TILE_SIZE,
 		WIN_TITLE);
 	if (data.win == NULL)
 	{

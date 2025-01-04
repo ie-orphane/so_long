@@ -6,13 +6,14 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 18:41:38 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:32:39 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef SPRITE_H
 # define SPRITE_H
+
+# define TILE_SIZE 64
 
 # define TW_TOP 0
 # define TW_BOTTOM 1
@@ -23,7 +24,6 @@
 # define TW_BOTTOM_R 6
 # define TW_BOTTOM_L 7
 # define TW_MAX 8
-
 
 # define FP_IDLE_R 0
 # define FP_IDLE_R_C 6

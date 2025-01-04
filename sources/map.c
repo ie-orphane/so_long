@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/12/22 17:13:07 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:32:09 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ static void	check_blocks(t_data *data, t_map **map)
 	{
 		if (map_cpy->blocks[map_cpy->height][i] == 'P')
 		{
-			data->px = i * FRAME_SIZE;
-			data->py = map_cpy->height * FRAME_SIZE;
+			data->px = i * TILE_SIZE;
+			data->py = map_cpy->height * TILE_SIZE;
 		}
 		else if (map_cpy->blocks[map_cpy->height][i] == 'C')
 			data->ccount += 1;
@@ -85,12 +85,12 @@ static void	check_blocks(t_data *data, t_map **map)
  */
 void	check_map_size(t_map *map)
 {
-	if (map->width * FRAME_SIZE > WIN_WIDTH
-		|| map->height * FRAME_SIZE > WIN_HEIGHT)
+	if (map->width * TILE_SIZE > WIN_WIDTH
+		|| map->height * TILE_SIZE > WIN_HEIGHT)
 	{
 		printf("Error\nMap (%dx%d) overflow from the window  (%dx%d)\n",
-			map->width * FRAME_SIZE,
-			map->height * FRAME_SIZE,
+			map->width * TILE_SIZE,
+			map->height * TILE_SIZE,
 			WIN_WIDTH,
 			WIN_HEIGHT);
 		exit(1);

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 21:16:23 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:32:22 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define WIN_TITLE "my game"
 
 // # define BLOCK_SIZE 96
-# define FRAME_SIZE 64
+
 # define IDLE_FRAMES 6
 # define RUN_FRAMES 6
 # define COLLECTIVE_FRAMES 17
