@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 11:08:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:44:38 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,23 @@ t_uint	t_ground_index(t_data *data, int x, int y)
 	return ((top << 3) | (left << 2) | (right << 1) | bottom);
 }
 
-void	init_static_img(t_data *data)
+void	put_layers(t_data *data)
 {
 	int		x;
 	int		y;
 	t_img	*img;
 
-	data->static_img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
+	y = -1;
+	while (++y < data->map->height)
+	{
+		x = -1;
+		while (++x < data->map->width)
+		{
+			img = dict_find(&data->imgs, '0');
+			if (img)
+				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
+		}
+	}
 	y = -1;
 	while (++y < data->map->height)
 	{
@@ -40,12 +50,25 @@ void	init_static_img(t_data *data)
 		while (++x < data->map->width)
 		{
 			img = NULL;
-			if (data->map->blocks[y][x] == '1')
-				img = dict_find(&data->imgs, '0');
-			else
+			if (data->map->blocks[y][x] != '1')
+				img = frame_get(data->frames, 'f', data->f_foan.count);
+			if (img)
+			{
+				put_img_to_img(data->img, img, (TILE_SIZE * x) - ((82 - 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2));
+			}
+		}
+	}
+	y = -1;
+	while (++y < data->map->height)
+	{
+		x = -1;
+		while (++x < data->map->width)
+		{
+			img = NULL;
+			if (data->map->blocks[y][x] != '1')
 				img = data->t_ground[t_ground_index(data, x, y)];
 			if (img)
-				put_img_to_img(data->static_img, img, TILE_SIZE * x, TILE_SIZE * y);
+				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
 		}
 	}
 }
@@ -177,17 +200,21 @@ int keyin(t_data *data, int arr[])
 
 int update_animation(t_data *data)
 {
+	static char keyframe = 'i';
 	int next_x = data->px;
 	int next_y = data->py;
+	int updated = 0;
 
-	if (data->counter++ % ANIMATION_DELAY == 0)
+	gettimeofday(&data->f_player.current_time, NULL);
+	if ((data->f_player.current_time.tv_sec - data->f_player.last_time.tv_sec) * 1000
+		+ (data->f_player.current_time.tv_usec - data->f_player.last_time.tv_usec) / 1000 
+		>= 75)
 	{
-		char keyframe = 'i';
-		
+		keyframe = 'i';
 		if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
 		{
 			update_position(data, &next_x, &next_y);
-			data->current_frame = (data->current_frame + 1) % RUN_FRAMES;
+			data->f_player.count = (data->f_player.count + 1) % RUN_FRAMES;
 			if (data->direction == 'l')
 				keyframe = 'R';
 			else
@@ -195,31 +222,43 @@ int update_animation(t_data *data)
 		}
 		else
 		{
-			data->current_frame = (data->current_frame + 1) % IDLE_FRAMES;
+			data->f_player.count = (data->f_player.count + 1) % IDLE_FRAMES;
 			if (data->direction == 'l')
 				keyframe = 'I';
 		}
 		data->px = next_x;
 		data->py = next_y;
+		// data->count_frame = (data->count_frame + 1) % COLLECTIVE_FRAMES;
+		// data->enemy_frame = (data->enemy_frame + 1) % ENEMY_FRAMES;
+		// if (data->ccount == data->pcount)
+		// 	data->eframe = (data->eframe + 1) % EXIT_FRAMES;
+		data->f_player.last_time = data->f_player.current_time;
+		updated = 1;
+	}
+
+	gettimeofday(&data->f_foan.current_time, NULL);
+	if ((data->f_foan.current_time.tv_sec - data->f_foan.last_time.tv_sec) * 1000
+		+ (data->f_foan.current_time.tv_usec - data->f_foan.last_time.tv_usec) / 1000 
+		>= 115)
+	{
+		data->f_foan.count = (data->f_foan.count + 1) % FOAM_FRAMES;
+		data->f_foan.last_time = data->f_foan.current_time;
+		updated = 1;
+	}
+
+	if (updated)
+	{
 		t_dict *frames = dict_find(&data->frames, keyframe);
-		t_img *frame = dict_find(&frames, data->current_frame);
-		if (!frames || !frame)
-		{
-			ft_printf("failed to get frames");
-			exit(0);
-		}
-		data->count_frame = (data->count_frame + 1) % COLLECTIVE_FRAMES;
-		data->enemy_frame = (data->enemy_frame + 1) % ENEMY_FRAMES;
-		if (data->ccount == data->pcount)
-			data->eframe = (data->eframe + 1) % EXIT_FRAMES;
+		t_img *frame = dict_find(&frames, data->f_player.count);
+
 		if (data->img)
 		{
 			mlx_destroy_image(data->mlx, data->img->img_ptr);
 			free(data->img);
 		}
 		data->img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
-		put_img_to_img(data->img, data->static_img, 0, 0);
-		render(data);
+		put_layers(data);
+		// render(data);
 		put_img_to_img(data->img, frame, data->px, data->py);
 		mlx_clear_window(data->mlx, data->win);
 		mlx_put_image_to_window(data->mlx, data->win, data->img->img_ptr, 0, 0);
@@ -231,7 +270,6 @@ int main(void)
 {
 	t_data data;
 
-	srand(time(NULL));
 	data.map = read_map(&data, "./map.ber");
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
@@ -253,21 +291,25 @@ int main(void)
 
 	data.imgs = NULL;
 	data.img = NULL;
-	data.counter = 0;
+
 	data.frames = NULL;
 	data.steps = 0;
 	data.pcount = 0;
 	data.eframe = 0;
+	data.fframe = 0;
 	data.enemy_frame = 0;
 	data.direction = 'r';
 
-	init_images(&data);
-	init_static_img(&data);
+	data.f_foan.count = 0;
+	gettimeofday(&data.f_foan.last_time, NULL);
 
-	data.current_frame = 0;
+	data.f_player.count = 0;
+	gettimeofday(&data.f_player.last_time, NULL);
+
+	init_images(&data);
+
 	data.count_frame = 0;
 
-	data.counter = 0;
 	for (int i = 0; i < 256; i++)
 		data.keys[i] = 0;
 

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 21:53:37 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:43:14 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <X11/X.h>
 # include <math.h>
 # include <time.h>
+# include <sys/time.h>
 
 # include "ft_printf.h"
 # include "libft.h"
@@ -28,7 +29,6 @@
 # include "image.h"
 # include "mlx.h"
 # include "sprite.h"
-
 # define MLX_ERROR 1
 
 # define WIN_WIDTH 1920
@@ -42,10 +42,13 @@
 # define COLLECTIVE_FRAMES 17
 # define EXIT_FRAMES 8
 # define ENEMY_FRAMES 9
+# define FOAM_FRAMES 8
+
 # define ANIMATION_DELAY 10000
-# define SPEED 8
+# define SPEED 16
 
 typedef unsigned int t_uint;
+typedef struct timeval t_timeval;
 
 typedef struct s_map {
 	char *content;
@@ -74,6 +77,13 @@ typedef struct s_ply
 	int max_bag;
 } t_ply;
 
+typedef struct s_frame
+{
+	t_uint		count;
+	t_uint		max;
+	t_timeval	current_time;
+	t_timeval	last_time;
+}	t_frame;
 
 typedef struct s_data
 {
@@ -82,22 +92,24 @@ typedef struct s_data
 	t_map	*map;
 	t_dict	*imgs;
 	t_img	*img;
-	t_img	*static_img;
 
 	void	*t_wall[TW_MAX];
 	void	*t_ground[TG_MAX];
 
-	int current_frame;
 	int count_frame;
+	int fframe;
 	int eframe;
 	int enemy_frame;
+
+	t_frame f_foan;
+	t_frame f_player;
 
 	t_ply ply;
 	char direction;
 	t_dict *frames;
 	t_dict *pframes;
 	void	*_frames[F_MAX];
-	int counter;
+
 	int keys[256];
 	int steps;
 

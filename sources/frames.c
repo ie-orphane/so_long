@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 11:10:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:36:34 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	init_images(t_data *data)
 	fill_frames(data, RUN_FRAMES, "./sprites/pawn/run/left/", 'R');
 
 	fill_frames(data, COLLECTIVE_FRAMES, "./sprites/banana/", 'c');
+	fill_frames(data, FOAM_FRAMES, "./sprites/foam/", 'f');
 	fill_frames(data, EXIT_FRAMES, "./sprites/trophy/", 'e');
 	fill_frames(data, ENEMY_FRAMES, "./sprites/bird/", 'F');
 }

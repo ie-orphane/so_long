@@ -36,7 +36,7 @@ $(LIB_FILES):
 		$(MAKE) -C $$dir 1> /dev/null; \
 	done
 
-$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
+$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c $(INCLUDES)
 	@mkdir -p $(OBJECTS_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDE_PATHS) -O3 -c $< -o $@
 

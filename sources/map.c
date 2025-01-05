@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 21:32:09 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 12:18:11 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,16 +103,11 @@ t_map	*read_map(t_data *data, char *fpath)
 	char	*content;
 	char	**blocks;
 
-	if (!fpath)
-		return (NULL);
 	map = malloc(sizeof(t_map));
 	content = read_file(fpath);
-	if (content == NULL)
-		return (NULL);
 	blocks = ft_split(content, '\n');
 	free(content);
-	if (blocks == NULL)
-		return (NULL);
+
 	map->width = -1;
 	map->height = -1;
 	map->blocks = blocks;
