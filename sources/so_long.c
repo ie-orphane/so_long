@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 18:44:38 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 20:02:26 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ void	put_layers(t_data *data)
 			if (data->map->blocks[y][x] != '1')
 				img = frame_get(data->frames, 'f', data->f_foan.count);
 			if (img)
-			{
 				put_img_to_img(data->img, img, (TILE_SIZE * x) - ((82 - 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2));
-			}
 		}
 	}
 	y = -1;
@@ -266,11 +264,13 @@ int update_animation(t_data *data)
 	return (0);
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	t_data data;
 
-	data.map = read_map(&data, "./map.ber");
+	if (argc < 1)
+		return (0);
+	data.map = read_map(&data, argv[1]);
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
 	{

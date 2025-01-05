@@ -57,7 +57,7 @@ fclean : clean
 re : fclean all
 
 run : $(NAME)
-	@./$(NAME)
+	@./$(NAME) maps/regular.ber
 
 TEST = test
 TEST_SOURCES = test.c

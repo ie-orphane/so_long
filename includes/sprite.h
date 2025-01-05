@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 11:11:36 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 19:55:59 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define TILE_SIZE 64
 
 # define TG_MAX 16
-# define TG_PATH "sprites/grass/green/"
+# define TG_PATH "textures/grass/green/"
 
 # define TW_TOP 0
 # define TW_BOTTOM 1

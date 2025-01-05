@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 18:43:14 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:48:32 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_img	*frame_get(t_dict *framedict, char framekey, char frameindex);
 t_map	*read_map(t_data *data, char *fpath);
 
 int		handle_no_event(void *data);
-int		handle_close_event(t_data *data);
+int		handle_close_event();
 int key_down(int keycode, t_data *data);
 int key_up(int keycode, t_data *data);
 
