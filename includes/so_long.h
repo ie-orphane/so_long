@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/04 21:32:22 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/04 21:53:37 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
 # define ENEMY_FRAMES 9
 # define ANIMATION_DELAY 10000
 # define SPEED 8
+
+typedef unsigned int t_uint;
 
 typedef struct s_map {
 	char *content;
@@ -83,6 +85,7 @@ typedef struct s_data
 	t_img	*static_img;
 
 	void	*t_wall[TW_MAX];
+	void	*t_ground[TG_MAX];
 
 	int current_frame;
 	int count_frame;
