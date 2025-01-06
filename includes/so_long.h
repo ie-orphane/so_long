@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 18:48:32 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:07:47 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@
 
 # define IDLE_FRAMES 6
 # define RUN_FRAMES 6
-# define COLLECTIVE_FRAMES 17
+# define COLLECTIVE_FRAMES 14
 # define EXIT_FRAMES 8
-# define ENEMY_FRAMES 9
+# define ENEMY_FRAMES 7
 # define FOAM_FRAMES 8
 
 # define ANIMATION_DELAY 10000
@@ -103,6 +103,8 @@ typedef struct s_data
 
 	t_frame f_foan;
 	t_frame f_player;
+	t_frame f_enemy;
+	t_frame f_sheep;
 
 	t_ply ply;
 	char direction;

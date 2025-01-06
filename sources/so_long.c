@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 20:02:26 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 12:03:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ void	render(t_data *data)
 		{
 			img = NULL;
 			if (data->map->blocks[y][x] == 'C')
-				img = frame_get(data->frames, 'c', data->count_frame);
+				img = frame_get(data->frames, 'c', data->f_sheep.count);
 			else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
 				img = dict_find(&data->imgs, 'E');
 			else if (data->map->blocks[y][x] == 'E')
 				img = frame_get(data->frames, 'e', data->eframe);
 			else if (data->map->blocks[y][x] == 'F')
-				img = frame_get(data->frames, 'F', data->enemy_frame);
+				img = frame_get(data->frames, 'F', data->f_enemy.count);
 			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
+				put_img_to_img(data->img, img, TILE_SIZE * x - (img->width - TILE_SIZE), TILE_SIZE * y - (img->height - TILE_SIZE) - 10);
 		}
 	}
 }
@@ -121,7 +121,7 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 		x = 0;
 		while (x < data->map->width)
 		{
-			if (ft_strchr("1ECF", data->map->blocks[y][x]))
+			if (ft_strchr("1E", data->map->blocks[y][x]))
 			{
 				if (frames_overlap(x * TILE_SIZE, y * TILE_SIZE, next_x, next_y))
 				{
@@ -137,18 +137,18 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 						distance = 0;
 					if (distance == 0)
 					{
-						if (data->map->blocks[y][x] == 'C')
-						{
-							distance = SPEED;
-							data->map->blocks[y][x] = '0';
-							data->pcount += 1;
-						}
-						else if ((data->map->blocks[y][x] == 'E' && data->ccount == data->pcount) 
-							|| data->map->blocks[y][x] == 'F')
-						{
-							ft_printf("\nGAME OVER\n");
-							exit(0);
-						}
+						// if (data->map->blocks[y][x] == 'C')
+						// {
+						// 	distance = SPEED;
+						// 	data->map->blocks[y][x] = '0';
+						// 	data->pcount += 1;
+						// }
+						// else if ((data->map->blocks[y][x] == 'E' && data->ccount == data->pcount) 
+						// 	|| data->map->blocks[y][x] == 'F')
+						// {
+						// 	ft_printf("\nGAME OVER\n");
+						// 	exit(0);
+						// }
 					}
 				}
 			}
@@ -244,6 +244,26 @@ int update_animation(t_data *data)
 		updated = 1;
 	}
 
+	gettimeofday(&data->f_enemy.current_time, NULL);
+	if ((data->f_enemy.current_time.tv_sec - data->f_enemy.last_time.tv_sec) * 1000
+		+ (data->f_enemy.current_time.tv_usec - data->f_enemy.last_time.tv_usec) / 1000 
+		>= 100)
+	{
+		data->f_enemy.count = (data->f_enemy.count + 1) % ENEMY_FRAMES;
+		data->f_enemy.last_time = data->f_enemy.current_time;
+		updated = 1;
+	}
+
+	gettimeofday(&data->f_sheep.current_time, NULL);
+	if ((data->f_sheep.current_time.tv_sec - data->f_sheep.last_time.tv_sec) * 1000
+		+ (data->f_sheep.current_time.tv_usec - data->f_sheep.last_time.tv_usec) / 1000 
+		>= 75)
+	{
+		data->f_sheep.count = (data->f_sheep.count + 1) % 14;
+		data->f_sheep.last_time = data->f_sheep.current_time;
+		updated = 1;
+	}
+
 	if (updated)
 	{
 		t_dict *frames = dict_find(&data->frames, keyframe);
@@ -256,8 +276,11 @@ int update_animation(t_data *data)
 		}
 		data->img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
 		put_layers(data);
-		// render(data);
-		put_img_to_img(data->img, frame, data->px, data->py);
+		render(data);
+		if (data->direction == 'l')
+			put_img_to_img(data->img, frame, data->px - 10, data->py - 10);
+		else
+			put_img_to_img(data->img, frame, data->px + 10, data->py - 10);
 		mlx_clear_window(data->mlx, data->win);
 		mlx_put_image_to_window(data->mlx, data->win, data->img->img_ptr, 0, 0);
 	}
@@ -305,6 +328,12 @@ int main(int argc, char *argv[])
 
 	data.f_player.count = 0;
 	gettimeofday(&data.f_player.last_time, NULL);
+
+	data.f_enemy.count = 0;
+	gettimeofday(&data.f_enemy.last_time, NULL);
+
+	data.f_sheep.count = 0;
+	gettimeofday(&data.f_sheep.last_time, NULL);
 
 	init_images(&data);
 

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 19:55:59 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 12:07:14 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,17 @@ void	init_images(t_data *data)
 	dict_add(&data->imgs, '0', img_init(data->mlx, "./textures/water.xpm"));
 	init_ground_imgs(data);
 
-	dict_add(&data->imgs, 'E', img_init(data->mlx, "./textures/exit32x32.xpm"));
-	// fill_frames(data, IDLE_FRAMES, "./textures/pink-man/idle/", 'i');
-	// fill_frames(data, IDLE_FRAMES, "./textures/pink-man/idle/left/", 'I');
-	// fill_frames(data, RUN_FRAMES, "./textures/pink-man/run/", 'r');
-	// fill_frames(data, RUN_FRAMES, "./textures/pink-man/run/left/", 'R');
+	dict_add(&data->imgs, 'E', img_init(data->mlx, "./textures/gold-mine/destroyed.xpm"));
+
 	fill_frames(data, IDLE_FRAMES, "./textures/pawn/idle/right/", 'i');
 	fill_frames(data, IDLE_FRAMES, "./textures/pawn/idle/left/", 'I');
 	fill_frames(data, RUN_FRAMES, "./textures/pawn/run/right/", 'r');
 	fill_frames(data, RUN_FRAMES, "./textures/pawn/run/left/", 'R');
 
-	fill_frames(data, COLLECTIVE_FRAMES, "./textures/banana/", 'c');
+	fill_frames(data, COLLECTIVE_FRAMES, "./textures/sheep/", 'c');
 	fill_frames(data, FOAM_FRAMES, "./textures/foam/", 'f');
-	fill_frames(data, EXIT_FRAMES, "./textures/trophy/", 'e');
-	fill_frames(data, ENEMY_FRAMES, "./textures/bird/", 'F');
+	// fill_frames(data, EXIT_FRAMES, "./textures/trophy/", 'e');
+	fill_frames(data, ENEMY_FRAMES, "./textures/goblins/torch/", 'F');
 }
 
 t_img	*frame_get(t_dict *framedict, char framekey, char frameindex)
