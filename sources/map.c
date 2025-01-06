@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 20:01:58 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:31:48 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,27 @@
  * 
  * all lines should have the same length
  */
-static void	check_line_size(t_map **map)
+static void	check_line_size(t_data *data)
 {
-	t_map	*map_cpy;
 	int		line_size;
 
-	map_cpy = *map;
-	line_size = ft_strlen(map_cpy->blocks[map_cpy->height]);
-	if (map_cpy->width == -1)
-		map_cpy->width = line_size;
-	else if (map_cpy->width < line_size)
+	line_size = ft_strlen(data->map[data->height]);
+	if (data->width == -1)
+		data->width = line_size;
+	else if (data->width < line_size)
 	{
 		ft_printf("Error\nExtra %d block(s) in %d:'%s'\n",
-			line_size - map_cpy->width,
-			map_cpy->height,
-			map_cpy->blocks[map_cpy->height]);
+			line_size - data->width,
+			data->height,
+			data->map[data->height]);
 		exit(1);
 	}
-	else if (map_cpy->width > line_size)
+	else if (data->width > line_size)
 	{
 		ft_printf("Error\nMissing %d block(s) in %d:'%s'\n",
-			map_cpy->width - line_size,
-			map_cpy->height,
-			map_cpy->blocks[map_cpy->height]);
+			data->width - line_size,
+			data->height,
+			data->map[data->height]);
 		exit(1);
 	}
 }
@@ -49,29 +47,26 @@ static void	check_line_size(t_map **map)
  * 
  * the map should contains only '0', '1', 'C', 'E', 'P'
  */
-static void	check_blocks(t_data *data, t_map **map)
+static void	check_blocks(t_data *data)
 {
-	t_map	*map_cpy;
 	size_t	i;
 
-	map_cpy = *map;
 	i = 0;
-	while (map_cpy->blocks[map_cpy->height][i] != 0)
+	while (data->map[data->height][i] != 0)
 	{
-		if (map_cpy->blocks[map_cpy->height][i] == 'P')
+		if (data->map[data->height][i] == 'P')
 		{
 			data->px = i * TILE_SIZE;
-			data->py = map_cpy->height * TILE_SIZE;
+			data->py = data->height * TILE_SIZE;
 		}
-		else if (map_cpy->blocks[map_cpy->height][i] == 'C')
+		else if (data->map[data->height][i] == 'C')
 			data->ccount += 1;
-			// map_cpy->collective += 1;
-		else if (ft_strchr("01EF\n", map_cpy->blocks[map_cpy->height][i]) == NULL)
+		else if (ft_strchr("01EF\n", data->map[data->height][i]) == NULL)
 		{
 			ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
-			map_cpy->blocks[map_cpy->height][i],
-			map_cpy->height,
-			i, map_cpy->blocks[map_cpy->height]);
+			data->map[data->height][i],
+			data->height,
+			i, data->map[data->height]);
 			exit(1);
 		}
 		i++;
@@ -83,43 +78,35 @@ static void	check_blocks(t_data *data, t_map **map)
  * 
  * the max size of the map should be the screen size
  */
-void	check_map_size(t_map *map)
+void	check_map_size(t_data *data)
 {
-	if (map->width * TILE_SIZE > WIN_WIDTH
-		|| map->height * TILE_SIZE > WIN_HEIGHT)
+	if (data->width * TILE_SIZE > WIN_WIDTH
+		|| data->height * TILE_SIZE > WIN_HEIGHT)
 	{
 		printf("Error\nMap (%dx%d) overflow from the window  (%dx%d)\n",
-			map->width * TILE_SIZE,
-			map->height * TILE_SIZE,
-			WIN_WIDTH,
-			WIN_HEIGHT);
+			data->width * TILE_SIZE,
+			data->height * TILE_SIZE,
+			WIN_WIDTH, WIN_HEIGHT);
 		exit(1);
 	}
 }
 
-t_map	*read_map(t_data *data, char *fpath)
+void	read_map(t_data *data, char *fpath)
 {
-	t_map	*map;
 	char	*content;
-	char	**blocks;
 
-	map = malloc(sizeof(t_map));
 	content = read_file(fpath);
-	blocks = ft_split(content, '\n');
+	data->map = ft_split(content, '\n');
 	free(content);
-
-	map->width = -1;
-	map->height = -1;
-	map->blocks = blocks;
-	// map->collective = 0;
+	data->width = -1;
+	data->height = -1;
 	data->ccount = 0;
 	data->px = -1;
 	data->py = -1;
-	while (blocks[++map->height])
+	while (data->map[++data->height])
 	{
-		check_line_size(&map);
-		check_blocks(data, &map);
+		check_line_size(data);
+		check_blocks(data);
 	}
-	check_map_size(map);
-	return (map);
+	check_map_size(data);
 }

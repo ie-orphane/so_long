@@ -1,4 +1,4 @@
-NAME=so_long
+NAME = so_long
 
 # Compiler and flags
 CC = cc
@@ -13,7 +13,7 @@ OBJECTS_DIR = objects
 OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(SOURCES_FILE:.c=.o))
 
 INCLUDES_DIR = includes
-INCLUDES_FILE = so_long.h image.h
+INCLUDES_FILE = so_long.h image.h sprite.h
 INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(INCLUDES_FILE))
 
 # Library directories and its files
@@ -42,7 +42,7 @@ $(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c $(INCLUDES)
 
 $(NAME): $(LIB_FILES) $(OBJECTS)
 	@echo "new compile"
-	@$(CC) $(OBJECTS) $(LIB_FLAGS)  -fsanitize=address -g3 -o $(NAME) 
+	@$(CC) $(OBJECTS) $(LIB_FLAGS) -fsanitize=address -g3 -o $(NAME)
 
 clean :
 	@rm -f $(OBJECTS)

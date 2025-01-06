@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 17:18:33 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:17:53 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ t_uint	t_ground_index(t_data *data, int x, int y)
 	t_uint	bottom;
 	t_uint	left;
 
-	top = data->map->blocks[y - 1][x] == '1';
-	right = data->map->blocks[y][x + 1] == '1';
-	bottom = data->map->blocks[y + 1][x] == '1';
-	left = data->map->blocks[y][x - 1] == '1';
+	top = data->map[y - 1][x] == '1';
+	right = data->map[y][x + 1] == '1';
+	bottom = data->map[y + 1][x] == '1';
+	left = data->map[y][x - 1] == '1';
 	return ((top << 3) | (left << 2) | (right << 1) | bottom);
 }
 
@@ -33,10 +33,10 @@ void	put_layers(t_data *data)
 	t_img	*img;
 
 	y = -1;
-	while (++y < data->map->height)
+	while (++y < data->height)
 	{
 		x = -1;
-		while (++x < data->map->width)
+		while (++x < data->width)
 		{
 			img = data->tiles[TILE_WATER];
 			if (img)
@@ -44,26 +44,26 @@ void	put_layers(t_data *data)
 		}
 	}
 	y = -1;
-	while (++y < data->map->height)
+	while (++y < data->height)
 	{
 		x = -1;
-		while (++x < data->map->width)
+		while (++x < data->width)
 		{
 			img = NULL;
-			if (data->map->blocks[y][x] != '1')
+			if (data->map[y][x] != '1')
 				img = data->f_foam.all[data->f_foam.count];
 			if (img)
 				put_img_to_img(data->img, img, (TILE_SIZE * x) - ((82 - 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2));
 		}
 	}
 	y = -1;
-	while (++y < data->map->height)
+	while (++y < data->height)
 	{
 		x = -1;
-		while (++x < data->map->width)
+		while (++x < data->width)
 		{
 			img = NULL;
-			if (data->map->blocks[y][x] != '1')
+			if (data->map[y][x] != '1')
 				img = data->t_ground[t_ground_index(data, x, y)];
 			if (img)
 				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
@@ -78,19 +78,19 @@ void	render(t_data *data)
 	t_img	*img;
 
 	y = -1;
-	while (++y < data->map->height)
+	while (++y < data->height)
 	{
 		x = -1;
-		while (++x < data->map->width)
+		while (++x < data->width)
 		{
 			img = NULL;
-			if (data->map->blocks[y][x] == 'C')
+			if (data->map[y][x] == 'C')
 				img = data->tiles[TILE_GOLD];
-			else if (data->map->blocks[y][x] == 'E' && data->ccount != data->pcount)
+			else if (data->map[y][x] == 'E' && data->ccount != data->pcount)
 				img = data->tiles[TILE_MINE_DESTROYED];
-			else if (data->map->blocks[y][x] == 'E')
+			else if (data->map[y][x] == 'E')
 				img = data->tiles[TILE_MINE_ACTIVE];
-			else if (data->map->blocks[y][x] == 'F')
+			else if (data->map[y][x] == 'F')
 				img = data->f_enemy.all[data->f_enemy.count];
 			if (img)
 				put_img_to_img(data->img, img, TILE_SIZE * x - (img->width - TILE_SIZE), TILE_SIZE * y - (img->height - TILE_SIZE) - 10);
@@ -116,12 +116,12 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 
 	y = 0;
 	distance = SPEED;
-	while (y < data->map->height)
+	while (y < data->height)
 	{
 		x = 0;
-		while (x < data->map->width)
+		while (x < data->width)
 		{
-			if (ft_strchr("1EC", data->map->blocks[y][x]))
+			if (ft_strchr("1EC", data->map[y][x]))
 			{
 				if (frames_overlap(x * TILE_SIZE, y * TILE_SIZE, next_x, next_y))
 				{
@@ -137,14 +137,14 @@ int	next_if(t_data *data, char direction, int next_x, int next_y)
 						distance = 0;
 					if (distance == 0)
 					{
-						if (data->map->blocks[y][x] == 'C')
+						if (data->map[y][x] == 'C')
 						{
 							distance = SPEED;
-							data->map->blocks[y][x] = '0';
+							data->map[y][x] = '0';
 							data->pcount += 1;
 						}
-						// else if ((data->map->blocks[y][x] == 'E' && data->ccount == data->pcount) 
-						// 	|| data->map->blocks[y][x] == 'F')
+						// else if ((data->map[y][x] == 'E' && data->ccount == data->pcount) 
+						// 	|| data->map[y][x] == 'F')
 						// {
 						// 	ft_printf("\nGAME OVER\n");
 						// 	exit(0);
@@ -253,7 +253,7 @@ int update_animation(t_data *data)
 			mlx_destroy_image(data->mlx, data->img->img_ptr);
 			free(data->img);
 		}
-		data->img = img_new(data->mlx, data->map->width * TILE_SIZE, data->map->height * TILE_SIZE);
+		data->img = img_new(data->mlx, data->width * TILE_SIZE, data->height * TILE_SIZE);
 		put_layers(data);
 		render(data);
 		if (data->direction == 'l')
@@ -272,31 +272,17 @@ int main(int argc, char *argv[])
 
 	if (argc < 1)
 		return (0);
-	data.map = read_map(&data, argv[1]);
+	read_map(&data, argv[1]);
 	data.mlx = mlx_init();
-	if (data.mlx == NULL)
-	{
-		ft_printf("Error\n");
-		return (0);
-	}
-	data.win = mlx_new_window(
-		data.mlx,
-		data.map->width * TILE_SIZE,
-		data.map->height * TILE_SIZE,
-		WIN_TITLE);
-	if (data.win == NULL)
-	{
-		ft_printf("Error\n");
-		free(data.mlx);
-		return (0);
-	}
+	data.win = mlx_new_window(data.mlx, data.width * TILE_SIZE,
+		data.height * TILE_SIZE, WIN_TITLE);
 
 	data.steps = 0;
 	data.pcount = 0;
 	data.direction = 'r';
+
 	for (int i = 0; i < 256; i++)
 		data.keys[i] = 0;
-
 	init_sprites(&data);
 
 	mlx_loop_hook(data.mlx, update_animation, &data);
