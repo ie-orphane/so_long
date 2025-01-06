@@ -6,33 +6,58 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 19:55:59 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:05:38 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SPRITE_H
 # define SPRITE_H
 
+typedef unsigned int t_uint;
+typedef struct timeval t_timeval;
+
 # define TILE_SIZE 64
 
-# define TG_MAX 16
-# define TG_PATH "textures/grass/green/"
+// TILES
+# define TILE_WATER 0
+# define TILE_GOLD 1
+# define TILE_MINE_ACTIVE 2
+# define TILE_MINE_INACTIVE 3
+# define TILE_MINE_DESTROYED 4
+# define TILES_MAX 5
 
-# define TW_TOP 0
-# define TW_BOTTOM 1
-# define TW_RIGHT 2
-# define TW_LEFT 3
-# define TW_TOP_R 4
-# define TW_TOP_L 5
-# define TW_BOTTOM_R 6
-# define TW_BOTTOM_L 7
-# define TW_MAX 8
+// TILE SETS
+# define TILESET_GROUND_MAX 16
+# define TILESET_GROUND_PATH "./textures/grass/green/"
 
-# define FP_IDLE_R 0
-# define FP_IDLE_R_C 6
-# define FP_IDLE_L 1
-# define FP_RUN_R 2
-# define FP_RUN_L 3
-# define F_MAX 4
+// FRAMES
+typedef struct s_frame
+{
+	t_img		**all;
+	t_uint		count;
+	t_uint		max;
+	t_timeval	current_time;
+	t_timeval	last_time;
+}	t_frame;
+
+// TROOP FRAMES
+#define TROOP_FRAMES_MAX 4
+
+typedef enum {
+    IDLE_RIGHT = 0,
+    IDLE_LEFT = 1,
+    RUN_RIGHT = 2,
+    RUN_LEFT = 3,
+}	e_troop_state;
+
+typedef struct s_troop_frame
+{
+	t_img			**all[TROOP_FRAMES_MAX];
+	e_troop_state	state;
+	t_uint			count;
+	t_uint			max;
+	t_timeval		current_time;
+	t_timeval		last_time;
+} t_troop_frame;
 
 #endif // SPRITE_H

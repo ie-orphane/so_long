@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 11:07:47 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:28:33 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,13 @@
 
 # include "ft_printf.h"
 # include "libft.h"
-# include "dict.h"
 # include "image.h"
 # include "mlx.h"
 # include "sprite.h"
-# define MLX_ERROR 1
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
 # define WIN_TITLE "my game"
-
-// # define BLOCK_SIZE 96
 
 # define IDLE_FRAMES 6
 # define RUN_FRAMES 6
@@ -47,9 +43,6 @@
 # define ANIMATION_DELAY 10000
 # define SPEED 16
 
-typedef unsigned int t_uint;
-typedef struct timeval t_timeval;
-
 typedef struct s_map {
 	char *content;
 	int width;
@@ -60,57 +53,24 @@ typedef struct s_map {
 	size_t collective;
 } t_map;
 
-// typedef struct s_img
-// {
-// 	void *self;
-// 	int width;
-// 	int height;
-// 	int x;
-// 	int y;
-// }	t_img;
-
-typedef struct s_ply
-{
-	int x;
-	int y;
-	int current_bag;
-	int max_bag;
-} t_ply;
-
-typedef struct s_frame
-{
-	t_uint		count;
-	t_uint		max;
-	t_timeval	current_time;
-	t_timeval	last_time;
-}	t_frame;
-
 typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
 	t_map	*map;
-	t_dict	*imgs;
 	t_img	*img;
 
-	void	*t_wall[TW_MAX];
-	void	*t_ground[TG_MAX];
+	void	*t_ground[TILESET_GROUND_MAX];
 
-	int count_frame;
-	int fframe;
-	int eframe;
-	int enemy_frame;
-
-	t_frame f_foan;
-	t_frame f_player;
+	t_frame f_foam;
 	t_frame f_enemy;
 	t_frame f_sheep;
 
-	t_ply ply;
+	t_troop_frame f_player;
+
 	char direction;
-	t_dict *frames;
-	t_dict *pframes;
-	void	*_frames[F_MAX];
+
+	t_img	*tiles[TILES_MAX];
 
 	int keys[256];
 	int steps;
@@ -129,15 +89,12 @@ int		randint(int min, int max);
 
 
 /* frames */
-void	fill_frames(t_data *data, size_t max, const char *dir, char key);
-void	init_images(t_data *data);
-t_img	*frame_get(t_dict *framedict, char framekey, char frameindex);
+void	init_sprites(t_data *data);
 
 
 /* map */
 t_map	*read_map(t_data *data, char *fpath);
 
-int		handle_no_event(void *data);
 int		handle_close_event();
 int key_down(int keycode, t_data *data);
 int key_up(int keycode, t_data *data);
