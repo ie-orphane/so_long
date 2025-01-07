@@ -6,107 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 18:17:53 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:07:41 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-t_uint	t_ground_index(t_data *data, int x, int y)
-{
-	t_uint	top;
-	t_uint	right;
-	t_uint	bottom;
-	t_uint	left;
-
-	top = data->map[y - 1][x] == '1';
-	right = data->map[y][x + 1] == '1';
-	bottom = data->map[y + 1][x] == '1';
-	left = data->map[y][x - 1] == '1';
-	return ((top << 3) | (left << 2) | (right << 1) | bottom);
-}
-
-void	put_layers(t_data *data)
-{
-	int		x;
-	int		y;
-	t_img	*img;
-
-	y = -1;
-	while (++y < data->height)
-	{
-		x = -1;
-		while (++x < data->width)
-		{
-			img = data->tiles[TILE_WATER];
-			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
-		}
-	}
-	y = -1;
-	while (++y < data->height)
-	{
-		x = -1;
-		while (++x < data->width)
-		{
-			img = NULL;
-			if (data->map[y][x] != '1')
-				img = data->f_foam.all[data->f_foam.count];
-			if (img)
-				put_img_to_img(data->img, img, (TILE_SIZE * x) - ((82 - 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2));
-		}
-	}
-	y = -1;
-	while (++y < data->height)
-	{
-		x = -1;
-		while (++x < data->width)
-		{
-			img = NULL;
-			if (data->map[y][x] != '1')
-				img = data->t_ground[t_ground_index(data, x, y)];
-			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
-		}
-	}
-}
-
-void	render(t_data *data)
-{
-	int		x;
-	int		y;
-	t_img	*img;
-
-	y = -1;
-	while (++y < data->height)
-	{
-		x = -1;
-		while (++x < data->width)
-		{
-			img = NULL;
-			if (data->map[y][x] == 'C')
-				img = data->tiles[TILE_GOLD];
-			else if (data->map[y][x] == 'E' && data->ccount != data->pcount)
-				img = data->tiles[TILE_MINE_DESTROYED];
-			else if (data->map[y][x] == 'E')
-				img = data->tiles[TILE_MINE_ACTIVE];
-			else if (data->map[y][x] == 'F')
-				img = data->f_enemy.all[data->f_enemy.count];
-			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x - (img->width - TILE_SIZE), TILE_SIZE * y - (img->height - TILE_SIZE) - 10);
-		}
-	}
-}
-
-int	frames_overlap(int ax, int ay, int bx, int by)
-{
-	if (ax >= bx + TILE_SIZE ||
-		bx >= ax + TILE_SIZE ||
-		ay >= by + TILE_SIZE ||
-		by >= ay + TILE_SIZE)
-		return (0);
-	return (1);
-}
 
 int	next_if(t_data *data, char direction, int next_x, int next_y)
 {
@@ -247,19 +151,14 @@ int update_animation(t_data *data)
 
 	if (updated)
 	{
-		t_img *frame = data->f_player.all[data->f_player.state][data->f_player.count];
 		if (data->img)
 		{
 			mlx_destroy_image(data->mlx, data->img->img_ptr);
 			free(data->img);
 		}
 		data->img = img_new(data->mlx, data->width * TILE_SIZE, data->height * TILE_SIZE);
-		put_layers(data);
-		render(data);
-		if (data->direction == 'l')
-			put_img_to_img(data->img, frame, data->px - 10, data->py - 10);
-		else
-			put_img_to_img(data->img, frame, data->px + 10, data->py - 10);
+		put_ground_layers(data);
+		put_entities_layers(data);
 		mlx_clear_window(data->mlx, data->win);
 		mlx_put_image_to_window(data->mlx, data->win, data->img->img_ptr, 0, 0);
 	}

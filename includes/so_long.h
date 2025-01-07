@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 21:22:19 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:17:43 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@
 # define WIN_HEIGHT 1080
 # define WIN_TITLE "Tiny Swords"
 # define SPEED 16
+
+typedef struct s_shape
+{
+	int	x;
+	int	y;
+	int	w;
+	int	h;
+}	t_shape;
 
 typedef struct s_data
 {
@@ -73,5 +81,11 @@ void	read_map(t_data *data, char *fpath);
 int		handle_close_event(void);
 int		key_down(int keycode, t_data *data);
 int		key_up(int keycode, t_data *data);
+
+/* layers */
+void	put_ground_layers(t_data *data);
+int		frames_overlap(int ax, int ay, int bx, int by);
+int		shape_overlap(t_shape a, t_shape b);
+void	put_entities_layers(t_data *data);
 
 #endif // SO_LONG_H
