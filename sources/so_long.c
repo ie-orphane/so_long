@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/07 12:07:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:15:46 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,55 +100,58 @@ int keyin(t_data *data, int arr[])
 	return (0);
 }
 
+void update_frame(t_data *data, int *updated,
+	void (*callable)(t_data *), t_frame_ref frame)
+{
+	gettimeofday(frame.current_time, NULL);
+	if (((*frame.current_time).tv_sec - (*frame.last_time).tv_sec) * 1000
+		+ ((*frame.current_time).tv_usec - (*frame.last_time).tv_usec) / 1000 
+		>= frame.delay)
+	{
+		(*frame.count) = ((*frame.count) + 1) % frame.max;
+		if (callable)
+			callable(data);
+		(*frame.last_time) = (*frame.current_time);
+		(*updated) = 1;
+	}
+}
+
+void player_frame_callable(t_data *data)
+{
+	int next_x;
+	int next_y;
+
+	next_x = data->px;
+	next_y = data->py;
+	data->f_player.state = IDLE_RIGHT;
+	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
+	{
+		update_position(data, &next_x, &next_y);
+		if (data->direction == 'l')
+			data->f_player.state = RUN_LEFT;
+		else
+			data->f_player.state = RUN_RIGHT;
+	}
+	else if (data->direction == 'l')
+		data->f_player.state = IDLE_LEFT;
+	data->px = next_x;
+	data->py = next_y;
+}
+
 int update_animation(t_data *data)
 {
-	int next_x = data->px;
-	int next_y = data->py;
-	int updated = 0;
+	int updated;
 
-	gettimeofday(&data->f_player.current_time, NULL);
-	if ((data->f_player.current_time.tv_sec - data->f_player.last_time.tv_sec) * 1000
-		+ (data->f_player.current_time.tv_usec - data->f_player.last_time.tv_usec) / 1000 
-		>= 75)
-	{
-		data->f_player.count = (data->f_player.count + 1) % data->f_player.max;
-		data->f_player.state = IDLE_RIGHT;
-		if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
-		{
-			update_position(data, &next_x, &next_y);
-			if (data->direction == 'l')
-				data->f_player.state = RUN_LEFT;
-			else
-				data->f_player.state = RUN_RIGHT;
-		}
-		else if (data->direction == 'l')
-			data->f_player.state = IDLE_LEFT;
-		data->px = next_x;
-		data->py = next_y;
-		data->f_player.last_time = data->f_player.current_time;
-		updated = 1;
-	}
-
-	gettimeofday(&data->f_foam.current_time, NULL);
-	if ((data->f_foam.current_time.tv_sec - data->f_foam.last_time.tv_sec) * 1000
-		+ (data->f_foam.current_time.tv_usec - data->f_foam.last_time.tv_usec) / 1000 
-		>= 115)
-	{
-		data->f_foam.count = (data->f_foam.count + 1) % data->f_foam.max;
-		data->f_foam.last_time = data->f_foam.current_time;
-		updated = 1;
-	}
-
-	gettimeofday(&data->f_enemy.current_time, NULL);
-	if ((data->f_enemy.current_time.tv_sec - data->f_enemy.last_time.tv_sec) * 1000
-		+ (data->f_enemy.current_time.tv_usec - data->f_enemy.last_time.tv_usec) / 1000 
-		>= 100)
-	{
-		data->f_enemy.count = (data->f_enemy.count + 1) % data->f_enemy.max;
-		data->f_enemy.last_time = data->f_enemy.current_time;
-		updated = 1;
-	}
-
+	updated = 0;
+	update_frame(data, &updated, NULL,
+		(t_frame_ref){.count = &data->f_enemy.count, .max = data->f_enemy.max, .delay = data->f_enemy.delay,
+		.current_time = &data->f_enemy.current_time, .last_time = &data->f_enemy.last_time});
+	update_frame(data, &updated, player_frame_callable,
+		(t_frame_ref){.count = &data->f_player.count, .max = data->f_player.max, .delay = data->f_player.delay,
+		.current_time = &data->f_player.current_time, .last_time = &data->f_player.last_time});
+	update_frame(data, &updated, NULL,
+		(t_frame_ref){.count = &data->f_foam.count, .max = data->f_foam.max,
+		.delay = data->f_foam.delay, .current_time = &data->f_foam.current_time, .last_time = &data->f_foam.last_time});
 	if (updated)
 	{
 		if (data->img)
@@ -171,24 +174,16 @@ int main(int argc, char *argv[])
 
 	if (argc < 1)
 		return (0);
+	ft_bzero(&data, sizeof(t_data));
 	read_map(&data, argv[1]);
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, data.width * TILE_SIZE,
 		data.height * TILE_SIZE, WIN_TITLE);
-
-	data.steps = 0;
-	data.pcount = 0;
-	data.direction = 'r';
-
-	for (int i = 0; i < 256; i++)
-		data.keys[i] = 0;
 	init_sprites(&data);
-
 	mlx_loop_hook(data.mlx, update_animation, &data);
 	mlx_hook(data.win, KeyPress, KeyPressMask, key_down, &data);
 	mlx_hook(data.win, KeyRelease, KeyReleaseMask, key_up, &data);
 	mlx_hook(data.win, DestroyNotify, NoEventMask, handle_close_event, &data);
-
 	mlx_loop(data.mlx);
 	mlx_destroy_display(data.mlx);
 	free(data.mlx);

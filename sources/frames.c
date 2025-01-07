@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 17:24:52 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:03:50 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,28 @@ static void	init_frame_imgs(t_data *data, t_img ***imgs,
 }
 
 static void	init_frames(t_data *data, t_frame *frame,
-	t_uint max, const char *dir)
+	t_frame_info info, const char *dir)
 {
 	frame->count = 0;
-	frame->max = max;
+	frame->max = info.max;
+	frame->delay = info.delay;
 	gettimeofday(&frame->last_time, NULL);
-	init_frame_imgs(data, &frame->all, max, dir);
+	init_frame_imgs(data, &frame->all, frame->max, dir);
 }
 
 static void	init_troop_frames(t_data *data, t_troop_frame *frame,
-	t_uint max, char *dirs[TROOP_FRAMES_MAX])
+	t_frame_info info, char *dirs[TROOP_FRAMES_MAX])
 {
 	t_uint	i;
 
 	frame->count = 0;
-	frame->max = max;
+	frame->max = info.max;
+	frame->delay = info.delay;
 	gettimeofday(&frame->last_time, NULL);
 	i = 0;
 	while (i < TROOP_FRAMES_MAX)
 	{
-		init_frame_imgs(data, &frame->all[i], max, dirs[i]);
+		init_frame_imgs(data, &frame->all[i], frame->max, dirs[i]);
 		i++;
 	}
 }
@@ -80,11 +82,10 @@ void	init_sprites(t_data *data)
 			"./textures/mine/active.xpm");
 	init_ground_imgs(data);
 	data->f_player.state = IDLE_RIGHT;
-	init_troop_frames(data, &data->f_player, 6, (char *[TROOP_FRAMES_MAX]){
-		"./textures/pawn/idle/right/",
-		"./textures/pawn/idle/left/",
-		"./textures/pawn/run/right/",
-		"./textures/pawn/run/left/"});
-	init_frames(data, &data->f_enemy, 7, "./textures/goblins/torch/");
-	init_frames(data, &data->f_foam, 8, "./textures/foam/");
+	init_troop_frames(data, &data->f_player, 
+		(t_frame_info){.delay = 87, .max = 6}, (char *[TROOP_FRAMES_MAX]){
+		"./textures/pawn/idle/right/","./textures/pawn/idle/left/",
+		"./textures/pawn/run/right/", "./textures/pawn/run/left/"});
+	init_frames(data, &data->f_enemy, (t_frame_info){.delay = 100, .max = 7}, "./textures/goblins/torch/");
+	init_frames(data, &data->f_foam, (t_frame_info){.delay = 115, .max = 8}, "./textures/foam/");
 }
