@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/07 15:52:30 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 16:01:50 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 # include <X11/X.h>
 # include <math.h>
 # include <time.h>
+# include <mlx.h>
 # include <sys/time.h>
 
 # include "ft_printf.h"
 # include "libft.h"
-# include "mlx.h"
 # include "image.h"
 # include "sprite.h"
 
@@ -67,7 +67,6 @@ typedef struct s_data
 
 /* utils */
 char	*read_file(char *fpath);
-int		ft_strset(const char *str, const char *set);
 char	*filename_to_path(const char *dir, int index);
 int		randint(int min, int max);
 
@@ -77,10 +76,15 @@ void	init_sprites(t_data *data);
 /* map */
 void	read_map(t_data *data, char *fpath);
 
+/* animate */
+void	update_position(t_data *data, int *next_x, int *next_y);
+void	update_frame(t_data *data, int *updated, void (*callable)(t_data *), t_frame_ref frame);
+
 /* events */
 int		handle_close_event(void);
 int		key_down(int keycode, t_data *data);
 int		key_up(int keycode, t_data *data);
+int 	keyin(t_data *data, int arr[]);
 
 /* layers */
 void	put_ground_layers(t_data *data);

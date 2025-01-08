@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/03 11:20:36 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:54:09 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,6 @@ char	*read_file(char *fpath)
 		stock = tmp;
 	}
 	return (stock);
-}
-
-/* 
- * check that all characters in str are included in the set
- * 
- * @return index of non charachter or -1 if not found
- */
-int	ft_strset(const char *str, const char *set)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != 0)
-	{
-		if (ft_strchr(set, str[i]) == NULL)
-			return (i);
-		i++;
-	}
-	return (-1);
 }
 
 char	*filename_to_path(const char *dir, int index)

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 15:09:12 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:51:57 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ t_img	*img_new(void *mlx_ptr, int width, int height)
 		ft_printf("Allocation error: %s\n", "empty");
 		exit(EXIT_FAILURE);
 	}
-	img->img_ptr = mlx_new_image(mlx_ptr, width, height);
-	img->addr = mlx_get_data_addr(img->img_ptr, &(img->bpp),
+	img->ptr = mlx_new_image(mlx_ptr, width, height);
+	img->addr = mlx_get_data_addr(img->ptr, &(img->bpp),
 			&(img->line_length), &(img->endian));
 	img->width = width;
 	img->height = height;
@@ -77,9 +77,9 @@ t_img	*img_init(void *mlx_ptr, char *img_path)
 		ft_printf("Allocation error: %s\n", img_path);
 		exit(EXIT_FAILURE);
 	}
-	img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, img_path,
+	img->ptr = mlx_xpm_file_to_image(mlx_ptr, img_path,
 			&img->width, &img->height);
-	if (img->img_ptr == NULL)
+	if (img->ptr == NULL)
 	{
 		ft_printf("Image not found: %s\n", img_path);
 		exit(EXIT_FAILURE);
@@ -88,10 +88,10 @@ t_img	*img_init(void *mlx_ptr, char *img_path)
 	// {
 	// 	ft_printf("Size error: Image dimensions must be %dx%d\n",
 	// 		TILE_SIZE, TILE_SIZE);
-	// 	mlx_destroy_image(mlx_ptr, img->img_ptr);
+	// 	mlx_destroy_image(mlx_ptr, img->ptr);
 	// 	exit(EXIT_FAILURE);
 	// }
-	img->addr = mlx_get_data_addr(img->img_ptr, &img->bpp,
+	img->addr = mlx_get_data_addr(img->ptr, &img->bpp,
 			&img->line_length, &img->endian);
 	return (img);
 }

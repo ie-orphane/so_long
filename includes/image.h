@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:15 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/06 18:29:12 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:51:57 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define TRANSPARENT_COLOR 0xFF000000
 
 typedef struct s_img {
-	void	*img_ptr;
+	void	*ptr;
 	char	*addr;
 	int		bpp;
 	int		line_length;

@@ -6,7 +6,7 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 
 # Source and object files
 SOURCES_DIR = sources
-SOURCES_FILE = so_long.c events.c map.c utils.c image.c frames.c layers.c
+SOURCES_FILE = so_long.c events.c map.c utils.c image.c frames.c layers.c animate.c
 SOURCES = $(addprefix $(SOURCES_DIR)/,$(SOURCES_FILE))
 
 OBJECTS_DIR = objects
@@ -56,8 +56,9 @@ fclean : clean
 
 re : fclean all
 
+DEFAULT_FILE = regular
 run : $(NAME)
-	@./$(NAME) maps/regular.ber
+	@./$(NAME) maps/$(if $(word 2,$(MAKECMDGOALS)),$(word 2,$(MAKECMDGOALS)),$(DEFAULT_FILE)).ber
 
 TEST = test
 TEST_SOURCES = test.c

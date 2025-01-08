@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 12:09:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/05 18:48:06 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:54:29 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,19 @@ int	key_up(int keycode, t_data *data)
 {
 	if (keycode >= 0 && keycode < 256)
 		data->keys[keycode] = 0;
+	return (0);
+}
+
+int keyin(t_data *data, int arr[])
+{
+	int i;
+
+	i = 0;
+	while (arr[i] != -1)
+	{
+		if (data->keys[arr[i]])
+			return (1);
+		i++;
+	}
 	return (0);
 }
