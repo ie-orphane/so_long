@@ -1,5 +1,2 @@
-*
-!.gitignore
-!ft_*.c
-!libft.h
-!Makefile
+objects/
+libft.a

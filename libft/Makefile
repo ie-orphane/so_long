@@ -3,30 +3,29 @@ NAME = libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-FUNCTIONS = toupper tolower isalpha isdigit isalnum isascii isprint \
-		strlen strchr strrchr strlcpy strlcat strncmp strnstr strdup \
-		memset memcmp memcpy memmove memchr bzero calloc atoi \
-		substr strjoin strtrim strmapi striteri split itoa \
-		putchar_fd putstr_fd putendl_fd putnbr_fd
+SOURCES_DIR = sources
+SOURCES_FILE = ft_toupper.c ft_tolower.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
+		ft_isascii.c ft_isprint.c ft_strlen.c ft_strchr.c ft_strrchr.c \
+		ft_strlcpy.c ft_strlcat.c ft_strncmp.c ft_strnstr.c ft_strdup.c \
+		ft_memset.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memchr.c \
+		ft_bzero.c ft_calloc.c ft_atoi.c ft_substr.c ft_strjoin.c \
+		ft_strtrim.c ft_strmapi.c ft_striteri.c ft_split.c ft_itoa.c \
+		ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
+		ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c \
+		ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c
+SOURCES = $(addprefix $(SOURCES_DIR)/,$(SOURCES_FILE))
 
-SOURCES = $(shell printf "ft_%s.c\n" ${FUNCTIONS})
-
-OBJECTS = $(SOURCES:.c=.o)
-
-FUNCTIONS_BONUS = new add_front size last add_back delone clear iter map
-
-SOURCES_BONUS = $(shell printf "ft_lst%s_bonus.c\n" ${FUNCTIONS_BONUS})
-
-OBJECTS_BONUS = $(SOURCES_BONUS:.c=.o)
-
+OBJECTS_DIR = objects
+OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(SOURCES_FILE:.c=.o))
 
 all : $(NAME)
 
 $(NAME) : $(OBJECTS)
 	@ar -rcs $(NAME) $(OBJECTS)
 
-bonus : $(OBJECTS_BONUS)
-	@ar -rcs $(NAME) $(OBJECTS_BONUS)
+$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c $(INCLUDES)
+	@mkdir -p $(OBJECTS_DIR)
+	@$(CC) $(CFLAGS) -I. -c $< -o $@
 
 clean :
 	@rm -f $(OBJECTS) $(OBJECTS_BONUS)
@@ -36,4 +35,4 @@ fclean : clean
 
 re : fclean all
 
-.PHONY : all bonus clean fclean re
+.PHONY : all clean fclean re
