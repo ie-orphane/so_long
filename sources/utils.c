@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:37:14 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 21:42:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,28 @@ char	*filename_to_path(const char *dir, int index)
 	return (path);
 }
 
+/*
+ * check if two shapes overlap
+ *
+ * @param a first shape
+ * @param b second shape
+ * @return true if overlap, false otherwise
+ */
+bool	shape_overlap(t_shape a, t_shape b)
+{
+	if (a.x >= b.x + b.w || b.x >= a.x + a.w || a.y >= b.y + b.h || b.y >= a.y
+		+ a.h)
+		return (0);
+	return (1);
+}
+
+/*
+ * generate a random integer between min and max
+ *
+ * @param min the minimum value
+ * @param max the maximum value
+ * @return the random integer
+ */
 int	randint(int min, int max)
 {
 	return (rand() % (max - min + 1) + min);

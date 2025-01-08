@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:39:15 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 22:21:29 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,22 @@
 static void	init_entity_shape(t_data *data, int x, int y, t_shape *entity)
 {
 	if (data->map[y][x] == 'E')
-		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (160 - 64) + 15,
-			.y = (y * TILE_SIZE) - (102 - 64) + 66, .w = 125, .h = 1};
+		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (160 - 64) + 15, .y = (y
+				* TILE_SIZE) - (102 - 64) + 66, .w = 125, .h = 1};
 	else if (data->map[y][x] == 'F')
-		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (84 - 64) + 15,
-			.y = (y * TILE_SIZE) - (84 - 64) + 30, .w = (84 - 15 - 15),
-			.h = (84 - 30 - 5)};
+		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (84 - 64) + 15, .y = (y
+				* TILE_SIZE) - (84 - 64) + 30, .w = (84 - 15 - 15), .h = (84
+				- 30 - 5)};
 	else if (data->map[y][x] == '1')
-		(*entity) = (t_shape){.x = x * TILE_SIZE,
-			.y = y * TILE_SIZE, .w = TILE_SIZE, .h = TILE_SIZE};
+		(*entity) = (t_shape){.x = x * TILE_SIZE, .y = y * TILE_SIZE,
+			.w = TILE_SIZE, .h = TILE_SIZE};
 	else if (data->map[y][x] == 'C')
-		(*entity) = (t_shape){.x = x * TILE_SIZE + 10,
-			.y = y * TILE_SIZE + 9, .w = TILE_SIZE - 10 - 9,
-			.h = TILE_SIZE - 9 - 8};
+		(*entity) = (t_shape){.x = x * TILE_SIZE + 10, .y = y * TILE_SIZE + 9,
+			.w = TILE_SIZE - 10 - 9, .h = TILE_SIZE - 9 - 8};
 }
 
-static int	calculate_distance(t_data *data, t_shape shapes[2],
-	char direction, char *entity)
+static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
+		char *entity)
 {
 	int	distance;
 
@@ -65,8 +64,8 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 	t_shape	entity;
 
 	y = -1;
-	player = (t_shape){.x = next_x, .y = next_y + 20,
-		.w = TILE_SIZE, .h = (TILE_SIZE - 20)};
+	player = (t_shape){next_x + 6, next_y + 46, TILE_SIZE - 6 - 6, TILE_SIZE
+		- 46};
 	while (++y < data->height)
 	{
 		x = -1;
@@ -77,8 +76,8 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 			init_entity_shape(data, x, y, &entity);
 			if (!shape_overlap(player, entity))
 				continue ;
-			return (calculate_distance(data, (t_shape []){player, entity},
-				direction, &data->map[y][x]));
+			return (calculate_distance(data, (t_shape[]){player, entity},
+					direction, &data->map[y][x]));
 		}
 	}
 	return (SPEED);
@@ -103,13 +102,13 @@ void	update_position(t_data *data, int *next_x, int *next_y)
 	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
 }
 
-void	update_frame(t_data *data, int *updated,
-	void (*callable)(t_data *), t_frame_ref frame)
+void	update_frame(t_data *data, int *updated, void (*callable)(t_data *),
+		t_frame_ref frame)
 {
 	gettimeofday(frame.current_time, NULL);
 	if (((*frame.current_time).tv_sec - (*frame.last_time).tv_sec) * 1000
-		+ ((*frame.current_time).tv_usec - (*frame.last_time).tv_usec) / 1000
-		>= frame.delay)
+		+ ((*frame.current_time).tv_usec - (*frame.last_time).tv_usec)
+		/ 1000 >= frame.delay)
 	{
 		(*frame.count) = ((*frame.count) + 1) % frame.max;
 		if (callable)

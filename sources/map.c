@@ -6,16 +6,17 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:36:56 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 21:13:51 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 /*
- * checks the length of a line in the map
+ * checks the size of the line in the map
  *
- * all lines should have the same length
+ * @param data the game data
+ * @note the line size should be the same as the first line
  */
 static void	check_line_size(t_data *data)
 {
@@ -39,9 +40,10 @@ static void	check_line_size(t_data *data)
 }
 
 /*
- * checks the blocks of a line in the map
+ * checks the blocks in the map
  *
- * the map should contains only '0', '1', 'C', 'E', 'P'
+ * @note the blocks should be 'P', 'C', 'E', 'F', '1', '0' or '\\n'
+ * @param data the game data
  */
 static void	check_blocks(t_data *data)
 {
@@ -69,9 +71,10 @@ static void	check_blocks(t_data *data)
 }
 
 /*
- * checks the height and width of the map
+ * checks the size of the map
  *
- * the max size of the map should be the screen size
+ * @param data the game data
+ * @note the map size should not overflow the window size
  */
 void	check_map_size(t_data *data)
 {
@@ -85,6 +88,12 @@ void	check_map_size(t_data *data)
 	}
 }
 
+/*
+ * reads the map from the file
+ *
+ * @param data the game data
+ * @param fpath the file path
+ */
 void	read_map(t_data *data, char *fpath)
 {
 	char	*content;
@@ -94,7 +103,6 @@ void	read_map(t_data *data, char *fpath)
 	free(content);
 	data->width = -1;
 	data->height = -1;
-	data->ccount = 0;
 	data->px = -1;
 	data->py = -1;
 	while (data->map[++data->height])

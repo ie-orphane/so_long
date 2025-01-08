@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:06:49 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:45:13 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 22:03:46 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,47 @@ void	put_ground_layers(t_data *data)
 	}
 }
 
-int	shape_overlap(t_shape a, t_shape b)
+static void	put_entities_img(t_data *data, t_img *img, t_point position, char **player_img)
 {
-	if (a.x >= b.x + b.w || b.x >= a.x + a.w || a.y >= b.y + b.h || b.y >= a.y
-		+ a.h)
-		return (0);
-	return (1);
+	t_shape	entity;
+	t_shape	player;
+
+	player = (t_shape){data->px, data->py - 10, TILE_SIZE, TILE_SIZE};
+	entity = (t_shape){TILE_SIZE * position.x - (img->width / 2) + (TILE_SIZE / 2),
+		TILE_SIZE * position.y - (img->height / 2) + (TILE_SIZE / 2) - 10,
+		img->width, img->height};
+	if (shape_overlap(player, entity))
+	{
+		(*player_img) = "test";
+		if (position.y * TILE_SIZE <= data->py)
+		{
+			put_img_to_img(data->img, img, entity.x, entity.y);
+			put_player_img(data);
+		}
+		else
+		{
+			put_player_img(data);
+			put_img_to_img(data->img, img, entity.x, entity.y);
+		}
+	}
+	else
+		put_img_to_img(data->img, img, entity.x, entity.y);
+}
+
+t_img	*get_entity_img(t_data *data, int x, int y)
+{
+	t_img	*img;
+
+	img = NULL;
+	if (data->map[y][x] == 'C')
+		img = data->tiles[TILE_GOLD];
+	else if (data->map[y][x] == 'E' && data->ccount != data->pcount)
+		img = data->tiles[TILE_MINE_DESTROYED];
+	else if (data->map[y][x] == 'E')
+		img = data->tiles[TILE_MINE_ACTIVE];
+	else if (data->map[y][x] == 'F')
+		img = data->f_enemy.all[data->f_enemy.count];
+	return (img);
 }
 
 void	put_entities_layers(t_data *data)
@@ -109,42 +144,10 @@ void	put_entities_layers(t_data *data)
 		x = -1;
 		while (++x < data->width)
 		{
-			img = NULL;
-			if (data->map[y][x] == 'C')
-				img = data->tiles[TILE_GOLD];
-			else if (data->map[y][x] == 'E' && data->ccount != data->pcount)
-				img = data->tiles[TILE_MINE_DESTROYED];
-			else if (data->map[y][x] == 'E')
-				img = data->tiles[TILE_MINE_ACTIVE];
-			else if (data->map[y][x] == 'F')
-				img = data->f_enemy.all[data->f_enemy.count];
+			img = get_entity_img(data, x, y);
 			if (!img)
 				continue ;
-			if (shape_overlap((t_shape){data->px, data->py - 10, TILE_SIZE,
-					TILE_SIZE}, (t_shape){TILE_SIZE * x - (img->width
-					- TILE_SIZE), TILE_SIZE * y - (img->height - TILE_SIZE)
-				- 10, img->width, img->height}))
-			{
-				player_img = "test";
-				if (y * TILE_SIZE <= data->py)
-				{
-					put_img_to_img(data->img, img, TILE_SIZE * x - (img->width
-							- TILE_SIZE), TILE_SIZE * y - (img->height
-							- TILE_SIZE) - 10);
-					put_player_img(data);
-				}
-				else
-				{
-					put_player_img(data);
-					put_img_to_img(data->img, img, TILE_SIZE * x - (img->width
-							- TILE_SIZE), TILE_SIZE * y - (img->height
-							- TILE_SIZE) - 10);
-				}
-			}
-			else
-				put_img_to_img(data->img, img, TILE_SIZE * x - (img->width
-						- TILE_SIZE), TILE_SIZE * y - (img->height - TILE_SIZE)
-					- 10);
+			put_entities_img(data, img, (t_point){x, y}, &player_img);
 		}
 	}
 	if (!player_img)

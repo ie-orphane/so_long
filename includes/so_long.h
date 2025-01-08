@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 16:01:50 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 21:40:58 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <time.h>
 # include <mlx.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
 # include "ft_printf.h"
 # include "libft.h"
@@ -69,6 +70,7 @@ typedef struct s_data
 char	*read_file(char *fpath);
 char	*filename_to_path(const char *dir, int index);
 int		randint(int min, int max);
+bool	shape_overlap(t_shape a, t_shape b);
 
 /* frames */
 void	init_sprites(t_data *data);
@@ -88,8 +90,6 @@ int 	keyin(t_data *data, int arr[]);
 
 /* layers */
 void	put_ground_layers(t_data *data);
-int		frames_overlap(int ax, int ay, int bx, int by);
-int		shape_overlap(t_shape a, t_shape b);
 void	put_entities_layers(t_data *data);
 
 #endif // SO_LONG_H
