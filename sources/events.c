@@ -6,13 +6,13 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 12:09:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 15:54:29 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:38:11 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	handle_close_event()
+int	handle_close_event(void)
 {
 	exit(0);
 	return (0);
@@ -34,9 +34,9 @@ int	key_up(int keycode, t_data *data)
 	return (0);
 }
 
-int keyin(t_data *data, int arr[])
+int	keyin(t_data *data, int arr[])
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i] != -1)

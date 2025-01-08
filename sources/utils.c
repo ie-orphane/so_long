@@ -6,24 +6,24 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 15:54:09 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:37:14 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-/* 
+/*
  * read all bytes of a file
- * 
+ *
  * @return content of file or NULL if read fails
  */
 char	*read_file(char *fpath)
 {
-	int			fd;
-	char		*stock;
-	char		*tmp;
-	char		buffer[1024];
-	ssize_t		bytes_read;
+	int		fd;
+	char	*stock;
+	char	*tmp;
+	char	buffer[1024];
+	ssize_t	bytes_read;
 
 	fd = open(fpath, O_RDONLY);
 	stock = NULL;
@@ -66,5 +66,5 @@ char	*filename_to_path(const char *dir, int index)
 
 int	randint(int min, int max)
 {
-	return rand() % (max - min + 1) + min;
+	return (rand() % (max - min + 1) + min);
 }
