@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:29:57 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 14:43:47 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:42:34 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	check_path(t_data *data)
 		ft_error("Player not found\n");
 	if (!map.exit)
 		ft_error("Exit not found\n");
+	if (map.ccount != data->ccount)
+		ft_error("Player cannot reach all collectibles\n");
 	i = -1;
 	while (++i < data->height)
 		free(map.content[i]);
