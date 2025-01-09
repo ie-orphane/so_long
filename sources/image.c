@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:40:13 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:49:46 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	put_pixel_img(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
-	if (color == (int)TRANSPARENT_COLOR || color == 0x0)
+	if (color == (int)TRANSPARENT_COLOR)
 		return ;
 	if (x >= 0 && y >= 0 && x < img->width && y < img->height)
 	{

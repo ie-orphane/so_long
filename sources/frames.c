@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:38:05 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:11:16 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,31 +56,41 @@ static void	init_troop_frames(t_data *data, t_troop_frame *frame,
 	}
 }
 
-static void	init_ground_imgs(t_data *data)
+static t_img	**init_tileset(t_data *data, int max, char *dir)
 {
 	int		i;
 	char	*img_path;
+	t_img	**tileset;
 
+	tileset = malloc(sizeof(t_img *) * max);
 	i = 0;
-	while (i < TILESET_GROUND_MAX)
+	while (i < max)
 	{
-		img_path = filename_to_path(TILESET_GROUND_PATH, i);
-		data->t_ground[i] = img_init(data->mlx, img_path);
+		img_path = filename_to_path(dir, i);
+		tileset[i] = img_init(data->mlx, img_path);
 		free(img_path);
 		i++;
 	}
+	return (tileset);
 }
 
 void	init_sprites(t_data *data)
 {
 	data->img = NULL;
 	data->tiles[TILE_GOLD] = img_init(data->mlx, "./textures/gold.xpm");
+	data->tiles[TILE_COLON] = img_init(data->mlx, "./textures/colon.xpm");
+	data->tiles[TILE_SEMI_COLON] = img_init(data->mlx, "./textures/semi-colon.xpm");
+	data->tiles[TILE_PERIOD] = img_init(data->mlx, "./textures/period.xpm");
+	// data->tiles[TILE_BANNER] = img_init(data->mlx, "./textures/banner.xpm");
 	data->tiles[TILE_WATER] = img_init(data->mlx, "./textures/water.xpm");
 	data->tiles[TILE_MINE_DESTROYED] = img_init(data->mlx,
 			"./textures/mine/destroyed.xpm");
 	data->tiles[TILE_MINE_ACTIVE] = img_init(data->mlx,
 			"./textures/mine/active.xpm");
-	init_ground_imgs(data);
+	data->ts_ground = init_tileset(data, 16, "./textures/grass/green/");
+	data->ts_numbers = init_tileset(data, 10, "./textures/numbers/");
+	data->ts_letters = init_tileset(data, 26, "./textures/letters/");
+	data->ts_banner = init_tileset(data, 3, "./textures/banner/");
 	data->f_player.state = IDLE_RIGHT;
 	init_troop_frames(data, &data->f_player, (t_frame_info){.delay = 87,
 		.max = 6}, (char *[TROOP_FRAMES_MAX]){"./textures/pawn/idle/right/",

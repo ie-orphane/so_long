@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 15:09:48 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:31:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ typedef struct s_data
 	int				width;
 	int				height;
 	t_img			*img;
-	t_img			*t_ground[TILESET_GROUND_MAX];
+	t_img			**ts_ground;
+	t_img			**ts_numbers;
+	t_img			**ts_letters;
+	t_img			**ts_banner;
 	t_img			*tiles[TILES_MAX];
 	t_frame			f_foam;
 	t_frame			f_enemy;
