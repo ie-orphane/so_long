@@ -6,17 +6,15 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 21:42:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:07:33 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-/*
- * read all bytes of a file
- *
- * @return content of file or NULL if read fails
- */
+/// @brief Reads the file
+/// @param fpath the file path
+/// @return the file content or NULL if read fails
 char	*read_file(char *fpath)
 {
 	int		fd;
@@ -45,6 +43,11 @@ char	*read_file(char *fpath)
 	return (stock);
 }
 
+/// @brief Converts a filename to a path
+/// @param dir the directory
+/// @param index the index
+/// @return the path
+/// @note if the allocation fails, the function returns NULL
 char	*filename_to_path(const char *dir, int index)
 {
 	char	*path;
@@ -52,6 +55,8 @@ char	*filename_to_path(const char *dir, int index)
 	size_t	pathsize;
 
 	num = ft_itoa(index);
+	if (!num)
+		return (NULL);
 	pathsize = ft_strlen(dir) + ft_strlen(num) + 5;
 	path = malloc(pathsize * sizeof(char));
 	if (path)
@@ -64,13 +69,10 @@ char	*filename_to_path(const char *dir, int index)
 	return (path);
 }
 
-/*
- * check if two shapes overlap
- *
- * @param a first shape
- * @param b second shape
- * @return true if overlap, false otherwise
- */
+/// @brief Checks if two shapes overlap
+/// @param a the first shape
+/// @param b the second shape
+/// @return true if overlap, false otherwise
 bool	shape_overlap(t_shape a, t_shape b)
 {
 	if (a.x >= b.x + b.w || b.x >= a.x + a.w || a.y >= b.y + b.h || b.y >= a.y
@@ -79,13 +81,10 @@ bool	shape_overlap(t_shape a, t_shape b)
 	return (1);
 }
 
-/*
- * generate a random integer between min and max
- *
- * @param min the minimum value
- * @param max the maximum value
- * @return the random integer
- */
+/// @brief Generates a random integer between min and max
+/// @param min the minimum value
+/// @param max the maximum value
+/// @return the random integer
 int	randint(int min, int max)
 {
 	return (rand() % (max - min + 1) + min);

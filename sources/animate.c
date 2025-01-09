@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 22:21:29 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:39:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 			if (!shape_overlap(player, entity))
 				continue ;
 			return (calculate_distance(data, (t_shape[]){player, entity},
-					direction, &data->map[y][x]));
+				direction, &data->map[y][x]));
 		}
 	}
 	return (SPEED);

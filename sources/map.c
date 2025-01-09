@@ -6,109 +6,64 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:06:56 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 21:13:51 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:31:28 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-/*
- * checks the size of the line in the map
- *
- * @param data the game data
- * @note the line size should be the same as the first line
- */
-static void	check_line_size(t_data *data)
+/// @brief Flood fill algorithm to fill the map
+/// @param data the game data
+/// @param x the x position
+/// @param y the y position
+void	flood_fill(t_data *data, t_map_check *map, int x, int y)
 {
-	int	line_size;
-
-	line_size = ft_strlen(data->map[data->height]);
-	if (data->width == -1)
-		data->width = line_size;
-	else if (data->width < line_size)
+	if (x < 0 || y < 0 || x >= data->width || y >= data->height
+		|| map->content[y][x] == ' ' || map->content[y][x] == '1')
+		return ;
+	if (data->map[y][x] == 'C')
+		map->ccount += 1;
+	if ((map->content[y][x] == 'E' && map->exit) || (map->content[y][x] == 'P'
+			&& map->player))
+		ft_error("Extra '%c' found in %d, %d\n", map->content[y][x], x, y);
+	if (data->map[y][x] == 'E')
 	{
-		ft_printf("Error\nExtra %d block(s) in %d:'%s'\n", line_size
-			- data->width, data->height, data->map[data->height]);
-		exit(1);
+		map->exit = true;
+		map->content[y][x] = '1';
+		flood_fill(data, map, x, y);
+		return ;
 	}
-	else if (data->width > line_size)
-	{
-		ft_printf("Error\nMissing %d block(s) in %d:'%s'\n", data->width
-			- line_size, data->height, data->map[data->height]);
-		exit(1);
-	}
+	if (data->map[y][x] == 'P')
+		map->player = true;
+	map->content[y][x] = ' ';
+	flood_fill(data, map, x + 1, y);
+	flood_fill(data, map, x - 1, y);
+	flood_fill(data, map, x, y + 1);
+	flood_fill(data, map, x, y - 1);
 }
 
-/*
- * checks the blocks in the map
- *
- * @note the blocks should be 'P', 'C', 'E', 'F', '1', '0' or '\\n'
- * @param data the game data
- */
-static void	check_blocks(t_data *data)
-{
-	size_t	i;
-
-	i = 0;
-	while (data->map[data->height][i] != 0)
-	{
-		if (data->map[data->height][i] == 'P')
-		{
-			data->px = i * TILE_SIZE;
-			data->py = data->height * TILE_SIZE;
-		}
-		else if (data->map[data->height][i] == 'C')
-			data->ccount += 1;
-		else if (ft_strchr("01EF\n", data->map[data->height][i]) == NULL)
-		{
-			ft_printf("Error\nUnknown block '%c' found in %d:%d:'%s'\n",
-				data->map[data->height][i], data->height, i,
-				data->map[data->height]);
-			exit(1);
-		}
-		i++;
-	}
-}
-
-/*
- * checks the size of the map
- *
- * @param data the game data
- * @note the map size should not overflow the window size
- */
-void	check_map_size(t_data *data)
-{
-	if (data->width * TILE_SIZE > WIN_WIDTH || data->height
-		* TILE_SIZE > WIN_HEIGHT)
-	{
-		printf("Error\nMap (%dx%d) overflow from the window  (%dx%d)\n",
-			data->width * TILE_SIZE, data->height * TILE_SIZE, WIN_WIDTH,
-			WIN_HEIGHT);
-		exit(1);
-	}
-}
-
-/*
- * reads the map from the file
- *
- * @param data the game data
- * @param fpath the file path
- */
-void	read_map(t_data *data, char *fpath)
+/// @brief Reads the map from the file
+/// @param data the game data
+/// @param fpath the file path
+void	parse_map(t_data *data, char *fpath)
 {
 	char	*content;
 
 	content = read_file(fpath);
+	if (!content)
+		ft_error("Cannot read the map file\n");
 	data->map = ft_split(content, '\n');
 	free(content);
+	if (!data->map)
+		ft_error("Cannot read the map\n");
 	data->width = -1;
 	data->height = -1;
-	data->px = -1;
-	data->py = -1;
 	while (data->map[++data->height])
 	{
 		check_line_size(data);
 		check_blocks(data);
 	}
+	check_closed(data);
 	check_map_size(data);
+	check_path(data);
 }

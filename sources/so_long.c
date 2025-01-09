@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/08 18:49:18 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:44:15 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	main(int argc, char *argv[])
 	if (argc < 1)
 		return (0);
 	ft_bzero(&data, sizeof(t_data));
-	read_map(&data, argv[1]);
+	parse_map(&data, argv[1]);
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, data.width * TILE_SIZE, data.height
 			* TILE_SIZE, WIN_TITLE);
