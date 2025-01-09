@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:08:53 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:33:23 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ typedef struct timeval	t_timeval;
 # define TILE_COLON 5
 # define TILE_SEMI_COLON 6
 # define TILE_PERIOD 7
-# define TILE_BANNER 8
-# define TILES_MAX 9
+# define TILES_MAX 8
 
 // TILE SETS
 # define TILESET_GROUND_MAX 16

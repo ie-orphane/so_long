@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 15:10:25 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:26:27 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:34:15 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void	put_text(t_data *data, char *str)
 	}
 	img = data->tiles[TILE_SEMI_COLON];
 	put_img_to_img(data->img, img, (img->width - 5) * i + (TILE_SIZE
-					/ 4), (TILE_SIZE - img->height) / 2);
+			/ 4), (TILE_SIZE - img->height) / 2);
 	free(str);
 }
 
@@ -115,9 +115,6 @@ void	put_ground_layers(t_data *data)
 	}
 	put_foam(data);
 	put_ground(data);
-	// img = data->tiles[TILE_BANNER];
-	// if (img)
-	// 	put_img_to_img(data->img, img, 0, 0);
 	put_img_to_img(data->img, data->ts_banner[0], 0 * TILE_SIZE, 0);
 	put_img_to_img(data->img, data->ts_banner[1], 1 * TILE_SIZE, 0);
 	put_img_to_img(data->img, data->ts_banner[1], 2 * TILE_SIZE, 0);

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:11:16 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:33:35 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ void	init_sprites(t_data *data)
 	data->img = NULL;
 	data->tiles[TILE_GOLD] = img_init(data->mlx, "./textures/gold.xpm");
 	data->tiles[TILE_COLON] = img_init(data->mlx, "./textures/colon.xpm");
-	data->tiles[TILE_SEMI_COLON] = img_init(data->mlx, "./textures/semi-colon.xpm");
+	data->tiles[TILE_SEMI_COLON] = img_init(data->mlx,
+			"./textures/semi-colon.xpm");
 	data->tiles[TILE_PERIOD] = img_init(data->mlx, "./textures/period.xpm");
-	// data->tiles[TILE_BANNER] = img_init(data->mlx, "./textures/banner.xpm");
 	data->tiles[TILE_WATER] = img_init(data->mlx, "./textures/water.xpm");
 	data->tiles[TILE_MINE_DESTROYED] = img_init(data->mlx,
 			"./textures/mine/destroyed.xpm");

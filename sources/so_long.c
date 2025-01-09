@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 18:37:00 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:33:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	update_animation(t_data *data)
 	data->img = img_new(data->mlx, data->width * TILE_SIZE, data->height
 			* TILE_SIZE);
 	put_ground_layers(data);
-
 	put_entities_layers(data);
 	mlx_clear_window(data->mlx, data->win);
 	mlx_put_image_to_window(data->mlx, data->win, data->img->ptr, 0, 0);
