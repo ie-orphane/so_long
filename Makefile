@@ -7,7 +7,7 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 # Source and object files
 SOURCES_DIR = sources
 SOURCES_FILE = so_long.c events.c map.c utils.c image.c \
-			frames.c layers.c animate.c check.c
+			frames.c layers.c animate.c check.c ground.c
 SOURCES = $(addprefix $(SOURCES_DIR)/,$(SOURCES_FILE))
 
 OBJECTS_DIR = objects

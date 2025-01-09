@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 14:39:19 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:03:15 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 static void	init_entity_shape(t_data *data, int x, int y, t_shape *entity)
 {
 	if (data->map[y][x] == 'E')
-		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (160 - 64) + 15, .y = (y
-				* TILE_SIZE) - (102 - 64) + 66, .w = 125, .h = 1};
+		(*entity) = (t_shape){.x = (x * TILE_SIZE) - ((160 - 64) / 2) + 15,
+			.y = (y * TILE_SIZE) - ((102 - 64) / 2) + 66, .w = 125, .h = 28};
 	else if (data->map[y][x] == 'F')
-		(*entity) = (t_shape){.x = (x * TILE_SIZE) - (84 - 64) + 15, .y = (y
-				* TILE_SIZE) - (84 - 64) + 30, .w = (84 - 15 - 15), .h = (84
-				- 30 - 5)};
+		(*entity) = (t_shape){.x = (x * TILE_SIZE) - ((84 - 64) / 2) + 15,
+			.y = (y * TILE_SIZE) - ((84 - 64) / 2) + 30, .w = (84 - 15 - 15),
+			.h = (84 - 30 - 5)};
 	else if (data->map[y][x] == '1')
 		(*entity) = (t_shape){.x = x * TILE_SIZE, .y = y * TILE_SIZE,
 			.w = TILE_SIZE, .h = TILE_SIZE};
 	else if (data->map[y][x] == 'C')
-		(*entity) = (t_shape){.x = x * TILE_SIZE + 10, .y = y * TILE_SIZE + 9,
-			.w = TILE_SIZE - 10 - 9, .h = TILE_SIZE - 9 - 8};
+		(*entity) = (t_shape){.x = x * TILE_SIZE + 10, .y = y * TILE_SIZE + 9
+			- 10, .w = TILE_SIZE - 10 - 9, .h = TILE_SIZE};
 }
 
 static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,

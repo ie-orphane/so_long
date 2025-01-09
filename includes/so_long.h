@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 14:33:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:09:48 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,24 +80,20 @@ char				*filename_to_path(const char *dir, int index);
 int					randint(int min, int max);
 bool				shape_overlap(t_shape a, t_shape b);
 
-/* frames */
+/* frames & animate */
 void				init_sprites(t_data *data);
+void				update_position(t_data *data, int *next_x, int *next_y);
+void				update_frame(t_data *data, int *updated,
+						void (*callable)(t_data *), t_frame_ref frame);
 
-/* check */
+/* check & map */
 void				check_line_size(t_data *data);
 void				check_blocks(t_data *data);
 void				check_map_size(t_data *data);
 void				check_path(t_data *data);
 void				check_closed(t_data *data);
-
-/* map */
 void				flood_fill(t_data *data, t_map_check *map, int x, int y);
 void				parse_map(t_data *data, char *fpath);
-
-/* animate */
-void				update_position(t_data *data, int *next_x, int *next_y);
-void				update_frame(t_data *data, int *updated,
-						void (*callable)(t_data *), t_frame_ref frame);
 
 /* events */
 int					handle_close_event(void);
@@ -105,7 +101,7 @@ int					key_down(int keycode, t_data *data);
 int					key_up(int keycode, t_data *data);
 int					keyin(t_data *data, int arr[]);
 
-/* layers */
+/* layers & ground */
 void				put_ground_layers(t_data *data);
 void				put_entities_layers(t_data *data);
 
