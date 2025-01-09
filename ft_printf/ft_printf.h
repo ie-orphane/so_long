@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:37:50 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/11/13 18:18:27 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:18:37 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdarg.h>
 # include <unistd.h>
-
+# include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
 # include <limits.h>
@@ -30,5 +30,6 @@ void	ft_puthex(int *count, unsigned long n, const char x);
 void	ft_putunbr(int *count, unsigned long n);
 
 int		ft_printf(const char *format, ...);
+void	ft_error(const char *msg, ...);
 
 #endif
