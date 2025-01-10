@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 12:02:20 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:09:20 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,6 @@ void	init_frames(t_data *data)
 		"./textures/goblins/torch/");
 	init_frameset(data, &data->f_foam, (t_frame_info){.delay = 115, .max = 8},
 		"./textures/foam/");
+	init_frameset(data, &data->f_dying, (t_frame_info){.delay = 150, .max = 14},
+		"./textures/knights/dead/");
 }

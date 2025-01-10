@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 15:03:15 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:14:16 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 		(*entity) = '0';
 		data->pcount += 1;
 	}
+	if (distance == 0 && (*entity) == 'F')
+		data->f_player.state = DYING;
 	if (distance < SPEED)
 		return (distance);
 	return (SPEED);

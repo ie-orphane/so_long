@@ -27,7 +27,7 @@ LIB_PATHS =  -Lft_printf -Llibft -L/usr/local/lib
 LIBS =  -lftprintf -lft -lmlx_Linux
 INCLUDE_PATHS := -I$(INCLUDES_DIR) -I/usr/local/include -Ift_printf -Ilibft
 
-LIB_FLAGS = $(LIB_PATHS) $(LIBS) -lXext -lX11 -lm $(INCLUDE_PATHS) #-fsanitize=address -g3
+LIB_FLAGS = $(LIB_PATHS) $(LIBS) -lXext -lX11 -lm $(INCLUDE_PATHS) -fsanitize=address -g3
 
 
 all : $(NAME)

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 12:01:52 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:13:09 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_data
 	t_img			*tiles[TILES_MAX];
 	t_frame			f_foam;
 	t_frame			f_enemy;
-	t_frame			f_sheep;
+	t_frame			f_dying;
 	t_troop_frame	f_player;
 	int				keys[256];
 	int				steps;

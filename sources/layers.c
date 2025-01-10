@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:06:49 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 15:12:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:12:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ static void	put_player_img(t_data *data)
 	int		player_x;
 	int		player_y;
 
-	player_x = data->px;
-	player_y = data->py - 10;
-	player_img = data->f_player.all[data->f_player.state][data->f_player.count];
-	if (data->direction == 'l')
-		put_img_to_img(data->img, player_img, player_x, player_y);
+	if (data->f_player.state == DEAD)
+		return ;
+	if (data->f_player.state == DYING)
+		player_img = data->f_dying.all[(data->f_dying.count - 1) % data->f_dying.max];
 	else
-		put_img_to_img(data->img, player_img, player_x, player_y);
+		player_img = data->f_player.all[data->f_player.state][data->f_player.count];
+	player_x = data->px - ((player_img->width - TILE_SIZE) / 2);
+	player_y = data->py - 10 - ((player_img->height - TILE_SIZE) / 2);
+	put_img_to_img(data->img, player_img, player_x, player_y);
 }
 
 static void	put_entities_img(t_data *data, t_img *img, t_point position,
