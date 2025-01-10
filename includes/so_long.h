@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:31:19 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:01:52 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,11 @@ char				*filename_to_path(const char *dir, int index);
 int					randint(int min, int max);
 bool				shape_overlap(t_shape a, t_shape b);
 
-/* frames & animate */
-void				init_sprites(t_data *data);
+/* frames & tiles */
+void				init_frames(t_data *data);
+void				init_tiles(t_data *data);
+
+/* animate */
 void				update_position(t_data *data, int *next_x, int *next_y);
 void				update_frame(t_data *data, int *updated,
 						void (*callable)(t_data *), t_frame_ref frame);

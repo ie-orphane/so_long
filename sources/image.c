@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 17:49:46 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:53:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,15 @@ t_img	*img_init(void *mlx_ptr, char *img_path)
 	t_img	*img;
 
 	img = malloc(sizeof(t_img));
-	if (img == NULL)
-	{
-		ft_printf("Allocation error: %s\n", img_path);
-		exit(EXIT_FAILURE);
-	}
+	if (!img)
+		ft_error("Image allocation failed: %s\n", img_path);
 	img->ptr = mlx_xpm_file_to_image(mlx_ptr, img_path, &img->width,
 			&img->height);
-	if (img->ptr == NULL)
-	{
-		ft_printf("Image not found: %s\n", img_path);
-		exit(EXIT_FAILURE);
-	}
+	if (!img->ptr)
+		ft_error("Image not found: %s\n", img_path);
 	img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->line_length,
 			&img->endian);
+	if (!img->addr)
+		ft_error("Getting image data failed: %s\n", img_path);
 	return (img);
 }

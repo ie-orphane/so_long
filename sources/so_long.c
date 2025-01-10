@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:33:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:02:50 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int	main(int argc, char *argv[])
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, data.width * TILE_SIZE, data.height
 			* TILE_SIZE, WIN_TITLE);
-	init_sprites(&data);
+	init_tiles(&data);
+	init_frames(&data);
 	mlx_loop_hook(data.mlx, update_animation, &data);
 	mlx_hook(data.win, KeyPress, KeyPressMask, key_down, &data);
 	mlx_hook(data.win, KeyRelease, KeyReleaseMask, key_up, &data);
