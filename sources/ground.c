@@ -6,31 +6,18 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 15:10:25 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 21:34:15 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:45:13 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static t_uint	ts_ground_index(t_data *data, int x, int y)
-{
-	t_uint	top;
-	t_uint	right;
-	t_uint	bottom;
-	t_uint	left;
-
-	top = data->map[y - 1][x] == '1';
-	right = data->map[y][x + 1] == '1';
-	bottom = data->map[y + 1][x] == '1';
-	left = data->map[y][x - 1] == '1';
-	return ((top << 3) | (left << 2) | (right << 1) | bottom);
-}
-
 static void	put_ground(t_data *data)
 {
-	int		x;
-	int		y;
-	t_img	*img;
+	int				x;
+	int				y;
+	t_img			*img;
+	unsigned int	index;
 
 	y = -1;
 	while (++y < data->height)
@@ -40,9 +27,15 @@ static void	put_ground(t_data *data)
 		{
 			img = NULL;
 			if (data->map[y][x] != '1')
-				img = data->ts_ground[ts_ground_index(data, x, y)];
+			{
+				index = ((data->map[y - 1][x] == '1') << 3) | ((data->map[y][x
+							- 1] == '1') << 2) | ((data->map[y][x
+							+ 1] == '1') << 1) | (data->map[y + 1][x] == '1');
+				img = data->ts_ground[index];
+			}
 			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
+				put_img_to_img(data->img, img, (t_point){TILE_SIZE * x,
+					TILE_SIZE * y}, data->brightness);
 		}
 	}
 }
@@ -63,10 +56,25 @@ static void	put_foam(t_data *data)
 			if (data->map[y][x] != '1')
 				img = data->f_foam.all[data->f_foam.count];
 			if (img)
-				put_img_to_img(data->img, img, (TILE_SIZE * x) - ((82 - 64)
-						/ 2), (TILE_SIZE * y) - ((82 - 64) / 2));
+				put_img_to_img(data->img, img, (t_point){(TILE_SIZE * x) - ((82
+							- 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2)},
+					data->brightness);
 		}
 	}
+}
+
+static void	put_ribbon(t_data *data, char *str)
+{
+	int	x;
+
+	put_img_to_img(data->img, data->ts_banner[0], (t_point){TILE_SIZE / 3,
+		TILE_SIZE / 3}, data->brightness);
+	x = -1;
+	while (++x < ((24 - 5) * ((int)ft_strlen(str) + 1)) / 64)
+		put_img_to_img(data->img, data->ts_banner[1], (t_point){((x + 1)
+				* TILE_SIZE) + TILE_SIZE / 3, TILE_SIZE / 3}, data->brightness);
+	put_img_to_img(data->img, data->ts_banner[2], (t_point){((x + 1)
+			* TILE_SIZE) + TILE_SIZE / 3, TILE_SIZE / 3}, data->brightness);
 }
 
 static void	put_text(t_data *data, char *str)
@@ -74,7 +82,6 @@ static void	put_text(t_data *data, char *str)
 	int		i;
 	t_img	*img;
 
-	str = ft_strjoin(str, ft_itoa(data->steps / TILE_SIZE));
 	i = 0;
 	while (str[i])
 	{
@@ -85,15 +92,13 @@ static void	put_text(t_data *data, char *str)
 			img = data->tiles[TILE_COLON];
 		else if ('0' <= str[i] && str[i] <= '9')
 			img = data->ts_numbers[str[i] - '0'];
+		else if (str[i] == ';')
+			img = data->tiles[TILE_SEMI_COLON];
 		if (img)
-			put_img_to_img(data->img, img, (img->width - 5) * i + (TILE_SIZE
-					/ 4), (TILE_SIZE - img->height) / 2);
+			put_img_to_img(data->img, img, (t_point){(img->width - 5) * i
+				+ TILE_SIZE, (TILE_SIZE + img->width) / 3}, data->brightness);
 		i++;
 	}
-	img = data->tiles[TILE_SEMI_COLON];
-	put_img_to_img(data->img, img, (img->width - 5) * i + (TILE_SIZE
-			/ 4), (TILE_SIZE - img->height) / 2);
-	free(str);
 }
 
 void	put_ground_layers(t_data *data)
@@ -101,6 +106,7 @@ void	put_ground_layers(t_data *data)
 	int		x;
 	int		y;
 	t_img	*img;
+	char	*str;
 
 	y = -1;
 	while (++y < data->height)
@@ -110,15 +116,14 @@ void	put_ground_layers(t_data *data)
 		{
 			img = data->tiles[TILE_WATER];
 			if (img)
-				put_img_to_img(data->img, img, TILE_SIZE * x, TILE_SIZE * y);
+				put_img_to_img(data->img, img, (t_point){TILE_SIZE * x,
+					TILE_SIZE * y}, data->brightness);
 		}
 	}
 	put_foam(data);
 	put_ground(data);
-	put_img_to_img(data->img, data->ts_banner[0], 0 * TILE_SIZE, 0);
-	put_img_to_img(data->img, data->ts_banner[1], 1 * TILE_SIZE, 0);
-	put_img_to_img(data->img, data->ts_banner[1], 2 * TILE_SIZE, 0);
-	put_img_to_img(data->img, data->ts_banner[1], 3 * TILE_SIZE, 0);
-	put_img_to_img(data->img, data->ts_banner[2], 4 * TILE_SIZE, 0);
-	put_text(data, "mouvments:");
+	str = ft_ultimate_strjoin(3, "steps:", ft_itoa(data->steps / SPEED), ";");
+	put_ribbon(data, str);
+	put_text(data, str);
+	free(str);
 }

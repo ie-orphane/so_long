@@ -6,17 +6,17 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 11:53:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 10:26:41 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	put_pixel_img(t_img *img, int x, int y, int color)
+void	put_pixel_img(t_img *img, int x, int y, unsigned int color)
 {
 	char	*dst;
 
-	if (color == (int)TRANSPARENT_COLOR)
+	if (color == TRANSPARENT_COLOR)
 		return ;
 	if (x >= 0 && y >= 0 && x < img->width && y < img->height)
 	{
@@ -25,16 +25,27 @@ void	put_pixel_img(t_img *img, int x, int y, int color)
 	}
 }
 
-unsigned int	get_pixel_img(t_img *img, int x, int y)
+unsigned int	darken_color(unsigned int color, double factor)
 {
-	return (*(unsigned int *)((img->addr + (y * img->line_length) + (x
-				* img->bpp / 8))));
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+
+	if (factor < 0.0)
+		factor = 0.0;
+	if (factor >= 1.0)
+		return (color);
+	r = ((color >> 16) & 0xFF) * (1.0 - factor);
+	g = ((color >> 8) & 0xFF) * (1.0 - factor);
+	b = (color & 0xFF) * (1.0 - factor);
+	return ((color & 0xFF000000) | (r << 16) | (g << 8) | b);
 }
 
-void	put_img_to_img(t_img *dst, t_img *src, int x, int y)
+void	put_img_to_img(t_img *dst, t_img *src, t_point pixel, double brightness)
 {
-	int	i;
-	int	j;
+	int				i;
+	int				j;
+	unsigned int	color;
 
 	i = 0;
 	while (i < src->width)
@@ -42,7 +53,10 @@ void	put_img_to_img(t_img *dst, t_img *src, int x, int y)
 		j = 0;
 		while (j < src->height)
 		{
-			put_pixel_img(dst, x + i, y + j, get_pixel_img(src, i, j));
+			color = (*(unsigned int *)((src->addr + (j * src->line_length) + (i
+								* src->bpp / 8))));
+			color = darken_color(color, brightness);
+			put_pixel_img(dst, pixel.x + i, pixel.y + j, color);
 			j++;
 		}
 		i++;

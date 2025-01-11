@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 12:06:49 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 16:12:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:29:39 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,40 +21,45 @@ static void	put_player_img(t_data *data)
 	if (data->f_player.state == DEAD)
 		return ;
 	if (data->f_player.state == DYING)
-		player_img = data->f_dying.all[(data->f_dying.count - 1) % data->f_dying.max];
+		player_img = data->f_dying.all[(data->f_dying.count - 1)
+			% data->f_dying.max];
 	else
-		player_img = data->f_player.all[data->f_player.state][data->f_player.count];
+		player_img = data->f_player.all[data->f_player.state]
+		[data->f_player.count];
 	player_x = data->px - ((player_img->width - TILE_SIZE) / 2);
 	player_y = data->py - 10 - ((player_img->height - TILE_SIZE) / 2);
-	put_img_to_img(data->img, player_img, player_x, player_y);
+	put_img_to_img(data->img, player_img, (t_point){player_x, player_y},
+		data->brightness);
 }
 
-static void	put_entities_img(t_data *data, t_img *img, t_point position,
-		char **player_img)
+static void	put_entities_img(t_data *data, t_img *img, t_point player_position,
+		bool *player_putted)
 {
 	t_shape	entity;
 	t_shape	player;
+	t_point	entity_position;
 
 	player = (t_shape){data->px, data->py - 10, TILE_SIZE, TILE_SIZE};
-	entity = (t_shape){TILE_SIZE * position.x - ((img->width - TILE_SIZE) / 2),
-		TILE_SIZE * position.y - ((img->height - TILE_SIZE) / 2) - 15,
-		img->width, img->height};
-	if (shape_overlap(player, entity))
+	entity = (t_shape){TILE_SIZE * player_position.x - ((img->width - TILE_SIZE)
+			/ 2), TILE_SIZE * player_position.y - ((img->height - TILE_SIZE)
+			/ 2) - 15, img->width, img->height};
+	entity_position = (t_point){entity.x, entity.y};
+	if (!shape_overlap(player, entity))
 	{
-		(*player_img) = "test";
-		if (position.y * TILE_SIZE <= data->py)
-		{
-			put_img_to_img(data->img, img, entity.x, entity.y);
-			put_player_img(data);
-		}
-		else
-		{
-			put_player_img(data);
-			put_img_to_img(data->img, img, entity.x, entity.y);
-		}
+		put_img_to_img(data->img, img, entity_position, data->brightness);
+		return ;
+	}
+	if (player_position.y * TILE_SIZE <= data->py)
+	{
+		put_img_to_img(data->img, img, entity_position, data->brightness);
+		put_player_img(data);
 	}
 	else
-		put_img_to_img(data->img, img, entity.x, entity.y);
+	{
+		put_player_img(data);
+		put_img_to_img(data->img, img, entity_position, data->brightness);
+	}
+	(*player_putted) = true;
 }
 
 t_img	*get_entity_img(t_data *data, int x, int y)
@@ -78,9 +83,9 @@ void	put_entities_layers(t_data *data)
 	int		x;
 	int		y;
 	t_img	*img;
-	char	*player_img;
+	bool	player_putted;
 
-	player_img = NULL;
+	player_putted = false;
 	y = -1;
 	while (++y < data->height)
 	{
@@ -90,9 +95,9 @@ void	put_entities_layers(t_data *data)
 			img = get_entity_img(data, x, y);
 			if (!img)
 				continue ;
-			put_entities_img(data, img, (t_point){x, y}, &player_img);
+			put_entities_img(data, img, (t_point){x, y}, &player_putted);
 		}
 	}
-	if (!player_img)
+	if (!player_putted)
 		put_player_img(data);
 }

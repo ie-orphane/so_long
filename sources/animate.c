@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 16:14:16 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:24:43 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	update_position(t_data *data, int *next_x, int *next_y)
 	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
 }
 
-void	update_frame(t_data *data, int *updated, void (*callable)(t_data *),
+void	update_frame(t_data *data, void (*callable)(t_data *),
 		t_frame_ref frame)
 {
 	gettimeofday(frame.current_time, NULL);
@@ -116,6 +116,6 @@ void	update_frame(t_data *data, int *updated, void (*callable)(t_data *),
 		if (callable)
 			callable(data);
 		(*frame.last_time) = (*frame.current_time);
-		(*updated) = 1;
+		data->f_updated = true;
 	}
 }

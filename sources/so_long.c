@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:10 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 16:06:55 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:42:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,39 @@ void	player_frame_callable(t_data *data)
 	data->py = next_y;
 }
 
-int	update_frames(t_data *data)
+void	update_frames(t_data *data)
 {
-	int	updated;
-
-	updated = 0;
-	update_frame(data, &updated, NULL,
-		(t_frame_ref){.count = &data->f_enemy.count, .max = data->f_enemy.max,
-		.delay = data->f_enemy.delay,
+	data->f_updated = false;
+	update_frame(data, NULL, (t_frame_ref){.count = &data->f_foam.count,
+		.max = data->f_foam.max, .delay = data->f_foam.delay,
+		.current_time = &data->f_foam.current_time,
+		.last_time = &data->f_foam.last_time});
+	update_frame(data, NULL, (t_frame_ref){.count = &data->f_enemy.count,
+		.max = data->f_enemy.max, .delay = data->f_enemy.delay,
 		.current_time = &data->f_enemy.current_time,
 		.last_time = &data->f_enemy.last_time});
 	if (data->f_player.state != DEAD && data->f_player.state != DYING)
-		update_frame(data, &updated, player_frame_callable,
-			(t_frame_ref){.count = &data->f_player.count, .max = data->f_player.max,
-			.delay = data->f_player.delay,
+		update_frame(data, player_frame_callable,
+			(t_frame_ref){.count = &data->f_player.count,
+			.max = data->f_player.max, .delay = data->f_player.delay,
 			.current_time = &data->f_player.current_time,
 			.last_time = &data->f_player.last_time});
 	else if (data->f_player.state == DYING)
-	{
-		update_frame(data, &updated, NULL,
-			(t_frame_ref){.count = &data->f_dying.count, .max = data->f_dying.max,
-			.delay = data->f_dying.delay,
+		update_frame(data, NULL, (t_frame_ref){.count = &data->f_dying.count,
+			.max = data->f_dying.max, .delay = data->f_dying.delay,
 			.current_time = &data->f_dying.current_time,
 			.last_time = &data->f_dying.last_time});
-		if (data->f_dying.count == data->f_dying.max - 1)
-			data->f_player.state = DEAD;
+	if (data->f_dying.count == data->f_dying.max - 1)
+	{
+		data->f_player.state = DEAD;
+		data->brightness = 0.75;
 	}
-	update_frame(data, &updated, NULL,
-		(t_frame_ref){.count = &data->f_foam.count, .max = data->f_foam.max,
-		.delay = data->f_foam.delay, .current_time = &data->f_foam.current_time,
-		.last_time = &data->f_foam.last_time});
-	return (updated);
 }
 
 int	update_animation(t_data *data)
 {
-	if (!update_frames(data))
+	update_frames(data);
+	if (!data->f_updated)
 		return (0);
 	if (data->img)
 	{

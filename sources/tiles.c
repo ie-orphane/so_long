@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:56:25 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 11:58:49 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:08:55 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ void	init_tiles(t_data *data)
 	data->ts_ground = init_tileset(data, 16, "./textures/grass/green/");
 	data->ts_numbers = init_tileset(data, 10, "./textures/numbers/");
 	data->ts_letters = init_tileset(data, 26, "./textures/letters/");
-	data->ts_banner = init_tileset(data, 3, "./textures/banner/");
+	data->ts_banner = init_tileset(data, 3, "./textures/ribbon/white/");
 }

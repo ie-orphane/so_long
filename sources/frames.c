@@ -6,17 +6,17 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 21:42:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 16:09:20 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 10:24:05 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static void	init_frame_imgs(t_data *data, t_img ***imgs, t_uint max,
+static void	init_frame_imgs(t_data *data, t_img ***imgs, unsigned int max,
 		const char *dir)
 {
-	t_uint	i;
-	char	*img_path;
+	unsigned int	i;
+	char			*img_path;
 
 	(*imgs) = malloc(sizeof(t_img) * max);
 	i = 0;
@@ -42,7 +42,7 @@ static void	init_frameset(t_data *data, t_frame *frame, t_frame_info info,
 static void	init_troop_frames(t_data *data, t_troop_frame *frame,
 		t_frame_info info, char *dirs[TROOP_FRAMES_MAX])
 {
-	t_uint	i;
+	unsigned int	i;
 
 	frame->count = 0;
 	frame->max = info.max;

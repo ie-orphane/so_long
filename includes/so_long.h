@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 16:13:09 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:48:33 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_data
 	int				width;
 	int				height;
 	t_img			*img;
+	double			brightness;
 	t_img			**ts_ground;
 	t_img			**ts_numbers;
 	t_img			**ts_letters;
@@ -68,6 +69,7 @@ typedef struct s_data
 	t_frame			f_enemy;
 	t_frame			f_dying;
 	t_troop_frame	f_player;
+	bool			f_updated;
 	int				keys[256];
 	int				steps;
 	char			direction;
@@ -82,6 +84,7 @@ char				*read_file(char *fpath);
 char				*filename_to_path(const char *dir, int index);
 int					randint(int min, int max);
 bool				shape_overlap(t_shape a, t_shape b);
+char				*ft_ultimate_strjoin(size_t count, ...);
 
 /* frames & tiles */
 void				init_frames(t_data *data);
@@ -89,8 +92,8 @@ void				init_tiles(t_data *data);
 
 /* animate */
 void				update_position(t_data *data, int *next_x, int *next_y);
-void				update_frame(t_data *data, int *updated,
-						void (*callable)(t_data *), t_frame_ref frame);
+void				update_frame(t_data *data, void (*callable)(t_data *),
+						t_frame_ref frame);
 
 /* check & map */
 void				check_line_size(t_data *data);

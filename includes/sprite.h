@@ -6,14 +6,13 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/10 15:00:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 18:09:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SPRITE_H
 # define SPRITE_H
 
-typedef unsigned int	t_uint;
 typedef struct timeval	t_timeval;
 
 # define TILE_SIZE 64
@@ -37,26 +36,26 @@ typedef struct timeval	t_timeval;
 typedef struct s_frame
 {
 	t_img				**all;
-	t_uint				count;
-	t_uint				max;
-	t_uint				delay;
+	unsigned int		count;
+	unsigned int		max;
+	unsigned int		delay;
 	t_timeval			current_time;
 	t_timeval			last_time;
 }						t_frame;
 
 typedef struct s_frame_ref
 {
-	t_uint				*count;
-	t_uint				max;
-	t_uint				delay;
+	unsigned int		*count;
+	unsigned int		max;
+	unsigned int		delay;
 	t_timeval			*current_time;
 	t_timeval			*last_time;
 }						t_frame_ref;
 
 typedef struct s_frame_info
 {
-	t_uint				delay;
-	t_uint				max;
+	unsigned int		delay;
+	unsigned int		max;
 }						t_frame_info;
 
 // TROOP FRAMES
@@ -76,9 +75,9 @@ typedef struct s_troop_frame
 {
 	t_img				**all[TROOP_FRAMES_MAX];
 	t_troop_state		state;
-	t_uint				count;
-	t_uint				max;
-	t_uint				delay;
+	unsigned int		count;
+	unsigned int		max;
+	unsigned int		delay;
 	t_timeval			current_time;
 	t_timeval			last_time;
 }						t_troop_frame;
