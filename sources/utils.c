@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 18:48:08 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/11 21:35:39 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,29 +90,24 @@ int	randint(int min, int max)
 	return (rand() % (max - min + 1) + min);
 }
 
-char	*ft_ultimate_strjoin(size_t count, ...)
+char	*ft_ultimate_strjoin(char **strs)
 {
 	char	*str;
 	size_t	str_size;
-	va_list	strs;
 	size_t	i;
 
-	va_start(strs, count);
 	str_size = 1;
 	i = -1;
-	while (++i < count)
-		str_size += ft_strlen(va_arg(strs, char *));
-	va_end(strs);
+	while (strs[++i])
+		str_size += ft_strlen(strs[i]);
 	if (str_size == 1)
 		return ((char *)ft_calloc(1, 1));
 	str = malloc(str_size);
 	if (!str)
 		return (NULL);
-	va_start(strs, count);
 	str[0] = '\0';
 	i = -1;
-	while (++i < count)
-		ft_strlcat(str, (const char *)va_arg(strs, char *), str_size);
-	va_end(strs);
+	while (strs[++i])
+		ft_strlcat(str, strs[i], str_size);
 	return (str);
 }
