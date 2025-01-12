@@ -6,28 +6,17 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:51:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:00:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_BONUS_H
 # define MAIN_BONUS_H
 
-# include "ft_printf.h"
-# include "libft.h"
+# include "libs.h"
 # include "image.h"
+# include "utils.h"
 # include "sprite_bonus.h"
-# include <X11/X.h>
-# include <X11/keysym.h>
-# include <fcntl.h>
-# include <math.h>
-# include <mlx.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/time.h>
-# include <time.h>
-# include <unistd.h>
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
@@ -42,20 +31,11 @@ typedef struct s_map_check
 	bool			player;
 }					t_map_check;
 
-typedef struct s_shape
-{
-	int				x;
-	int				y;
-	int				w;
-	int				h;
-}					t_shape;
-
 typedef struct s_data
 {
 	void			*mlx;
 	void			*win;
 	char			**map;
-	char			**map_cpy;
 	int				width;
 	int				height;
 	t_img			*img;
@@ -78,13 +58,6 @@ typedef struct s_data
 	int				pcount;
 	int				ccount;
 }					t_data;
-
-/* utils */
-char				*read_file(char *fpath);
-char				*filename_to_path(const char *dir, int index);
-int					randint(int min, int max);
-bool				shape_overlap(t_shape a, t_shape b);
-char				*ft_ultimate_strjoin(char **strs);
 
 /* frames & tiles */
 void				init_frames(t_data *data);

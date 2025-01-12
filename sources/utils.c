@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/12 10:50:28 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:30 by ielyatim         ###   ########.fr       */
+/*   Created: 2025/01/12 10:55:29 by ielyatim          #+#    #+#             */
+/*   Updated: 2025/01/12 10:55:49 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main_bonus.h"
+#include "utils.h"
 
 /// @brief Reads the file
 /// @param fpath the file path

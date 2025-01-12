@@ -6,7 +6,7 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 
 # Source and object files
 SOURCES_DIR = sources
-_SOURCES_BONUS = main_bonus.c events_bonus.c map_bonus.c utils_bonus.c image_bonus.c \
+_SOURCES_BONUS = main_bonus.c events_bonus.c map_bonus.c utils.c image_bonus.c \
 			frames_bonus.c layers_bonus.c animate_bonus.c check_bonus.c ground_bonus.c \
 			tiles_bonus.c
 SOURCES_BONUS = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
@@ -15,7 +15,7 @@ OBJECTS_DIR = objects
 OBJECTS_BONUS = $(addprefix $(OBJECTS_DIR)/,$(_SOURCES_BONUS:.c=.o))
 
 INCLUDES_DIR = includes
-_INCLUDES = main_bonus.h image.h sprite_bonus.h
+_INCLUDES = main_bonus.h image.h sprite_bonus.h utils.h libs.h
 INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(_INCLUDES))
 
 # Library directories and its files
