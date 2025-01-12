@@ -6,11 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:56:25 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 18:08:55 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 10:37:12 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "main_bonus.h"
 
 static t_img	**init_tileset(t_data *data, int max, char *dir)
 {

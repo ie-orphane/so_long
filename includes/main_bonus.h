@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 21:36:35 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 10:35:42 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define SO_LONG_H
 
 # include "ft_printf.h"
-# include "image.h"
 # include "libft.h"
-# include "sprite.h"
+# include "image.h"
+# include "sprite_bonus.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>

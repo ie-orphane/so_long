@@ -6,11 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 12:13:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 10:26:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 10:37:12 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "main_bonus.h"
 
 void	put_pixel_img(t_img *img, int x, int y, unsigned int color)
 {

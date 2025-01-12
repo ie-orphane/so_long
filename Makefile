@@ -6,17 +6,17 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 
 # Source and object files
 SOURCES_DIR = sources
-SOURCES_FILE = so_long.c events.c map.c utils.c image.c \
-			frames.c layers.c animate.c check.c ground.c \
-			tiles.c
-SOURCES = $(addprefix $(SOURCES_DIR)/,$(SOURCES_FILE))
+_SOURCES_BONUS = main_bonus.c events_bonus.c map_bonus.c utils_bonus.c image_bonus.c \
+			frames_bonus.c layers_bonus.c animate_bonus.c check_bonus.c ground_bonus.c \
+			tiles_bonus.c
+SOURCES_BONUS = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
 OBJECTS_DIR = objects
-OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(SOURCES_FILE:.c=.o))
+OBJECTS_BONUS = $(addprefix $(OBJECTS_DIR)/,$(_SOURCES_BONUS:.c=.o))
 
 INCLUDES_DIR = includes
-INCLUDES_FILE = so_long.h image.h sprite.h
-INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(INCLUDES_FILE))
+_INCLUDES = main_bonus.h image.h sprite_bonus.h
+INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(_INCLUDES))
 
 # Library directories and its files
 LIB_DIRS = ft_printf libft
@@ -46,8 +46,13 @@ $(NAME): $(LIB_FILES) $(OBJECTS)
 	@echo "new compile"
 	@$(CC) $(OBJECTS) $(LIB_FLAGS) -o $(NAME)
 
+bonus: $(LIB_FILES) $(OBJECTS_BONUS)
+	@echo "Compiling Bonus"
+	$(CC) $(OBJECTS_BONUS) $(LIB_FLAGS) -o $(NAME)
+	@echo "Done"
+
 clean :
-	@rm -f $(OBJECTS)
+	@rm -rf $(OBJECTS_DIR)
 	@for dir in $(LIB_DIRS); do \
 		echo "Cleaning library in $$dir..."; \
 		$(MAKE) -C $$dir clean 1> /dev/null; \
@@ -58,8 +63,4 @@ fclean : clean
 
 re : fclean all
 
-DEFAULT_FILE = regular
-run : $(NAME)
-	@./$(NAME) maps/$(if $(word 2,$(MAKECMDGOALS)),$(word 2,$(MAKECMDGOALS)),$(DEFAULT_FILE)).ber
-
-.PHONY : all clean fclean re run test
+.PHONY : all clean fclean re bonus 

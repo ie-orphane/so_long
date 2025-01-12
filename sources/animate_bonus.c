@@ -6,11 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:56:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 18:24:43 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 10:37:12 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "main_bonus.h"
 
 static void	init_entity_shape(t_data *data, int x, int y, t_shape *entity)
 {

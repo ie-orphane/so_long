@@ -6,11 +6,11 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:53:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 21:35:39 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 10:37:12 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "main_bonus.h"
 
 /// @brief Reads the file
 /// @param fpath the file path
