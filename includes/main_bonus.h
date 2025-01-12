@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long_bonus.h                                    :+:      :+:    :+:   */
+/*   main_bonus.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/15 21:40:06 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:35:42 by ielyatim         ###   ########.fr       */
+/*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
+/*   Updated: 2025/01/12 10:51:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef MAIN_BONUS_H
+# define MAIN_BONUS_H
 
 # include "ft_printf.h"
 # include "libft.h"
@@ -114,4 +114,4 @@ int					keyin(t_data *data, int arr[]);
 void				put_ground_layers(t_data *data);
 void				put_entities_layers(t_data *data);
 
-#endif // SO_LONG_H
+#endif // MAIN_BONUS_H

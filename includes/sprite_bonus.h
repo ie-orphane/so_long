@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sprite.h                                           :+:      :+:    :+:   */
+/*   sprite_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/04 18:36:32 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/11 18:09:04 by ielyatim         ###   ########.fr       */
+/*   Created: 2025/01/12 10:51:07 by ielyatim          #+#    #+#             */
+/*   Updated: 2025/01/12 10:51:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SPRITE_H
-# define SPRITE_H
+#ifndef SPRITE_BONUS_H
+# define SPRITE_BONUS_H
 
 typedef struct timeval	t_timeval;
 
@@ -82,4 +82,4 @@ typedef struct s_troop_frame
 	t_timeval			last_time;
 }						t_troop_frame;
 
-#endif // SPRITE_H
+#endif // SPRITE_BONUS_H
