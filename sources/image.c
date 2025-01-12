@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_bonus.c                                      :+:      :+:    :+:   */
+/*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/12 10:49:58 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:00 by ielyatim         ###   ########.fr       */
+/*   Created: 2025/01/12 11:58:41 by ielyatim          #+#    #+#             */
+/*   Updated: 2025/01/12 21:40:22 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main_bonus.h"
+#include "image.h"
 
 void	put_pixel_img(t_img *img, int x, int y, unsigned int color)
 {
 	char	*dst;
 
-	if (color == TRANSPARENT_COLOR)
+	if (color == (unsigned int)TRANSPARENT_COLOR)
 		return ;
 	if (x >= 0 && y >= 0 && x < img->width && y < img->height)
 	{
@@ -69,10 +69,7 @@ t_img	*img_new(void *mlx_ptr, int width, int height)
 
 	img = malloc(sizeof(t_img));
 	if (img == NULL)
-	{
-		ft_printf("Allocation error: %s\n", "empty");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("Allocation error: %s\n", "empty");
 	img->ptr = mlx_new_image(mlx_ptr, width, height);
 	img->addr = mlx_get_data_addr(img->ptr, &(img->bpp), &(img->line_length),
 			&(img->endian));

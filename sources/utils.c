@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:55:29 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:55:49 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:25:52 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ bool	shape_overlap(t_shape a, t_shape b)
 {
 	if (a.x >= b.x + b.w || b.x >= a.x + a.w || a.y >= b.y + b.h || b.y >= a.y
 		+ a.h)
-		return (0);
-	return (1);
+		return (false);
+	return (true);
 }
 
 /// @brief Generates a random integer between min and max
