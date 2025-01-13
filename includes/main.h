@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:02:24 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 12:07:47 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:16:41 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_data
 	bool	game_over;
 	t_point	min;
 	t_point	max;
-	// int				steps;
+	int		steps;
 	t_point	p;
 	int		pcount;
 	int		ccount;
@@ -63,15 +63,15 @@ void		check_path(t_data *data);
 void		check_closed(t_data *data);
 void		parse_map(t_data *data, char *fpath);
 
-int			handle_close_event(void);
-int			keyin(int keycode, int arr[]);
-
 void		put_scaled_img_to_img(t_img *dst, t_img *src, t_point pixel,
 				double brightness);
 void		img_destroy(void *mlx_ptr, t_img **img);
 t_img		*wall_tile(t_data *data, int x, int y);
 t_img		**init_tileset(void *mlx_ptr, int max, char *dir);
 
+void		ft_exit(t_data *data, char *msg, int status);
+
+int			destroy_handler(t_data *data);
 int			key_handler(int keycode, t_data *data);
 int			loop_handler(t_data *data);
 

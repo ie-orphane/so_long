@@ -7,7 +7,7 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 # Source and object files
 SOURCES_DIR = sources
 
-_SOURCES = main.c utils.c map.c events.c image.c \
+_SOURCES = main.c utils.c map.c image.c \
 			hooks.c tiles.c check.c
 SOURCES = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
@@ -34,7 +34,7 @@ LIB_PATHS =  -Lft_printf -Llibft -L/usr/local/lib
 LIBS =  -lftprintf -lft -lmlx_Linux
 INCLUDE_PATHS := -I$(INCLUDES_DIR) -I/usr/local/include -Ift_printf -Ilibft
 
-LIB_FLAGS = $(LIB_PATHS) $(LIBS) -lXext -lX11 -lm $(INCLUDE_PATHS) -fsanitize=address -g3
+LIB_FLAGS = $(LIB_PATHS) $(LIBS) -lXext -lX11 -lm $(INCLUDE_PATHS) # -fsanitize=address -g3
 
 
 all : $(NAME)

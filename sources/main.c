@@ -6,13 +6,40 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:06:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 11:00:07 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:16:53 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	init_tiles(t_data *data)
+void	ft_exit(t_data *data, char *msg, int status)
+{
+	int	i;
+
+	i = -1;
+	while (++i < TILES_MAX)
+		img_destroy(data->mlx, &data->tiles[i]);
+	i = -1;
+	while (++i < 9)
+		img_destroy(data->mlx, &data->ts_wall[i]);
+	free(data->ts_wall);
+	i = -1;
+	while (++i < 2)
+		img_destroy(data->mlx, &data->ts_exit[i]);
+	free(data->ts_exit);
+	i = -1;
+	while (data->map[++i])
+		free(data->map[i]);
+	free(data->map);
+	img_destroy(data->mlx, &data->img);
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
+	ft_printf(msg);
+	exit(status);
+}
+
+static void	init_tiles(t_data *data)
 {
 	data->tiles[TILE_GROUND] = img_init(data->mlx, "./textures/ground.xpm");
 	data->tiles[TILE_PLAYER] = img_init(data->mlx, "./textures/player.xpm");
@@ -35,7 +62,7 @@ int	main(int argc, char *argv[])
 	data.updated = true;
 	init_tiles(&data);
 	mlx_loop_hook(data.mlx, loop_handler, &data);
-	mlx_hook(data.win, DestroyNotify, NoEventMask, handle_close_event, &data);
+	mlx_hook(data.win, DestroyNotify, NoEventMask, destroy_handler, &data);
 	mlx_key_hook(data.win, key_handler, &data);
 	mlx_loop(data.mlx);
 }
