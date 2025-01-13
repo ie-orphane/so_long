@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:15:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 12:07:33 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:18:02 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static int	min(int a, int b)
 	return (b);
 }
 
-static void	update_minmax(t_data *data, t_map_check *map, t_point *pos, char f)
+static void	update_minmax(t_data *data, t_point *pos, char f)
 {
-	if (map->content[pos->y][pos->x] != '1')
+	if (data->check.content[pos->y][pos->x] != '1')
 		return ;
 	if (f == 'x')
 		data->min.x = min(data->min.x, pos->x);
@@ -44,31 +44,33 @@ static void	update_minmax(t_data *data, t_map_check *map, t_point *pos, char f)
 /// @param data the game data
 /// @param x the x position
 /// @param y the y position
-void	flood_fill(t_data *data, t_map_check *map, t_point pos, char f)
+void	flood_fill(t_data *data, t_point pos, char f)
 {
-	if (pos.x < 0 || pos.y < 0 || pos.x >= data->width || pos.y >= data->height
-		|| ft_strchr(" 1", map->content[pos.y][pos.x]))
-		return (update_minmax(data, map, &pos, f));
+	const char	key = data->check.content[pos.y][pos.x];
+
+	if (ft_strchr(" 1", key))
+		return (update_minmax(data, &pos, f));
 	if (data->map[pos.y][pos.x] == 'C')
-		map->ccount += 1;
-	if ((map->content[pos.y][pos.x] == 'E' && map->exit)
-		|| (map->content[pos.y][pos.x] == 'P' && map->player))
-		ft_error("Extra '%c' found in %d, %d\n", map->content[pos.y][pos.x],
-			pos.x, pos.y);
-	if (data->map[pos.y][pos.x] == 'E')
+		data->check.ccount += 1;
+	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
 	{
-		map->exit = true;
-		map->content[pos.y][pos.x] = '1';
-		flood_fill(data, map, pos, ' ');
+		ft_printf("Error\nExtra '%c' found in %d, %d\n", key, pos.x, pos.y);
+		ft_exit(data, 0);
+	}
+	if (key == 'E')
+	{
+		data->check.exit = true;
+		data->check.content[pos.y][pos.x] = '1';
+		flood_fill(data, pos, ' ');
 		return ;
 	}
-	if (data->map[pos.y][pos.x] == 'P')
-		map->player = true;
-	map->content[pos.y][pos.x] = ' ';
-	flood_fill(data, map, (t_point){pos.x + 1, pos.y}, 'X');
-	flood_fill(data, map, (t_point){pos.x - 1, pos.y}, 'x');
-	flood_fill(data, map, (t_point){pos.x, pos.y + 1}, 'Y');
-	flood_fill(data, map, (t_point){pos.x, pos.y - 1}, 'y');
+	if (key == 'P')
+		data->check.player = true;
+	data->check.content[pos.y][pos.x] = ' ';
+	flood_fill(data, (t_point){pos.x + 1, pos.y}, 'X');
+	flood_fill(data, (t_point){pos.x - 1, pos.y}, 'x');
+	flood_fill(data, (t_point){pos.x, pos.y + 1}, 'Y');
+	flood_fill(data, (t_point){pos.x, pos.y - 1}, 'y');
 }
 
 /// @brief Reads the map from the file
@@ -80,11 +82,17 @@ void	parse_map(t_data *data, char *fpath)
 
 	content = read_file(fpath);
 	if (!content)
-		ft_error("Cannot read the map file\n");
+	{
+		ft_printf("Cannot open the map file\n");
+		exit(1);
+	}
 	data->map = ft_split(content, '\n');
 	free(content);
 	if (!data->map)
-		ft_error("Cannot read the map\n");
+	{
+		ft_printf("Cannot read the map\n");
+		exit(1);
+	}
 	data->width = -1;
 	data->height = -1;
 	while (data->map[++data->height])

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:35:16 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 11:19:04 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:13:43 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,4 @@ int	ft_printf(const char *format, ...)
 	}
 	va_end(args);
 	return (count);
-}
-
-void	ft_error(const char *msg, ...)
-{
-	va_list	args;
-	int		count;
-
-	if (write(1, 0, 0))
-		exit(2);
-	va_start(args, msg);
-	count = 0;
-	ft_printf("Error\n");
-	while (*msg)
-	{
-		if (*msg == '%' && ft_strchr("%csdiuxXp", *(msg + 1)))
-		{
-			ft_conversions(args, *(msg + 1), &count);
-			msg++;
-		}
-		else
-			ft_putchar(&count, *msg);
-		msg++;
-	}
-	va_end(args);
-	exit(1);
 }

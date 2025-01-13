@@ -6,13 +6,13 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:06:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 15:16:53 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:20:41 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	ft_exit(t_data *data, char *msg, int status)
+static void	destroy_tiles(t_data *data)
 {
 	int	i;
 
@@ -27,15 +27,33 @@ void	ft_exit(t_data *data, char *msg, int status)
 	while (++i < 2)
 		img_destroy(data->mlx, &data->ts_exit[i]);
 	free(data->ts_exit);
-	i = -1;
-	while (data->map[++i])
-		free(data->map[i]);
-	free(data->map);
 	img_destroy(data->mlx, &data->img);
+}
+
+void	ft_exit(t_data *data, int status)
+{
+	int	i;
+
+	if (data->map)
+	{
+		i = -1;
+		while (data->map[++i])
+			free(data->map[i]);
+		free(data->map);
+	}
+	if (data->check.content)
+	{
+		i = -1;
+		while (++i < data->height)
+			free(data->check.content[i]);
+		free(data->check.content);
+	}
+	if (!data->mlx)
+		exit(status);
+	destroy_tiles(data);
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
-	ft_printf(msg);
 	exit(status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:37:50 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/09 11:18:37 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:13:38 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ void	ft_puthex(int *count, unsigned long n, const char x);
 void	ft_putunbr(int *count, unsigned long n);
 
 int		ft_printf(const char *format, ...);
-void	ft_error(const char *msg, ...);
 
 #endif

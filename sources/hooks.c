@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 10:59:40 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 15:16:46 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:26:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	key_handler(int keycode, t_data *data)
 	t_point	next;
 
 	if (keycode == XK_Escape)
-		ft_exit(data, "See you later!\n", 0);
+		destroy_handler(data);
 	if (!(keycode == XK_d || keycode == XK_a || keycode == XK_s
 			|| keycode == XK_w || keycode == XK_Right || keycode == XK_Left
 			|| keycode == XK_Up || keycode == XK_Down) || data->brightness != 0)
@@ -87,7 +87,10 @@ int	loop_handler(t_data *data)
 	t_img	*img;
 
 	if (data->game_over)
-		ft_exit(data, "Game Over! you win.\n", 0);
+	{
+		ft_printf("Game Over! you win.\n");
+		ft_exit(data, 0);
+	}
 	if (!data->updated)
 		return (0);
 	ft_printf("Current Mouvements: %d\n", data->steps);
@@ -107,6 +110,7 @@ int	loop_handler(t_data *data)
 
 int	destroy_handler(t_data *data)
 {
-	ft_exit(data, "Bye bye! see you later.\n", 0);
+	ft_printf("Bye bye! see you later.\n");
+	ft_exit(data, 0);
 	return (0);
 }
