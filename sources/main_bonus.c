@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 18:01:10 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:05:45 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	player_frame_callable(t_data *data)
 	next_x = data->px;
 	next_y = data->py;
 	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
+	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
 		update_position(data, &next_x, &next_y);
 		if (data->f_player.state == DYING)
@@ -65,17 +65,6 @@ void	update_frames(t_data *data)
 	}
 }
 
-void	img_destroy(void *mlx_ptr, t_img **img)
-{
-	if (mlx_ptr && img && (*img))
-	{
-		if ((*img)->ptr)
-			mlx_destroy_image(mlx_ptr, (*img)->ptr);
-		free(*img);
-		(*img) = NULL;
-	}
-}
-
 int	update_animation(t_data *data)
 {
 	update_frames(data);
@@ -89,60 +78,6 @@ int	update_animation(t_data *data)
 	mlx_clear_window(data->mlx, data->win);
 	mlx_put_image_to_window(data->mlx, data->win, data->img->ptr, 0, 0);
 	return (0);
-}
-
-void	destroy_tiles(t_data *data)
-{
-	int	i;
-
-	i = -1;
-	while (++i < TILES_MAX)
-		img_destroy(data->mlx, &data->tiles[i]);
-	i = -1;
-	while (++i < 16)
-		img_destroy(data->mlx, &data->ts_ground[i]);
-	free(data->ts_ground);
-	i = -1;
-	while (++i < 10)
-		img_destroy(data->mlx, &data->ts_numbers[i]);
-	free(data->ts_numbers);
-	i = -1;
-	while (++i < 26)
-		img_destroy(data->mlx, &data->ts_letters[i]);
-	free(data->ts_letters);
-	i = -1;
-	while (++i < 3)
-		img_destroy(data->mlx, &data->ts_banner[i]);
-	free(data->ts_banner);
-	img_destroy(data->mlx, &data->img);
-}
-
-void	destroy_frames(t_data *data)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	while (++i < (int)data->f_foam.max)
-		img_destroy(data->mlx, &data->f_foam.all[i]);
-	free(data->f_foam.all);
-	i = -1;
-	while (++i < (int)data->f_enemy.max)
-		img_destroy(data->mlx, &data->f_enemy.all[i]);
-	free(data->f_enemy.all);
-	i = -1;
-	while (++i < (int)data->f_dying.max)
-		img_destroy(data->mlx, &data->f_dying.all[i]);
-	free(data->f_dying.all);
-	i = -1;
-	while (++i < TROOP_FRAMES_MAX)
-	{
-		j = -1;
-		while (++j < 6)
-			img_destroy(data->mlx, &(data->f_player.all[i][j]));
-		free(data->f_player.all[i]);
-	}
-	img_destroy(data->mlx, &data->img);
 }
 
 void	ft_exit(t_data *data, int status)

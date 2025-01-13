@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:22 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:24 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:04:28 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,41 @@ void	init_tiles(t_data *data)
 	data->ts_numbers = init_tileset(data, 10, "./textures/numbers/");
 	data->ts_letters = init_tileset(data, 26, "./textures/letters/");
 	data->ts_banner = init_tileset(data, 3, "./textures/ribbon/white/");
+}
+
+void	img_destroy(void *mlx_ptr, t_img **img)
+{
+	if (mlx_ptr && img && (*img))
+	{
+		if ((*img)->ptr)
+			mlx_destroy_image(mlx_ptr, (*img)->ptr);
+		free(*img);
+		(*img) = NULL;
+	}
+}
+
+void	destroy_tiles(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < TILES_MAX)
+		img_destroy(data->mlx, &data->tiles[i]);
+	i = -1;
+	while (++i < 16)
+		img_destroy(data->mlx, &data->ts_ground[i]);
+	free(data->ts_ground);
+	i = -1;
+	while (++i < 10)
+		img_destroy(data->mlx, &data->ts_numbers[i]);
+	free(data->ts_numbers);
+	i = -1;
+	while (++i < 26)
+		img_destroy(data->mlx, &data->ts_letters[i]);
+	free(data->ts_letters);
+	i = -1;
+	while (++i < 3)
+		img_destroy(data->mlx, &data->ts_banner[i]);
+	free(data->ts_banner);
+	img_destroy(data->mlx, &data->img);
 }

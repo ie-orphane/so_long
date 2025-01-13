@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:39 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:04:23 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,32 @@ void	init_frames(t_data *data)
 		"./textures/foam/");
 	init_frameset(data, &data->f_dying, (t_frame_info){.delay = 150, .max = 14},
 		"./textures/knights/dead/");
+}
+
+void	destroy_frames(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (++i < (int)data->f_foam.max)
+		img_destroy(data->mlx, &data->f_foam.all[i]);
+	free(data->f_foam.all);
+	i = -1;
+	while (++i < (int)data->f_enemy.max)
+		img_destroy(data->mlx, &data->f_enemy.all[i]);
+	free(data->f_enemy.all);
+	i = -1;
+	while (++i < (int)data->f_dying.max)
+		img_destroy(data->mlx, &data->f_dying.all[i]);
+	free(data->f_dying.all);
+	i = -1;
+	while (++i < TROOP_FRAMES_MAX)
+	{
+		j = -1;
+		while (++j < 6)
+			img_destroy(data->mlx, &(data->f_player.all[i][j]));
+		free(data->f_player.all[i]);
+	}
+	img_destroy(data->mlx, &data->img);
 }

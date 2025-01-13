@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 17:40:34 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:05:22 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ typedef struct s_data
 /* frames & tiles */
 void				init_frames(t_data *data);
 void				init_tiles(t_data *data);
+void				img_destroy(void *mlx_ptr, t_img **img);
+void				destroy_tiles(t_data *data);
+void				destroy_frames(t_data *data);
 
 /* animate */
 void				update_position(t_data *data, int *next_x, int *next_y);
