@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:10 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:01:10 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	player_frame_callable(t_data *data)
 	next_x = data->px;
 	next_y = data->py;
 	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
+	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
 		update_position(data, &next_x, &next_y);
 		if (data->f_player.state == DYING)
@@ -65,16 +65,23 @@ void	update_frames(t_data *data)
 	}
 }
 
+void	img_destroy(void *mlx_ptr, t_img **img)
+{
+	if (mlx_ptr && img && (*img))
+	{
+		if ((*img)->ptr)
+			mlx_destroy_image(mlx_ptr, (*img)->ptr);
+		free(*img);
+		(*img) = NULL;
+	}
+}
+
 int	update_animation(t_data *data)
 {
 	update_frames(data);
 	if (!data->f_updated)
 		return (0);
-	if (data->img)
-	{
-		mlx_destroy_image(data->mlx, data->img->ptr);
-		free(data->img);
-	}
+	img_destroy(data->mlx, &data->img);
 	data->img = img_new(data->mlx, data->width * TILE_SIZE, data->height
 			* TILE_SIZE);
 	put_ground_layers(data);
@@ -82,6 +89,88 @@ int	update_animation(t_data *data)
 	mlx_clear_window(data->mlx, data->win);
 	mlx_put_image_to_window(data->mlx, data->win, data->img->ptr, 0, 0);
 	return (0);
+}
+
+void	destroy_tiles(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < TILES_MAX)
+		img_destroy(data->mlx, &data->tiles[i]);
+	i = -1;
+	while (++i < 16)
+		img_destroy(data->mlx, &data->ts_ground[i]);
+	free(data->ts_ground);
+	i = -1;
+	while (++i < 10)
+		img_destroy(data->mlx, &data->ts_numbers[i]);
+	free(data->ts_numbers);
+	i = -1;
+	while (++i < 26)
+		img_destroy(data->mlx, &data->ts_letters[i]);
+	free(data->ts_letters);
+	i = -1;
+	while (++i < 3)
+		img_destroy(data->mlx, &data->ts_banner[i]);
+	free(data->ts_banner);
+	img_destroy(data->mlx, &data->img);
+}
+
+void	destroy_frames(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (++i < (int)data->f_foam.max)
+		img_destroy(data->mlx, &data->f_foam.all[i]);
+	free(data->f_foam.all);
+	i = -1;
+	while (++i < (int)data->f_enemy.max)
+		img_destroy(data->mlx, &data->f_enemy.all[i]);
+	free(data->f_enemy.all);
+	i = -1;
+	while (++i < (int)data->f_dying.max)
+		img_destroy(data->mlx, &data->f_dying.all[i]);
+	free(data->f_dying.all);
+	i = -1;
+	while (++i < TROOP_FRAMES_MAX)
+	{
+		j = -1;
+		while (++j < 6)
+			img_destroy(data->mlx, &(data->f_player.all[i][j]));
+		free(data->f_player.all[i]);
+	}
+	img_destroy(data->mlx, &data->img);
+}
+
+void	ft_exit(t_data *data, int status)
+{
+	int	i;
+
+	if (data->map)
+	{
+		i = -1;
+		while (data->map[++i])
+			free(data->map[i]);
+		free(data->map);
+	}
+	if (data->check.content)
+	{
+		i = -1;
+		while (++i < data->height)
+			free(data->check.content[i]);
+		free(data->check.content);
+	}
+	if (!data->mlx)
+		exit(status);
+	destroy_tiles(data);
+	destroy_frames(data);
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
+	exit(status);
 }
 
 int	main(int argc, char *argv[])
@@ -98,11 +187,9 @@ int	main(int argc, char *argv[])
 	init_tiles(&data);
 	init_frames(&data);
 	mlx_loop_hook(data.mlx, update_animation, &data);
-	mlx_hook(data.win, KeyPress, KeyPressMask, key_down, &data);
-	mlx_hook(data.win, KeyRelease, KeyReleaseMask, key_up, &data);
-	mlx_hook(data.win, DestroyNotify, NoEventMask, handle_close_event, &data);
+	mlx_hook(data.win, KeyPress, KeyPressMask, keypress_handler, &data);
+	mlx_hook(data.win, KeyRelease, KeyReleaseMask, keyrelease_handler, &data);
+	mlx_hook(data.win, DestroyNotify, NoEventMask, destroy_handler, &data);
 	mlx_loop(data.mlx);
-	mlx_destroy_display(data.mlx);
-	free(data.mlx);
 	return (0);
 }

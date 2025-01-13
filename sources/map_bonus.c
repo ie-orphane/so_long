@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:16 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:31:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,33 @@
 /// @param data the game data
 /// @param x the x position
 /// @param y the y position
-void	flood_fill(t_data *data, t_map_check *map, int x, int y)
+void	flood_fill(t_data *data, int x, int y)
 {
-	if (x < 0 || y < 0 || x >= data->width || y >= data->height
-		|| map->content[y][x] == ' ' || map->content[y][x] == '1')
+	const char	key = data->check.content[y][x];
+
+	if (key == ' ' || key == '1')
 		return ;
 	if (data->map[y][x] == 'C')
-		map->ccount += 1;
-	if ((map->content[y][x] == 'E' && map->exit) || (map->content[y][x] == 'P'
-			&& map->player))
-		ft_error("Extra '%c' found in %d, %d\n", map->content[y][x], x, y);
+		data->check.ccount += 1;
+	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
+	{
+		ft_printf("Error\nExtra '%c' found in %d, %d\n", key, x, y);
+		ft_exit(data, 0);
+	}
 	if (data->map[y][x] == 'E')
 	{
-		map->exit = true;
-		map->content[y][x] = '1';
-		flood_fill(data, map, x, y);
+		data->check.exit = true;
+		data->check.content[y][x] = '1';
+		flood_fill(data, x, y);
 		return ;
 	}
 	if (data->map[y][x] == 'P')
-		map->player = true;
-	map->content[y][x] = ' ';
-	flood_fill(data, map, x + 1, y);
-	flood_fill(data, map, x - 1, y);
-	flood_fill(data, map, x, y + 1);
-	flood_fill(data, map, x, y - 1);
+		data->check.player = true;
+	data->check.content[y][x] = ' ';
+	flood_fill(data, x + 1, y);
+	flood_fill(data, x - 1, y);
+	flood_fill(data, x, y + 1);
+	flood_fill(data, x, y - 1);
 }
 
 /// @brief Reads the map from the file
@@ -51,11 +54,17 @@ void	parse_map(t_data *data, char *fpath)
 
 	content = read_file(fpath);
 	if (!content)
-		ft_error("Cannot read the map file\n");
+	{
+		ft_printf("Error\nFailed open to the map file\n");
+		exit(1);
+	}
 	data->map = ft_split(content, '\n');
 	free(content);
 	if (!data->map)
-		ft_error("Cannot read the map\n");
+	{
+		ft_printf("Error\nFailed read to the map\n");
+		exit(1);
+	}
 	data->width = -1;
 	data->height = -1;
 	while (data->map[++data->height])

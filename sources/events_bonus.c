@@ -6,28 +6,29 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:33 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:35 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:01:56 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
 
-int	handle_close_event(void)
+int	destroy_handler(t_data *data)
 {
-	exit(0);
+	ft_printf("Bye bye! See you later.\n");
+	ft_exit(data, 0);
 	return (0);
 }
 
-int	key_down(int keycode, t_data *data)
+int	keypress_handler(int keycode, t_data *data)
 {
 	if (keycode == XK_Escape)
-		exit(1);
+		return (destroy_handler(data));
 	if (keycode >= 0 && keycode < 256)
 		data->keys[keycode] = 1;
 	return (0);
 }
 
-int	key_up(int keycode, t_data *data)
+int	keyrelease_handler(int keycode, t_data *data)
 {
 	if (keycode >= 0 && keycode < 256)
 		data->keys[keycode] = 0;

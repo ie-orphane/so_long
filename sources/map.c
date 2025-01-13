@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:15:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 17:18:02 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:29:54 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,14 @@ void	parse_map(t_data *data, char *fpath)
 	content = read_file(fpath);
 	if (!content)
 	{
-		ft_printf("Cannot open the map file\n");
+		ft_printf("Error\nFailed to open the map file\n");
 		exit(1);
 	}
 	data->map = ft_split(content, '\n');
 	free(content);
 	if (!data->map)
 	{
-		ft_printf("Cannot read the map\n");
+		ft_printf("Error\nFailed to read the map\n");
 		exit(1);
 	}
 	data->width = -1;

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 12:05:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 16:22:01 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:26:56 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	check_path(t_data *data)
 	}
 	if (data->check.ccount != data->ccount)
 	{
-		ft_printf("Error\nPlayer cannot reach all collectibles\n");
+		ft_printf("Error\nPlayer cannot reach %d collectible(s)\n", data->ccount
+			- data->check.ccount);
 		ft_exit(data, 1);
 	}
 }

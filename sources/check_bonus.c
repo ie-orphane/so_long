@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:29 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:27:59 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@ void	check_line_size(t_data *data)
 	if (data->width == -1)
 		data->width = line_size;
 	else if (data->width < line_size)
-		ft_error("Error\nExtra %d block(s) in %d:'%s'\n", line_size
+	{
+		ft_printf("Error\nExtra %d block(s) in %d:'%s'\n", line_size
 			- data->width, data->height, data->map[data->height]);
+		ft_exit(data, 1);
+	}
 	else if (data->width > line_size)
-		ft_error("Missing %d block(s) in %d:'%s'\n", data->width - line_size,
-			data->height, data->map[data->height]);
+	{
+		ft_printf("Error\nMissing %d block(s) in %d:'%s'\n", data->width
+			- line_size, data->height, data->map[data->height]);
+		ft_exit(data, 1);
+	}
 }
 
 /// @brief Checks the blocks in the map
@@ -47,8 +53,11 @@ void	check_blocks(t_data *data)
 		else if (data->map[data->height][i] == 'C')
 			data->ccount += 1;
 		else if (!ft_strchr("01EF\n", data->map[data->height][i]))
-			ft_error("Invalid Block '%c' in %d, %d\n",
+		{
+			ft_printf("Error\nInvalid Block '%c' in %d, %d\n",
 				data->map[data->height][i], data->height, i);
+			ft_exit(data, 1);
+		}
 		i++;
 	}
 }
@@ -59,35 +68,46 @@ void	check_map_size(t_data *data)
 {
 	if (data->width * TILE_SIZE > WIN_WIDTH || data->height
 		* TILE_SIZE > WIN_HEIGHT)
-		ft_error("Map (%dx%d) overflow from the window  (%dx%d)\n", data->width
-			* TILE_SIZE, data->height * TILE_SIZE, WIN_WIDTH, WIN_HEIGHT);
+	{
+		ft_printf("Error\nMap (%dx%d) overflow from the window (%dx%d)\n",
+			data->width * TILE_SIZE, data->height * TILE_SIZE, WIN_WIDTH,
+			WIN_HEIGHT);
+		ft_exit(data, 1);
+	}
 	if (data->ccount == 0)
-		ft_error("No collectibles found\n");
+	{
+		ft_printf("Error\nNo collectibles found\n");
+		ft_exit(data, 1);
+	}
 }
 
 /// @brief Checks if the map is closed
 /// @param data the game data
 void	check_path(t_data *data)
 {
-	int			i;
-	t_map_check	map;
+	int	i;
 
-	ft_bzero(&map, sizeof(t_map_check));
-	map.content = malloc(sizeof(char *) * data->height);
+	data->check.content = malloc(sizeof(char *) * data->height);
 	i = -1;
 	while (++i < data->height)
-		map.content[i] = ft_strdup(data->map[i]);
-	flood_fill(data, &map, data->px / TILE_SIZE, data->py / TILE_SIZE);
-	if (!map.player)
-		ft_error("Player not found\n");
-	if (!map.exit)
-		ft_error("Exit not found\n");
-	if (map.ccount != data->ccount)
-		ft_error("Player cannot reach all collectibles\n");
-	i = -1;
-	while (++i < data->height)
-		free(map.content[i]);
-	free(map.content);
+		data->check.content[i] = ft_strdup(data->map[i]);
+	flood_fill(data, data->px / TILE_SIZE, data->py / TILE_SIZE);
+	if (!data->check.player)
+	{
+		ft_printf("Error\nPlayer not found\n");
+		ft_exit(data, 1);
+	}
+	if (!data->check.exit)
+	{
+		ft_printf("Error\nExit not found\n");
+		ft_exit(data, 1);
+	}
+	if (data->check.ccount != data->ccount)
+	{
+		ft_printf("Error\nPlayer cannot reach %d collectible(s)\n", data->ccount
+			- data->check.ccount);
+		ft_exit(data, 1);
+	}
 }
 
 /// @brief Checks if the map is closed
@@ -106,10 +126,16 @@ void	check_closed(t_data *data)
 			while (++j < data->width)
 			{
 				if (data->map[i][j] != '1')
-					ft_error("Map is not closed\n");
+				{
+					ft_printf("Error\nMap is not closed\n");
+					ft_exit(data, 1);
+				}
 			}
 		}
 		if (data->map[i][0] != '1' || data->map[i][data->width - 1] != '1')
-			ft_error("Map is not closed\n");
+		{
+			ft_printf("Error\nMap is not closed\n");
+			ft_exit(data, 1);
+		}
 	}
 }
