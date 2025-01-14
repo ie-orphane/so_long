@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:21 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:23 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:22:30 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 		distance = shapes[1].y - shapes[0].y + SPEED - shapes[0].h;
 	else if (direction == 'u')
 		distance = shapes[0].y - SPEED - shapes[1].y - shapes[1].h;
-	if (distance < 0)
-		distance = 0;
+	distance = (distance + (-distance * (distance < 0)));
 	if (distance == 0 && (*entity) == 'C')
 	{
 		distance = SPEED;
@@ -52,7 +51,9 @@ static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 		data->pcount += 1;
 	}
 	if (distance == 0 && (*entity) == 'F')
-		data->f_player.state = DYING;
+		data->f_player.state = DEAD;
+	if (distance == 0 && (*entity) == 'E' && data->ccount == data->pcount)
+		data->f_player.state = EXIT;
 	if (distance < SPEED)
 		return (distance);
 	return (SPEED);
@@ -85,7 +86,7 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 	return (SPEED);
 }
 
-void	update_position(t_data *data, int *next_x, int *next_y)
+static void	update_position(t_data *data, int *next_x, int *next_y)
 {
 	if (data->keys[XK_d])
 	{
@@ -104,18 +105,26 @@ void	update_position(t_data *data, int *next_x, int *next_y)
 	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
 }
 
-void	update_frame(t_data *data, void (*callable)(t_data *),
-		t_frame_ref frame)
+void	player_frame_callable(t_data *data)
 {
-	gettimeofday(frame.current_time, NULL);
-	if (((*frame.current_time).tv_sec - (*frame.last_time).tv_sec) * 1000
-		+ ((*frame.current_time).tv_usec - (*frame.last_time).tv_usec)
-		/ 1000 >= frame.delay)
+	int	next_x;
+	int	next_y;
+
+	next_x = data->px;
+	next_y = data->py;
+	data->f_player.state = IDLE_RIGHT;
+	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
-		(*frame.count) = ((*frame.count) + 1) % frame.max;
-		if (callable)
-			callable(data);
-		(*frame.last_time) = (*frame.current_time);
-		data->f_updated = true;
+		update_position(data, &next_x, &next_y);
+		if (data->f_player.state == DEAD || data->f_player.state == EXIT)
+			return ;
+		if (data->direction == 'l')
+			data->f_player.state = RUN_LEFT;
+		else
+			data->f_player.state = RUN_RIGHT;
 	}
+	else if (data->direction == 'l')
+		data->f_player.state = IDLE_LEFT;
+	data->px = next_x;
+	data->py = next_y;
 }

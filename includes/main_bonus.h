@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 18:05:22 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:22:05 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ void				destroy_tiles(t_data *data);
 void				destroy_frames(t_data *data);
 
 /* animate */
-void				update_position(t_data *data, int *next_x, int *next_y);
-void				update_frame(t_data *data, void (*callable)(t_data *),
-						t_frame_ref frame);
+void				player_frame_callable(t_data *data);
 
 /* check & map */
 void				check_line_size(t_data *data);
@@ -92,5 +90,6 @@ void				put_ground_layers(t_data *data);
 void				put_entities_layers(t_data *data);
 
 void				ft_exit(t_data *data, int status);
+unsigned int		timediff(t_timeval *current, t_timeval last);
 
 #endif // MAIN_BONUS_H

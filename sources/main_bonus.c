@@ -6,68 +6,70 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 18:05:45 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:23:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
 
-void	player_frame_callable(t_data *data)
+static void	update_frames_enhanced(t_data *data)
 {
-	int	next_x;
-	int	next_y;
+	t_frame	*frames[2];
+	int		i;
 
-	next_x = data->px;
-	next_y = data->py;
-	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
+	frames[0] = &data->f_foam;
+	frames[1] = &data->f_enemy;
+	i = -1;
+	while (++i < 2)
 	{
-		update_position(data, &next_x, &next_y);
-		if (data->f_player.state == DYING)
+		if (timediff(&frames[i]->current_time,
+				frames[i]->last_time) >= frames[i]->delay)
+		{
+			frames[i]->count = (frames[i]->count + 1) % frames[i]->max;
+			frames[i]->last_time = frames[i]->current_time;
+			data->f_updated = true;
+		}
+	}
+}
+
+static void	update_troop_frames(t_data *data)
+{
+	if (data->f_player.state == DEAD || data->f_player.state == EXIT)
+	{
+		if (!(timediff(&data->f_dying.current_time,
+					data->f_dying.last_time) >= (data->f_dying.delay
+					- ((data->f_dying.delay * 0.25)
+						* (data->f_player.state == EXIT)))))
 			return ;
-		else if (data->direction == 'l')
-			data->f_player.state = RUN_LEFT;
-		else
-			data->f_player.state = RUN_RIGHT;
+		data->f_dying.count = (data->f_dying.count + 1) % data->f_dying.max;
+		data->brightness += (1.0 / (data->f_dying.max - ((data->f_dying.max
+							* 0.625) * (data->f_player.state == EXIT))));
+		data->brightness = dmin(0.9, data->brightness);
+		data->f_dying.last_time = data->f_dying.current_time;
+		data->f_updated = true;
 	}
-	else if (data->direction == 'l')
-		data->f_player.state = IDLE_LEFT;
-	data->px = next_x;
-	data->py = next_y;
-}
-
-void	update_frames(t_data *data)
-{
-	data->f_updated = false;
-	update_frame(data, NULL, (t_frame_ref){.count = &data->f_foam.count,
-		.max = data->f_foam.max, .delay = data->f_foam.delay,
-		.current_time = &data->f_foam.current_time,
-		.last_time = &data->f_foam.last_time});
-	update_frame(data, NULL, (t_frame_ref){.count = &data->f_enemy.count,
-		.max = data->f_enemy.max, .delay = data->f_enemy.delay,
-		.current_time = &data->f_enemy.current_time,
-		.last_time = &data->f_enemy.last_time});
-	if (data->f_player.state != DEAD && data->f_player.state != DYING)
-		update_frame(data, player_frame_callable,
-			(t_frame_ref){.count = &data->f_player.count,
-			.max = data->f_player.max, .delay = data->f_player.delay,
-			.current_time = &data->f_player.current_time,
-			.last_time = &data->f_player.last_time});
-	else if (data->f_player.state == DYING)
-		update_frame(data, NULL, (t_frame_ref){.count = &data->f_dying.count,
-			.max = data->f_dying.max, .delay = data->f_dying.delay,
-			.current_time = &data->f_dying.current_time,
-			.last_time = &data->f_dying.last_time});
-	if (data->f_dying.count == data->f_dying.max - 1)
+	else if (timediff(&data->f_player.current_time,
+			data->f_player.last_time) >= data->f_player.delay)
 	{
-		data->f_player.state = DEAD;
-		data->brightness = 0.75;
+		data->f_player.count = (data->f_player.count + 1) % data->f_player.max;
+		player_frame_callable(data);
+		data->f_player.last_time = data->f_player.current_time;
+		data->f_updated = true;
 	}
 }
 
-int	update_animation(t_data *data)
+static int	loop_handler(t_data *data)
 {
-	update_frames(data);
+	update_frames_enhanced(data);
+	update_troop_frames(data);
+	if (data->brightness == 0.9)
+	{
+		if (data->f_player.state == EXIT)
+			ft_printf("Game Over! you win.\n");
+		if (data->f_player.state == DEAD)
+			ft_printf("Game Over! you lost.\n");
+		ft_exit(data, 0);
+	}
 	if (!data->f_updated)
 		return (0);
 	img_destroy(data->mlx, &data->img);
@@ -77,6 +79,7 @@ int	update_animation(t_data *data)
 	put_entities_layers(data);
 	mlx_clear_window(data->mlx, data->win);
 	mlx_put_image_to_window(data->mlx, data->win, data->img->ptr, 0, 0);
+	data->f_updated = false;
 	return (0);
 }
 
@@ -121,7 +124,7 @@ int	main(int argc, char *argv[])
 			* TILE_SIZE, WIN_TITLE);
 	init_tiles(&data);
 	init_frames(&data);
-	mlx_loop_hook(data.mlx, update_animation, &data);
+	mlx_loop_hook(data.mlx, loop_handler, &data);
 	mlx_hook(data.win, KeyPress, KeyPressMask, keypress_handler, &data);
 	mlx_hook(data.win, KeyRelease, KeyReleaseMask, keyrelease_handler, &data);
 	mlx_hook(data.win, DestroyNotify, NoEventMask, destroy_handler, &data);

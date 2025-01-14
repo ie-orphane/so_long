@@ -6,11 +6,18 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:50:05 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 10:29:40 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
+
+unsigned int	timediff(t_timeval *current, t_timeval last)
+{
+	gettimeofday(current, NULL);
+	return (((*current).tv_sec - (last).tv_sec) * 1000 + ((*current).tv_usec
+			- (last).tv_usec) / 1000);
+}
 
 static void	put_player_img(t_data *data)
 {
@@ -18,9 +25,9 @@ static void	put_player_img(t_data *data)
 	int		player_x;
 	int		player_y;
 
-	if (data->f_player.state == DEAD)
+	if (data->f_player.state == EXIT)
 		return ;
-	if (data->f_player.state == DYING)
+	if (data->f_player.state == DEAD)
 		player_img = data->f_dying.all[(data->f_dying.count - 1)
 			% data->f_dying.max];
 	else

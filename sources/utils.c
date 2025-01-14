@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:55:29 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 16:25:52 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:32:16 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,23 @@ bool	shape_overlap(t_shape a, t_shape b)
 	return (true);
 }
 
-/// @brief Generates a random integer between min and max
-/// @param min the minimum value
-/// @param max the maximum value
-/// @return the random integer
-int	randint(int min, int max)
+/// @brief compares two double values and returns the smaller one.
+/// @param a The first double value to compare.
+/// @param b The second double value to compare.
+/// @return The smaller of the two double values.
+double	dmin(double a, double b)
 {
-	return (rand() % (max - min + 1) + min);
+	if (a < b)
+		return (a);
+	return (b);
 }
 
+/// @brief Concatenates an array of strings into a single string.
+/// @param strs A NULL-terminated array of strings to be concatenated.
+/// @return A newly allocated string containing the concatenated
+///			result of all strings in the array.
+///			If the array is empty or allocation fails, returns NULL.
+/// @note The caller is responsible for freeing the returned string.
 char	*ft_ultimate_strjoin(char **strs)
 {
 	char	*str;

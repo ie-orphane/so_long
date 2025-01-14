@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:51:07 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:51:40 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:08:53 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ typedef enum e_troop_state
 	IDLE_LEFT = 1,
 	RUN_RIGHT = 2,
 	RUN_LEFT = 3,
-	DYING = 4,
 	DEAD = 5,
+	EXITING = 6,
+	EXIT = 7,
 }						t_troop_state;
 
 typedef struct s_troop_frame
