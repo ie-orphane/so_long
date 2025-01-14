@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 11:22:05 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:54:01 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_map_check
 	int				ccount;
 	bool			exit;
 	bool			player;
+	t_point			exit_coor;
 }					t_map_check;
 
 typedef struct s_data
@@ -68,6 +69,7 @@ void				destroy_tiles(t_data *data);
 void				destroy_frames(t_data *data);
 
 /* animate */
+void				update_position(t_data *data, int *next_x, int *next_y);
 void				player_frame_callable(t_data *data);
 
 /* check & map */

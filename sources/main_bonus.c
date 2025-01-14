@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 11:23:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:56:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	update_troop_frames(t_data *data)
 						* (data->f_player.state == EXIT)))))
 			return ;
 		data->f_dying.count = (data->f_dying.count + 1) % data->f_dying.max;
-		data->brightness += (1.0 / (data->f_dying.max - ((data->f_dying.max
+		data->brightness += (0.9 / (data->f_dying.max - ((data->f_dying.max
 							* 0.625) * (data->f_player.state == EXIT))));
 		data->brightness = dmin(0.9, data->brightness);
 		data->f_dying.last_time = data->f_dying.current_time;

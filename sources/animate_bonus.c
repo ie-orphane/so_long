@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:21 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 11:22:30 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:57:14 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,26 @@ static void	init_entity_shape(t_data *data, int x, int y, t_shape *entity)
 			- 10, .w = TILE_SIZE - 10 - 9, .h = TILE_SIZE};
 }
 
+static void	check_collision(t_data *data, int *distance, char *entity,
+		t_shape shapes[2])
+{
+	if (*distance == 0 && (*entity) == 'C')
+	{
+		*distance = SPEED;
+		(*entity) = '0';
+		data->pcount += 1;
+	}
+	if (*distance == 0 && (*entity) == 'F')
+		data->f_player.state = DEAD;
+	if (*distance == 0 && (*entity) == 'E' && data->ccount == data->pcount)
+	{
+		shapes[1].x += 35;
+		shapes[1].w -= 65;
+		if (shape_overlap(shapes[0], shapes[1]))
+			data->f_player.state = EXIT;
+	}
+}
+
 static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 		char *entity)
 {
@@ -44,16 +64,7 @@ static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 	else if (direction == 'u')
 		distance = shapes[0].y - SPEED - shapes[1].y - shapes[1].h;
 	distance = (distance + (-distance * (distance < 0)));
-	if (distance == 0 && (*entity) == 'C')
-	{
-		distance = SPEED;
-		(*entity) = '0';
-		data->pcount += 1;
-	}
-	if (distance == 0 && (*entity) == 'F')
-		data->f_player.state = DEAD;
-	if (distance == 0 && (*entity) == 'E' && data->ccount == data->pcount)
-		data->f_player.state = EXIT;
+	check_collision(data, &distance, entity, shapes);
 	if (distance < SPEED)
 		return (distance);
 	return (SPEED);
@@ -86,7 +97,7 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 	return (SPEED);
 }
 
-static void	update_position(t_data *data, int *next_x, int *next_y)
+void	update_position(t_data *data, int *next_x, int *next_y)
 {
 	if (data->keys[XK_d])
 	{
@@ -103,28 +114,4 @@ static void	update_position(t_data *data, int *next_x, int *next_y)
 	if (data->keys[XK_w])
 		*next_y -= get_distance(data, 'u', data->px, *next_y - SPEED);
 	data->steps += abs(data->px - *next_x) + abs(data->py - *next_y);
-}
-
-void	player_frame_callable(t_data *data)
-{
-	int	next_x;
-	int	next_y;
-
-	next_x = data->px;
-	next_y = data->py;
-	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
-	{
-		update_position(data, &next_x, &next_y);
-		if (data->f_player.state == DEAD || data->f_player.state == EXIT)
-			return ;
-		if (data->direction == 'l')
-			data->f_player.state = RUN_LEFT;
-		else
-			data->f_player.state = RUN_RIGHT;
-	}
-	else if (data->direction == 'l')
-		data->f_player.state = IDLE_LEFT;
-	data->px = next_x;
-	data->py = next_y;
 }
