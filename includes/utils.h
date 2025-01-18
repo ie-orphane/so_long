@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:58:18 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 11:00:05 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/18 21:37:54 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,14 @@ typedef struct s_shape
 }		t_shape;
 
 char	*read_file(char *fpath);
+char	**read_map(char *fpath);
+
+void	ft_error(char *msg);
+
 char	*filename_to_path(const char *dir, int index);
-double	dmin(double a, double b);
 bool	shape_overlap(t_shape a, t_shape b);
-char	*ft_ultimate_strjoin(char **strs);
+
+int		max(int a, int b);
+double	dmin(double a, double b);
 
 #endif // UTILS_H

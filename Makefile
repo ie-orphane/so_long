@@ -8,12 +8,12 @@ CFLAGS = -O3 -Wall -Wextra -Werror
 SOURCES_DIR = sources
 
 _SOURCES = main.c utils.c map.c image.c \
-			hooks.c tiles.c check.c
+			hooks.c tiles.c check.c read.c
 SOURCES = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
 _SOURCES_BONUS = main_bonus.c events_bonus.c map_bonus.c utils.c image.c \
 			frames_bonus.c layers_bonus.c animate_bonus.c check_bonus.c ground_bonus.c \
-			tiles_bonus.c
+			tiles_bonus.c read.c
 SOURCES_BONUS = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
 OBJECTS_DIR = objects

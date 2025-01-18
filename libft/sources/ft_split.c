@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:20:13 by ielyatim          #+#    #+#             */
-/*   Updated: 2024/11/01 15:08:20 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/18 21:17:25 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,17 @@
 static int	ft_count_words(const char *str, char c)
 {
 	int	i;
-	int	words_count;
+	int	count;
 
-	i = 0;
-	words_count = 0;
-	while (str[i] != '\0')
+	i = -1;
+	count = 1;
+	while (str[++i] != '\0')
 	{
 		if (str[i] != c)
-		{
-			while (str[i] != '\0' && str[i] != c)
-				i++;
-			words_count++;
-		}
-		if (str[i] != '\0')
-			i++;
+			continue ;
+		count++;
 	}
-	return (words_count);
+	return (count);
 }
 
 static char	*ft_walloc(const char *str, char c, size_t *i)
@@ -81,13 +76,10 @@ char	**ft_split(char const *s, char c)
 		k = 0;
 		while (i < ft_strlen(s))
 		{
-			if (s[i] != c)
-			{
-				arr[k] = ft_walloc(s, c, &i);
-				if (!arr[k])
-					return (ft_free(arr, k));
-				k++;
-			}
+			arr[k] = ft_walloc(s, c, &i);
+			if (!arr[k])
+				return (ft_free(arr, k));
+			k++;
 			i++;
 		}
 		arr[k] = NULL;

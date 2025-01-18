@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 14:50:18 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/18 21:42:12 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,10 @@ static void	check_exit(t_data *data)
 	if (data->map[y + 1][x] == '1' || data->map[y + 1][x] == 'F')
 	{
 		ft_printf("Error\nPlayer can't exit! ");
-		ft_printf("In (%d,%d), replace '%c' with valid one.\n", x, y
-			+ 1, data->map[y + 1][x]);
+		ft_printf("In (%d,%d), replace '%c' with valid one.\n", x, y + 1,
+			data->map[y + 1][x]);
 		ft_exit(data, 1);
 	}
-}
-
-static void	ft_error(char *msg)
-{
-	ft_printf("Error\n%s\n", msg);
-	exit(1);
 }
 
 /// @brief Reads the map from the file
@@ -75,15 +69,7 @@ static void	ft_error(char *msg)
 /// @param fpath the file path
 void	parse_map(t_data *data, char *fpath)
 {
-	char	*content;
-
-	content = read_file(fpath);
-	if (!content)
-		ft_error("Failed open to the map file");
-	data->map = ft_split(content, '\n');
-	free(content);
-	if (!data->map)
-		ft_error("Failed read to the map");
+	data->map = read_map(fpath);
 	data->width = -1;
 	data->height = -1;
 	while (data->map[++data->height])
@@ -105,7 +91,7 @@ void	player_frame_callable(t_data *data)
 	next_x = data->px;
 	next_y = data->py;
 	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
+	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
 		update_position(data, &next_x, &next_y);
 		if (data->f_player.state == DEAD || data->f_player.state == EXIT)

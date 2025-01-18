@@ -6,12 +6,16 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:15:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 17:29:54 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/18 21:40:49 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
+/// @brief Compares two integer values and returns the larger one.
+/// @param a The first integer value to compare.
+/// @param b The second integer value to compare.
+/// @return The larger of the two integer values.
 static int	max(int a, int b)
 {
 	if (a > b)
@@ -19,6 +23,10 @@ static int	max(int a, int b)
 	return (b);
 }
 
+/// @brief This function performs an operation on two integers.
+/// @param a The first integer parameter.
+/// @param b The second integer parameter.
+/// @return The result of the operation as an integer.
 static int	min(int a, int b)
 {
 	if (a < b)
@@ -78,21 +86,7 @@ void	flood_fill(t_data *data, t_point pos, char f)
 /// @param fpath the file path
 void	parse_map(t_data *data, char *fpath)
 {
-	char	*content;
-
-	content = read_file(fpath);
-	if (!content)
-	{
-		ft_printf("Error\nFailed to open the map file\n");
-		exit(1);
-	}
-	data->map = ft_split(content, '\n');
-	free(content);
-	if (!data->map)
-	{
-		ft_printf("Error\nFailed to read the map\n");
-		exit(1);
-	}
+	data->map = read_map(fpath);
 	data->width = -1;
 	data->height = -1;
 	while (data->map[++data->height])

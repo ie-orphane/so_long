@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 12:30:23 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/18 21:45:45 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,9 @@ void	check_line_size(t_data *data)
 	line_size = ft_strlen(data->map[data->height]);
 	if (data->width == -1)
 		data->width = line_size;
-	else if (data->width < line_size)
+	else if (data->width != line_size)
 	{
-		ft_printf("Error\nExtra %d block(s) in %d:'%s'\n", line_size
-			- data->width, data->height, data->map[data->height]);
-		ft_exit(data, 1);
-	}
-	else if (data->width > line_size)
-	{
-		ft_printf("Error\nMissing %d block(s) in %d:'%s'\n", data->width
-			- line_size, data->height, data->map[data->height]);
+		ft_printf("Error\nMap is not rectangler.\n");
 		ft_exit(data, 1);
 	}
 }
@@ -54,8 +47,7 @@ void	check_blocks(t_data *data)
 			data->ccount += 1;
 		else if (!ft_strchr("01EF\n", data->map[data->height][i]))
 		{
-			ft_printf("Error\nInvalid Block '%c' in %d, %d\n",
-				data->map[data->height][i], data->height, i);
+			ft_printf("Error\nInvalid Block '%c'.\n");
 			ft_exit(data, 1);
 		}
 		i++;
