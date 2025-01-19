@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 14:56:19 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:33:08 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ static int	loop_handler(t_data *data)
 	if (data->brightness == 0.9)
 	{
 		if (data->f_player.state == EXIT)
-			ft_printf("Game Over! you win.\n");
+			ft_printf(B_GREEN "Game Over! " R_GREEN "you won.\n\n" RESET);
 		if (data->f_player.state == DEAD)
-			ft_printf("Game Over! you lost.\n");
+			ft_printf(B_RED "Game Over! " R_RED "you lost.\n\n" RESET);
 		ft_exit(data, 0);
 	}
 	if (!data->f_updated)

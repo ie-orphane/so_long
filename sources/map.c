@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:15:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 14:45:46 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:27:19 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void	flood_fill(t_data *data, t_point pos)
 		data->check.ccount += 1;
 	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
 	{
-		ft_printf(ERROR_START "Extra '%c' found in %d, %d" ERROR_END, key,
-			pos.x, pos.y);
+		ft_printf(ERROR_START "Extra '%c' found" ERROR_END, key);
 		ft_exit(data, 0);
 	}
 	if (key == 'E')

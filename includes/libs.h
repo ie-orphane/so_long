@@ -6,13 +6,15 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:56:58 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 14:50:44 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:27:51 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBS_H
 # define LIBS_H
 
+# include "ft_printf.h"
+# include "libft.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
@@ -24,8 +26,6 @@
 # include <sys/time.h>
 # include <time.h>
 # include <unistd.h>
-# include "ft_printf.h"
-# include "libft.h"
 
 # define BLACK "\x1B[30m"
 # define RED "\x1B[31m"
@@ -50,6 +50,5 @@
 
 # define ERROR_START B_RED "Error\n" R_RED
 # define ERROR_END ".\n\n" RESET
-
 
 #endif // LIBS_H

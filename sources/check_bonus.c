@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:27 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/18 21:45:45 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:28:39 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ void	check_line_size(t_data *data)
 	if (data->width == -1)
 		data->width = line_size;
 	else if (data->width != line_size)
-	{
-		ft_printf("Error\nMap is not rectangler.\n");
-		ft_exit(data, 1);
-	}
+		ft_ultimate_error(data, "Map is not rectangler");
 }
 
 /// @brief Checks the blocks in the map
@@ -47,7 +44,8 @@ void	check_blocks(t_data *data)
 			data->ccount += 1;
 		else if (!ft_strchr("01EF\n", data->map[data->height][i]))
 		{
-			ft_printf("Error\nInvalid Block '%c'.\n");
+			ft_printf(ERROR_START "Invalid Block '%c'" ERROR_END,
+				data->map[data->height][i]);
 			ft_exit(data, 1);
 		}
 		i++;
@@ -61,16 +59,13 @@ void	check_map_size(t_data *data)
 	if (data->width * TILE_SIZE > WIN_WIDTH || data->height
 		* TILE_SIZE > WIN_HEIGHT)
 	{
-		ft_printf("Error\nMap (%dx%d) overflow from the window (%dx%d)\n",
-			data->width * TILE_SIZE, data->height * TILE_SIZE, WIN_WIDTH,
-			WIN_HEIGHT);
+		ft_printf(ERROR_START "Map (%dx%d) overflow from the window (%dx%d)"
+			ERROR_END, data->width * TILE_SIZE, data->height * TILE_SIZE,
+			WIN_WIDTH, WIN_HEIGHT);
 		ft_exit(data, 1);
 	}
 	if (data->ccount == 0)
-	{
-		ft_printf("Error\nNo collectibles found\n");
-		ft_exit(data, 1);
-	}
+		ft_ultimate_error(data, "No collectibles found");
 }
 
 /// @brief Checks if the map is closed
@@ -85,19 +80,13 @@ void	check_path(t_data *data)
 		data->check.content[i] = ft_strdup(data->map[i]);
 	flood_fill(data, data->px / TILE_SIZE, data->py / TILE_SIZE);
 	if (!data->check.player)
-	{
-		ft_printf("Error\nPlayer not found\n");
-		ft_exit(data, 1);
-	}
+		ft_ultimate_error(data, "Player not found");
 	if (!data->check.exit)
-	{
-		ft_printf("Error\nExit not found\n");
-		ft_exit(data, 1);
-	}
+		ft_ultimate_error(data, "Exit not found");
 	if (data->check.ccount != data->ccount)
 	{
-		ft_printf("Error\nPlayer cannot reach %d collectible(s)\n", data->ccount
-			- data->check.ccount);
+		ft_printf(ERROR_START "Player cannot reach %d collectible(s)" ERROR_END,
+			data->ccount - data->check.ccount);
 		ft_exit(data, 1);
 	}
 }
@@ -118,16 +107,10 @@ void	check_closed(t_data *data)
 			while (++j < data->width)
 			{
 				if (data->map[i][j] != '1')
-				{
-					ft_printf("Error\nMap is not closed\n");
-					ft_exit(data, 1);
-				}
+					ft_ultimate_error(data, "Map is not closed");
 			}
 		}
 		if (data->map[i][0] != '1' || data->map[i][data->width - 1] != '1')
-		{
-			ft_printf("Error\nMap is not closed\n");
-			ft_exit(data, 1);
-		}
+			ft_ultimate_error(data, "Map is not closed");
 	}
 }

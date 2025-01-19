@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 14:54:01 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:18:15 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void				init_tiles(t_data *data);
 void				img_destroy(void *mlx_ptr, t_img **img);
 void				destroy_tiles(t_data *data);
 void				destroy_frames(t_data *data);
+
+void				ft_ultimate_error(t_data *data, char *msg);
 
 /* animate */
 void				update_position(t_data *data, int *next_x, int *next_y);

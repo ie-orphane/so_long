@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 10:41:34 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:30:22 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	flood_fill(t_data *data, int x, int y)
 		data->check.ccount += 1;
 	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
 	{
-		ft_printf("Error\nExtra '%c' found in %d, %d\n", key, x, y);
+		ft_printf(ERROR_START "Extra '%c' found" ERROR_END, key);
 		ft_exit(data, 0);
 	}
 	if (data->map[y][x] == 'E')
@@ -51,10 +51,8 @@ static void	check_exit(t_data *data)
 	const int	y = data->check.exit_coor.y;
 
 	if (data->map[y][x - 1] != '0' || data->map[y][x + 1] != '0')
-	{
-		ft_printf("Error\nExit should be horizontally surrounded by '0'\n");
-		ft_exit(data, 1);
-	}
+		ft_ultimate_error(data,
+			"Exit should be horizontally surrounded by '0'");
 }
 
 /// @brief Reads the map from the file

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:22 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 18:04:28 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:19:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,10 @@ void	destroy_tiles(t_data *data)
 		img_destroy(data->mlx, &data->ts_banner[i]);
 	free(data->ts_banner);
 	img_destroy(data->mlx, &data->img);
+}
+
+void	ft_ultimate_error(t_data *data, char *msg)
+{
+	ft_printf(ERROR_START "%s" ERROR_END, msg);
+	ft_exit(data, 1);
 }

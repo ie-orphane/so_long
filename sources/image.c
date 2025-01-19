@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:58:41 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 14:45:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:30:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ t_img	*img_init(void *mlx_ptr, char *img_path)
 			&img->endian);
 	if (!img->addr)
 	{
-		ft_printf(ERROR_START "Getting image data failed: %s" ERROR_END, img_path);
+		ft_printf(ERROR_START "Getting image data failed: %s" ERROR_END,
+			img_path);
 		return (NULL);
 	}
 	return (img);

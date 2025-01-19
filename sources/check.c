@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 12:05:31 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 14:42:18 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:29:42 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	check_map_size(t_data *data)
 	if (data->width * TILE_SIZE * TILE_SCALE > WIN_WIDTH || data->height
 		* TILE_SIZE * TILE_SCALE > WIN_HEIGHT)
 	{
-		ft_printf(ERROR_START "Map (%dx%d) overflow from the window (%dx%d)" ERROR_END,
-			data->width * TILE_SIZE * TILE_SCALE, data->height * TILE_SIZE
-			* TILE_SCALE, WIN_WIDTH, WIN_HEIGHT);
+		ft_printf(ERROR_START "Map (%dx%d) overflow from the window (%dx%d)"
+			ERROR_END, data->width * TILE_SIZE * TILE_SCALE, data->height
+			* TILE_SIZE * TILE_SCALE, WIN_WIDTH, WIN_HEIGHT);
 		ft_exit(data, 1);
 	}
 	if (data->ccount == 0)
