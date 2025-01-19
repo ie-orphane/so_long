@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/18 21:42:12 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:41:34 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,6 @@ static void	check_exit(t_data *data)
 		ft_printf("Error\nExit should be horizontally surrounded by '0'\n");
 		ft_exit(data, 1);
 	}
-	if (data->map[y + 1][x] == '1' || data->map[y + 1][x] == 'F')
-	{
-		ft_printf("Error\nPlayer can't exit! ");
-		ft_printf("In (%d,%d), replace '%c' with valid one.\n", x, y + 1,
-			data->map[y + 1][x]);
-		ft_exit(data, 1);
-	}
 }
 
 /// @brief Reads the map from the file
@@ -69,6 +62,9 @@ static void	check_exit(t_data *data)
 /// @param fpath the file path
 void	parse_map(t_data *data, char *fpath)
 {
+	char	**tmp;
+	int		i;
+
 	data->map = read_map(fpath);
 	data->width = -1;
 	data->height = -1;
@@ -78,6 +74,16 @@ void	parse_map(t_data *data, char *fpath)
 		check_blocks(data);
 	}
 	check_closed(data);
+	data->height++;
+	data->py += TILE_SIZE;
+	tmp = malloc((data->height + 1) * sizeof(char *));
+	i = 0;
+	tmp[i] = ft_strdup(data->map[i]);
+	while (++i < data->height)
+		tmp[i] = data->map[i - 1];
+	tmp[i] = NULL;
+	free(data->map);
+	data->map = tmp;
 	check_map_size(data);
 	check_path(data);
 	check_exit(data);
@@ -91,7 +97,7 @@ void	player_frame_callable(t_data *data)
 	next_x = data->px;
 	next_y = data->py;
 	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
+	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
 		update_position(data, &next_x, &next_y);
 		if (data->f_player.state == DEAD || data->f_player.state == EXIT)
