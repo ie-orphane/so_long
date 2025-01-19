@@ -6,11 +6,20 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 18:30:22 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:52:08 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
+
+void	flood_exit(t_data *data, int x, int y)
+{
+	data->check.exit = true;
+	data->check.exit_coor = (t_point){x, y};
+	data->check.content[y][x] = '1';
+	data->check.content[y][x + 1] = '1';
+	data->check.content[y][x - 1] = '1';
+}
 
 /// @brief Flood fill algorithm to fill the map
 /// @param data the game data
@@ -31,9 +40,7 @@ void	flood_fill(t_data *data, int x, int y)
 	}
 	if (data->map[y][x] == 'E')
 	{
-		data->check.exit = true;
-		data->check.exit_coor = (t_point){x, y};
-		data->check.content[y][x] = '1';
+		flood_exit(data, x, y);
 		return (flood_fill(data, x, y));
 	}
 	if (data->map[y][x] == 'P')

@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:56:58 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 18:27:51 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:56:39 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@
 # define BOLD "\x1B[1m"
 # define CLEAR "\x1B[H\x1B[J"
 
-# define B_RED BOLD RED
-# define B_GREEN BOLD GREEN
-# define B_YELLOW BOLD YELLOW
-# define B_WHITE BOLD WHITE
+# define B_RED "\x1B[1;31m"
+# define B_GREEN "\x1B[1;32m"
+# define B_YELLOW "\x1B[1;33m"
+# define B_WHITE "\x1B[1;37m"
 
-# define R_RED RESET RED
-# define R_GREEN RESET GREEN
-# define R_YELLOW RESET YELLOW
+# define R_RED "\x1B[0m\x1B[31m"
+# define R_GREEN "\x1B[0m\x1B[32m"
+# define R_YELLOW "\x1B[0m\x1B[33m"
 
-# define ERROR_START B_RED "Error\n" R_RED
-# define ERROR_END ".\n\n" RESET
+# define ERROR_START "\x1B[1;31mError\n\x1B[0m\x1B[31m"
+# define ERROR_END ".\n\n\x1B[0m"
 
 #endif // LIBS_H
