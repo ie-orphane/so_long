@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:56:58 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 11:00:48 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:50:44 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,30 @@
 # include <unistd.h>
 # include "ft_printf.h"
 # include "libft.h"
+
+# define BLACK "\x1B[30m"
+# define RED "\x1B[31m"
+# define GREEN "\x1B[32m"
+# define YELLOW "\x1B[33m"
+# define BLUE "\x1B[34m"
+# define MAGENTA "\x1B[35m"
+# define CYAN "\x1B[36m"
+# define WHITE "\x1B[37m"
+# define RESET "\x1B[0m"
+# define BOLD "\x1B[1m"
+# define CLEAR "\x1B[H\x1B[J"
+
+# define B_RED BOLD RED
+# define B_GREEN BOLD GREEN
+# define B_YELLOW BOLD YELLOW
+# define B_WHITE BOLD WHITE
+
+# define R_RED RESET RED
+# define R_GREEN RESET GREEN
+# define R_YELLOW RESET YELLOW
+
+# define ERROR_START B_RED "Error\n" R_RED
+# define ERROR_END ".\n\n" RESET
+
 
 #endif // LIBS_H

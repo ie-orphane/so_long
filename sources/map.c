@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:15:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/18 21:40:49 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:45:46 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,51 +34,66 @@ static int	min(int a, int b)
 	return (b);
 }
 
-static void	update_minmax(t_data *data, t_point *pos, char f)
-{
-	if (data->check.content[pos->y][pos->x] != '1')
-		return ;
-	if (f == 'x')
-		data->min.x = min(data->min.x, pos->x);
-	else if (f == 'X')
-		data->max.x = max(data->max.x, pos->x);
-	else if (f == 'y')
-		data->min.y = min(data->min.y, pos->y);
-	else if (f == 'Y')
-		data->max.y = max(data->max.y, pos->y);
-}
-
 /// @brief Flood fill algorithm to fill the map
 /// @param data the game data
 /// @param x the x position
 /// @param y the y position
-void	flood_fill(t_data *data, t_point pos, char f)
+void	flood_fill(t_data *data, t_point pos)
 {
 	const char	key = data->check.content[pos.y][pos.x];
 
 	if (ft_strchr(" 1", key))
-		return (update_minmax(data, &pos, f));
+		return ;
 	if (data->map[pos.y][pos.x] == 'C')
 		data->check.ccount += 1;
 	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
 	{
-		ft_printf("Error\nExtra '%c' found in %d, %d\n", key, pos.x, pos.y);
+		ft_printf(ERROR_START "Extra '%c' found in %d, %d" ERROR_END, key,
+			pos.x, pos.y);
 		ft_exit(data, 0);
 	}
 	if (key == 'E')
 	{
 		data->check.exit = true;
 		data->check.content[pos.y][pos.x] = '1';
-		flood_fill(data, pos, ' ');
+		flood_fill(data, pos);
 		return ;
 	}
 	if (key == 'P')
 		data->check.player = true;
 	data->check.content[pos.y][pos.x] = ' ';
-	flood_fill(data, (t_point){pos.x + 1, pos.y}, 'X');
-	flood_fill(data, (t_point){pos.x - 1, pos.y}, 'x');
-	flood_fill(data, (t_point){pos.x, pos.y + 1}, 'Y');
-	flood_fill(data, (t_point){pos.x, pos.y - 1}, 'y');
+	flood_fill(data, (t_point){pos.x + 1, pos.y});
+	flood_fill(data, (t_point){pos.x - 1, pos.y});
+	flood_fill(data, (t_point){pos.x, pos.y + 1});
+	flood_fill(data, (t_point){pos.x, pos.y - 1});
+}
+
+/// @brief Flood fill algorithm to fill the map
+/// @param data the game data
+/// @param x the x position
+/// @param y the y position
+void	flood_fill2(t_data *data, t_point pos, char f, char prev)
+{
+	char	key;
+
+	if (pos.x < 0 || pos.y < 0 || pos.x >= data->width || pos.y >= data->height
+		|| data->check.content[pos.y][pos.x] == ' ' || (prev == '1'
+			&& data->check.content[pos.y][pos.x] == '1'))
+		return ;
+	key = data->check.content[pos.y][pos.x];
+	if (f == 'x' && key == '1')
+		data->min.x = min(data->min.x, pos.x);
+	else if (f == 'X' && key == '1')
+		data->max.x = max(data->max.x, pos.x);
+	else if (f == 'y' && key == '1')
+		data->min.y = min(data->min.y, pos.y);
+	else if (f == 'Y' && key == '1')
+		data->max.y = max(data->max.y, pos.y);
+	data->check.content[pos.y][pos.x] = ' ';
+	flood_fill2(data, (t_point){pos.x + 1, pos.y}, 'X', key);
+	flood_fill2(data, (t_point){pos.x - 1, pos.y}, 'x', key);
+	flood_fill2(data, (t_point){pos.x, pos.y + 1}, 'Y', key);
+	flood_fill2(data, (t_point){pos.x, pos.y - 1}, 'y', key);
 }
 
 /// @brief Reads the map from the file

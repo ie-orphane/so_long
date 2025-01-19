@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:06:04 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 16:20:41 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:39:11 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ void	ft_exit(t_data *data, int status)
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 	exit(status);
+}
+
+void	ft_ultimate_error(t_data *data, char *msg)
+{
+	ft_printf(ERROR_START "%s" ERROR_END, msg);
+	ft_exit(data, 1);
 }
 
 static void	init_tiles(t_data *data)

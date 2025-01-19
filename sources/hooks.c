@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 10:59:40 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 16:26:40 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:51:02 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,13 @@ int	loop_handler(t_data *data)
 
 	if (data->game_over)
 	{
-		ft_printf("Game Over! you win.\n");
+		ft_printf(B_GREEN "Game Over! " R_GREEN "you won.\n\n" RESET);
 		ft_exit(data, 0);
 	}
 	if (!data->updated)
 		return (0);
-	ft_printf("Current Mouvements: %d\n", data->steps);
+	ft_printf(CLEAR BLACK "mouvement count: " B_WHITE "%d\n" RESET,
+		data->steps);
 	if (data->brightness != 0)
 		data->game_over = true;
 	img_destroy(data->mlx, &data->img);
@@ -110,7 +111,7 @@ int	loop_handler(t_data *data)
 
 int	destroy_handler(t_data *data)
 {
-	ft_printf("Bye bye! see you later.\n");
+	ft_printf(B_YELLOW "Bye bye!" R_YELLOW " see you later.\n\n" RESET);
 	ft_exit(data, 0);
 	return (0);
 }

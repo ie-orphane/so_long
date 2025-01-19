@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 11:02:24 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/13 16:02:36 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:44:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ typedef struct s_data
 	int			ccount;
 }				t_data;
 
-void			flood_fill(t_data *data, t_point pos, char f);
+void			flood_fill(t_data *data, t_point pos);
+void			flood_fill2(t_data *data, t_point pos, char f, char prev);
+
 void			check_line_size(t_data *data);
 void			check_blocks(t_data *data);
 void			check_map_size(t_data *data);
@@ -71,6 +73,7 @@ t_img			*wall_tile(t_data *data, int x, int y);
 t_img			**init_tileset(void *mlx_ptr, int max, char *dir);
 
 void			ft_exit(t_data *data, int status);
+void			ft_ultimate_error(t_data *data, char *msg);
 
 int				destroy_handler(t_data *data);
 int				key_handler(int keycode, t_data *data);
