@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 21:33:22 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 14:53:26 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:55:10 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char	**read_map(char *fpath)
 	char	*tmp;
 	char	**arr;
 
+	if (ft_strncmp(fpath + (ft_strlen(fpath) - 4), ".ber", 4))
+		ft_error("Invalid map file");
 	content = read_file(fpath);
 	if (!content)
 		ft_error("Failed to read the map");
