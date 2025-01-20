@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 18:52:08 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:39:35 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void	flood_exit(t_data *data, int x, int y)
 {
-	data->check.exit = true;
-	data->check.exit_coor = (t_point){x, y};
+	if (data->check.content[y][x] == 'E')
+	{
+		data->check.exit = true;
+		data->check.exit_coor = (t_point){x, y};
+		data->check.content[y][x + 1] = '1';
+		data->check.content[y][x - 1] = '1';
+	}
 	data->check.content[y][x] = '1';
-	data->check.content[y][x + 1] = '1';
-	data->check.content[y][x - 1] = '1';
 }
 
 /// @brief Flood fill algorithm to fill the map
@@ -29,21 +32,22 @@ void	flood_fill(t_data *data, int x, int y)
 {
 	const char	key = data->check.content[y][x];
 
-	if (key == ' ' || key == '1' || key == 'F')
+	if (key == ' ' || key == '1' || (key == '0' && (data->check.content[y][x
+				+ 1] == 'E' || data->check.content[y][x - 1] == 'E')))
 		return ;
-	if (data->map[y][x] == 'C')
-		data->check.ccount += 1;
 	if ((key == 'E' && data->check.exit) || (key == 'P' && data->check.player))
 	{
 		ft_printf(ERROR_START "Extra '%c' found" ERROR_END, key);
 		ft_exit(data, 0);
 	}
-	if (data->map[y][x] == 'E')
+	if (data->map[y][x] == 'E' || data->map[y][x] == 'F')
 	{
 		flood_exit(data, x, y);
-		return (flood_fill(data, x, y));
+		return ;
 	}
-	if (data->map[y][x] == 'P')
+	if (data->map[y][x] == 'C')
+		data->check.ccount += 1;
+	if (key == 'P')
 		data->check.player = true;
 	data->check.content[y][x] = ' ';
 	flood_fill(data, x + 1, y);
