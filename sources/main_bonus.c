@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 18:33:08 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:38:07 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ int	main(int argc, char *argv[])
 {
 	t_data	data;
 
-	if (argc < 1)
-		return (0);
+	if (argc < 2)
+		ft_error("missing map argument");
 	ft_bzero(&data, sizeof(t_data));
 	parse_map(&data, argv[1]);
 	data.mlx = mlx_init();
