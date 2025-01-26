@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:28:59 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/18 18:29:12 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/23 21:56:42 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ///			result of all strings in the array.
 ///			If the array is empty or allocation fails, returns NULL.
 /// @note The caller is responsible for freeing the returned string.
-char	*ft_ultimate_strjoin(char **strs)
+char	*ft_strsjoin(char **strs)
 {
 	char	*str;
 	size_t	str_size;

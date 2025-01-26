@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:53 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:55 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/26 18:15:20 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	put_ground_layers(t_data *data)
 	put_foam(data);
 	put_ground(data);
 	tmp = ft_itoa(data->steps / SPEED);
-	str = ft_ultimate_strjoin((char *[]){"steps:", tmp, ";", NULL});
+	str = ft_strsjoin((char *[]){"steps:", tmp, ";", NULL});
 	free(tmp);
 	put_ribbon(data, str);
 	put_text(data, str);
