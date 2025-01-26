@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:53 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/26 18:15:20 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:05:32 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	put_ground_layers(t_data *data)
 	int		y;
 	char	*str;
 	char	*tmp;
+	t_img	*img;
 
 	y = -1;
 	while (++y < data->height)
@@ -118,6 +119,12 @@ void	put_ground_layers(t_data *data)
 	}
 	put_foam(data);
 	put_ground(data);
+	if (data->c.x != -1 && data->c.y != -1)
+	{
+		img = data->f_gold.all[data->f_gold.count];
+		put_img_to_img(data->img, img, (t_point){(data->c.x * TILE_SIZE) - ((img->width - TILE_SIZE)
+			/ 2), (data->c.y * TILE_SIZE) - ((img->height - TILE_SIZE) / 2) - 15}, data->brightness);
+	}
 	tmp = ft_itoa(data->steps / SPEED);
 	str = ft_strsjoin((char *[]){"steps:", tmp, ";", NULL});
 	free(tmp);

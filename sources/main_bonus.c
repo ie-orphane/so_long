@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/21 18:38:07 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:05:03 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ static void	update_frames_enhanced(t_data *data)
 			frames[i]->last_time = frames[i]->current_time;
 			data->f_updated = true;
 		}
+	}
+	if (timediff(&data->f_gold.current_time,
+			data->f_gold.last_time) >= data->f_gold.delay && data->c.x != -1
+		&& data->c.y != -1)
+	{
+		data->f_gold.count = (data->f_gold.count + 1) % data->f_gold.max;
+		if (data->f_gold.count == 0)
+		{
+			data->c = (t_point){-1, -1};
+			return ;
+		}
+		data->f_gold.last_time = data->f_gold.current_time;
+		data->f_updated = true;
 	}
 }
 
@@ -124,6 +137,7 @@ int	main(int argc, char *argv[])
 			* TILE_SIZE, WIN_TITLE);
 	init_tiles(&data);
 	init_frames(&data);
+	data.c = (t_point){-1, -1};
 	mlx_loop_hook(data.mlx, loop_handler, &data);
 	mlx_hook(data.win, KeyPress, KeyPressMask, keypress_handler, &data);
 	mlx_hook(data.win, KeyRelease, KeyReleaseMask, keyrelease_handler, &data);

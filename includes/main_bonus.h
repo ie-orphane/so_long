@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/19 18:18:15 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/26 21:48:51 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data
 	t_frame			f_foam;
 	t_frame			f_enemy;
 	t_frame			f_dying;
+	t_frame			f_gold;
 	t_troop_frame	f_player;
 	bool			f_updated;
 	int				keys[256];
@@ -57,6 +58,7 @@ typedef struct s_data
 	char			direction;
 	int				px;
 	int				py;
+	t_point 		c;
 	int				pcount;
 	int				ccount;
 }					t_data;

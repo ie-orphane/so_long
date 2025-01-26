@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:21 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/14 14:57:14 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:03:29 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,19 @@ static void	init_entity_shape(t_data *data, int x, int y, t_shape *entity)
 			- 10, .w = TILE_SIZE - 10 - 9, .h = TILE_SIZE};
 }
 
-static void	check_collision(t_data *data, int *distance, char *entity,
+static void	check_collision(t_data *data, int *distance, t_point pos,
 		t_shape shapes[2])
 {
-	if (*distance == 0 && (*entity) == 'C')
+	if (*distance == 0 && data->map[pos.y][pos.x] == 'C')
 	{
 		*distance = SPEED;
-		(*entity) = '0';
+		data->map[pos.y][pos.x] = '0';
 		data->pcount += 1;
+		data->c = (t_point){pos.x, pos.y};
 	}
-	if (*distance == 0 && (*entity) == 'F')
+	if (*distance == 0 && data->map[pos.y][pos.x] == 'F')
 		data->f_player.state = DEAD;
-	if (*distance == 0 && (*entity) == 'E' && data->ccount == data->pcount)
+	if (*distance == 0 && data->map[pos.y][pos.x] == 'E' && data->ccount == data->pcount)
 	{
 		shapes[1].x += 35;
 		shapes[1].w -= 65;
@@ -50,7 +51,7 @@ static void	check_collision(t_data *data, int *distance, char *entity,
 }
 
 static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
-		char *entity)
+		t_point pos)
 {
 	int	distance;
 
@@ -64,7 +65,7 @@ static int	calculate_distance(t_data *data, t_shape shapes[2], char direction,
 	else if (direction == 'u')
 		distance = shapes[0].y - SPEED - shapes[1].y - shapes[1].h;
 	distance = (distance + (-distance * (distance < 0)));
-	check_collision(data, &distance, entity, shapes);
+	check_collision(data, &distance, pos, shapes);
 	if (distance < SPEED)
 		return (distance);
 	return (SPEED);
@@ -91,7 +92,7 @@ static int	get_distance(t_data *data, char direction, int next_x, int next_y)
 			if (!shape_overlap(player, entity))
 				continue ;
 			return (calculate_distance(data, (t_shape[]){player, entity},
-				direction, &data->map[y][x]));
+				direction, (t_point){x, y}));
 		}
 	}
 	return (SPEED);
