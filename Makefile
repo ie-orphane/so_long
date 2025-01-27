@@ -24,7 +24,7 @@ SOURCES = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
 _SOURCES_BONUS = main_bonus.c events_bonus.c map_bonus.c utils.c image.c \
 			frames_bonus.c layers_bonus.c animate_bonus.c check_bonus.c ground_bonus.c \
-			tiles_bonus.c read.c
+			tiles_bonus.c read.c random.c
 SOURCES_BONUS = $(addprefix $(SOURCES_DIR)/,$(_SOURCES_BONUS))
 
 OBJECTS_DIR = objects
@@ -34,7 +34,7 @@ OBJECTS_BONUS = $(addprefix $(OBJECTS_DIR)/,$(_SOURCES_BONUS:.c=.o))
 
 INCLUDES_DIR = includes
 _INCLUDES = image.h utils.h libs.h sprite.h main.h \
-		main_bonus.h sprite_bonus.h
+		main_bonus.h sprite_bonus.h random.h
 INCLUDES = $(addprefix $(INCLUDES_DIR)/,$(_INCLUDES))
 
 

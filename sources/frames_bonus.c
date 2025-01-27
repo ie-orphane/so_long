@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:39 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/26 22:12:46 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/27 11:36:08 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void	init_frames(t_data *data)
 		"./textures/gold/");
 	init_frameset(data, &data->f_dying, (t_frame_info){.delay = 150, .max = 14},
 		"./textures/knights/dead/");
+	init_frameset(data, &data->f_rocks[0], (t_frame_info){.delay = 115, .max = 8},
+		"./textures/rocks/0/");
+	init_frameset(data, &data->f_rocks[1], (t_frame_info){.delay = 115, .max = 8},
+		"./textures/rocks/1/");
 }
 
 void	destroy_frames(t_data *data)
@@ -92,12 +96,24 @@ void	destroy_frames(t_data *data)
 		img_destroy(data->mlx, &data->f_dying.all[i]);
 	free(data->f_dying.all);
 	i = -1;
+	while (++i < (int)data->f_gold.max)
+		img_destroy(data->mlx, &data->f_gold.all[i]);
+	free(data->f_gold.all);
+	i = -1;
 	while (++i < TROOP_FRAMES_MAX)
 	{
 		j = -1;
 		while (++j < 6)
 			img_destroy(data->mlx, &(data->f_player.all[i][j]));
 		free(data->f_player.all[i]);
+	}
+	i = -1;
+	while (++i < 2)
+	{
+		j = -1;
+		while (++j < (int)data->f_rocks[i].max)
+			img_destroy(data->mlx, &(data->f_rocks[i].all[j]));
+		free(data->f_rocks[i].all);
 	}
 	img_destroy(data->mlx, &data->img);
 }

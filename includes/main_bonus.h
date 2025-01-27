@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:42 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/26 21:48:51 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/27 11:01:10 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "image.h"
 # include "libs.h"
+# include "random.h"
 # include "sprite_bonus.h"
 # include "utils.h"
 
@@ -51,6 +52,7 @@ typedef struct s_data
 	t_frame			f_enemy;
 	t_frame			f_dying;
 	t_frame			f_gold;
+	t_frame			f_rocks[2];
 	t_troop_frame	f_player;
 	bool			f_updated;
 	int				keys[256];

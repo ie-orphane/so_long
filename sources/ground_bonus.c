@@ -6,18 +6,32 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:49:53 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/26 22:05:32 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/27 11:28:05 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
 
+static int	ground_index(t_data *data, t_point pos)
+{
+	unsigned int	index;
+	const bool		top = ft_strchr("1rR", data->map[pos.y - 1][pos.x]) != NULL;
+	const bool		bottom = ft_strchr("1rR", data->map[pos.y
+					+ 1][pos.x]) != NULL;
+	const bool		right = ft_strchr("1rR", data->map[pos.y][pos.x
+					+ 1]) != NULL;
+	const bool		left = ft_strchr("1rR", data->map[pos.y][pos.x
+					- 1]) != NULL;
+
+	index = (top << 3) | (left << 2) | (right << 1) | bottom;
+	return (index);
+}
+
 static void	put_ground(t_data *data)
 {
-	int				x;
-	int				y;
-	t_img			*img;
-	unsigned int	index;
+	int		x;
+	int		y;
+	t_img	*img;
 
 	y = -1;
 	while (++y < data->height)
@@ -26,13 +40,8 @@ static void	put_ground(t_data *data)
 		while (++x < data->width)
 		{
 			img = NULL;
-			if (data->map[y][x] != '1')
-			{
-				index = ((data->map[y - 1][x] == '1') << 3) | ((data->map[y][x
-							- 1] == '1') << 2) | ((data->map[y][x
-							+ 1] == '1') << 1) | (data->map[y + 1][x] == '1');
-				img = data->ts_ground[index];
-			}
+			if (!ft_strchr("1rR", data->map[y][x]))
+				img = data->ts_ground[ground_index(data, (t_point){x, y})];
 			if (img)
 				put_img_to_img(data->img, img, (t_point){TILE_SIZE * x,
 					TILE_SIZE * y}, data->brightness);
@@ -53,8 +62,12 @@ static void	put_foam(t_data *data)
 		while (++x < data->width)
 		{
 			img = NULL;
-			if (data->map[y][x] != '1')
+			if (!ft_strchr("1rR", data->map[y][x]))
 				img = data->f_foam.all[data->f_foam.count];
+			else if (data->map[y][x] == 'r')
+				img = data->f_rocks[1].all[data->f_rocks[1].count];
+			else if (data->map[y][x] == 'R')
+				img = data->f_rocks[0].all[data->f_rocks[0].count];
 			if (img)
 				put_img_to_img(data->img, img, (t_point){(TILE_SIZE * x) - ((82
 							- 64) / 2), (TILE_SIZE * y) - ((82 - 64) / 2)},
@@ -122,8 +135,9 @@ void	put_ground_layers(t_data *data)
 	if (data->c.x != -1 && data->c.y != -1)
 	{
 		img = data->f_gold.all[data->f_gold.count];
-		put_img_to_img(data->img, img, (t_point){(data->c.x * TILE_SIZE) - ((img->width - TILE_SIZE)
-			/ 2), (data->c.y * TILE_SIZE) - ((img->height - TILE_SIZE) / 2) - 15}, data->brightness);
+		put_img_to_img(data->img, img, (t_point){(data->c.x * TILE_SIZE)
+			- ((img->width - TILE_SIZE) / 2), (data->c.y * TILE_SIZE)
+			- ((img->height - TILE_SIZE) / 2) - 15}, data->brightness);
 	}
 	tmp = ft_itoa(data->steps / SPEED);
 	str = ft_strsjoin((char *[]){"steps:", tmp, ";", NULL});

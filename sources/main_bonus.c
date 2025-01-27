@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:08 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/26 22:05:03 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/27 11:40:02 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 static void	update_frames_enhanced(t_data *data)
 {
-	t_frame	*frames[2];
+	t_frame	*frames[4];
 	int		i;
 
 	frames[0] = &data->f_foam;
 	frames[1] = &data->f_enemy;
+	frames[2] = &data->f_rocks[0];
+	frames[3] = &data->f_rocks[1];
 	i = -1;
-	while (++i < 2)
+	while (++i < 4)
 	{
 		if (timediff(&frames[i]->current_time,
 				frames[i]->last_time) >= frames[i]->delay)
@@ -128,6 +130,7 @@ int	main(int argc, char *argv[])
 {
 	t_data	data;
 
+	srand(time(NULL));
 	if (argc < 2)
 		ft_error("missing map argument");
 	ft_bzero(&data, sizeof(t_data));

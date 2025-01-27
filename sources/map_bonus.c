@@ -6,7 +6,7 @@
 /*   By: ielyatim <ielyatim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 10:50:14 by ielyatim          #+#    #+#             */
-/*   Updated: 2025/01/20 14:39:35 by ielyatim         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:02:04 by ielyatim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,28 @@ void	flood_fill(t_data *data, int x, int y)
 	flood_fill(data, x, y - 1);
 }
 
+/// @brief Checks if the exit
+/// @param data the game data
 static void	check_exit(t_data *data)
 {
 	const int	x = data->check.exit_coor.x;
 	const int	y = data->check.exit_coor.y;
+	char		randchar;
 
 	if (data->map[y][x - 1] != '0' || data->map[y][x + 1] != '0')
 		ft_ultimate_error(data,
 			"Exit should be horizontally surrounded by '0'");
+	for (int y = 0; y < data->height; y++)
+	{
+		for (int x = 0; x < data->height; x++)
+		{
+			if (data->map[y][x] == '1' && randbool(11))
+			{
+				randchar = (char[]){'r', 'R'}[randint(0, 1)];
+				data->map[y][x] = randchar;
+			}
+		}
+	}
 }
 
 /// @brief Reads the map from the file
@@ -106,7 +120,7 @@ void	player_frame_callable(t_data *data)
 	next_x = data->px;
 	next_y = data->py;
 	data->f_player.state = IDLE_RIGHT;
-	if (keyin(data, (int []){XK_d, XK_a, XK_w, XK_s, -1}))
+	if (keyin(data, (int[]){XK_d, XK_a, XK_w, XK_s, -1}))
 	{
 		update_position(data, &next_x, &next_y);
 		if (data->f_player.state == DEAD || data->f_player.state == EXIT)
